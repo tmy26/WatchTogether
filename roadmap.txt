@@ -1,0 +1,17 @@
+0. Configure mysql to work with Django - Everyone should complete this task
+1. Create user and room models in Django
+2. Create API view in Django
+3. Create OAuth token functionality
+
+# Research on how should be implemented	- everyone
+	User reg / login system
+	Add friends
+	Add rooms
+	Join room
+	Add stream to room
+
+
+#ToDo
+
+	Research on how to represent connection (friendship) between users and how to implement it
+as functionality
