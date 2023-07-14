@@ -2,30 +2,15 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .backend_logic import function
+from .backend_logic import create_user
 
 class UserRegistration(APIView):
-    """C.R.U.D"""
-
-    def get(self, request) -> Response:
-
-        data = {'Message:': 'success'}
-        return Response(data=data, status=status.HTTP_200_OK)
-    
+    """User registration"""
 
     def post(self, request):
-
-        data = {'Message:': 'success'}
-        return Response(data=data, status=status.HTTP_200_OK)
-    
-
-    def put(self, request):
-
-        data = {'Message:': 'success'}
-        return Response(data=data, status=status.HTTP_200_OK)
-    
-
-    def delete(self, request):
-
-        data = {'Message:': 'success'}
-        return Response(data=data, status=status.HTTP_200_OK)
+        msg = create_user(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data={'Success': 'Created user'}, status=status.HTTP_200_OK)
+        
