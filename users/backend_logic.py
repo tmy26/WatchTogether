@@ -1,6 +1,7 @@
 #here the whole logic for user creation and bla bla bla is going to be implemented
 from .models import User
-import re
+from .validators import user_name_validator, first_name_validator, last_name_validator, password_validator, email_validator
+from django.contrib.auth.hashers import make_password
 
 
 def create_user(request) -> dict:
@@ -11,6 +12,7 @@ def create_user(request) -> dict:
     user_name = request.data.get('user_name')
     email = request.data.get('email')
     password = request.data.get('password')
+    password_check = request.data.get('password_check')
     first_name = request.data.get('first_name')
     last_name = request.data.get('last_name')
 
@@ -19,19 +21,23 @@ def create_user(request) -> dict:
         return {'Error': 'the email must be unique'}
     if User.objects.filter(user_name=user_name).exists():
         return {'Error': 'the username must be unique'}
-    
-    # password valiidations
-    if len(password) < 8:
-        return {'Error': 'the password cant be less then 8 chars'}
-    if not re.search(r"^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$", email):
-        return {'Error': 'the email is invalid'}
-    # TODO: better regex to verify email, more password validations, put method for user, login method
 
+
+
+    user_name_validator(user_name)
+    first_name_validator(first_name)
+    last_name_validator(last_name)
+    password_validator(password, password_check)
+    email_validator(email)
+
+    # TODO: better regex to verify email, more password validations, put method for user, login method
+    hashed_password = make_password(password)
     #user creation
     User.objects.create(
         user_name=user_name,
         email=email,
-        password=password,
+        password=hashed_password,
         first_name=first_name,
         last_name=last_name,
     )
+    return {'Sucess': 'asd'}
