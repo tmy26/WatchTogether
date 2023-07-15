@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .backend_logic import create_user, delete_user_account
+from .backend_logic import create_user, delete_user_account, user_authentification
 
 
 class UserRegistration(APIView):
@@ -24,3 +24,11 @@ class UserRegistration(APIView):
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
+        
+
+class UserAuthentification(APIView):
+    """User auth"""
+
+    def post(self, request):
+        msg = user_authentification(request)
+        return msg
