@@ -25,6 +25,7 @@ class User(AbstractUser):
 class Room(models.Model):
     class Meta:
         verbose_name_plural = "Rooms"
+        #git
     
     # Room properties
     room_unique_id =  models.UUIDField(
