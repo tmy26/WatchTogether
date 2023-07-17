@@ -2,8 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+<<<<<<< HEAD
 from .backend_logic import create_user, delete_user_account, user_authentification
 
+=======
+from .backend_logic import create_user
+from .backend_logic_rooms import create_room
+>>>>>>> main
 
 class UserRegistration(APIView):
     """User registration"""
@@ -14,6 +19,7 @@ class UserRegistration(APIView):
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data={'Success': 'Created user'}, status=status.HTTP_200_OK)
+<<<<<<< HEAD
         
     def put(self, request):
         pass
@@ -32,3 +38,16 @@ class UserAuthentification(APIView):
     def post(self, request):
         msg = user_authentification(request)
         return msg
+=======
+
+
+class RoomCreation(APIView):
+    """Room creation"""
+
+    def post(self, request):
+        msg = create_room(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data={'Success': 'Created room'}, status=status.HTTP_200_OK)
+>>>>>>> main

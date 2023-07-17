@@ -1,4 +1,8 @@
 venv/
 ./venv/
+venv
 .DS_Store
+db.sqlite3
+**/__pycache__
+
 #add here the files that you want to be ignored by git
