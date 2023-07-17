@@ -1,43 +1,78 @@
 #here the whole logic for user creation and bla bla bla is going to be implemented
 from .models import User
-from .validators import user_name_validator, first_name_validator, last_name_validator, password_validator, email_validator
 from django.contrib.auth.hashers import make_password
-
+from rest_framework.authtoken.models import Token
 
 def create_user(request) -> dict:
     """
     User register method
     """
     #data request
-    user_name = request.data.get('user_name')
+    user_name = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
     password_check = request.data.get('password_check')
-    first_name = request.data.get('first_name')
-    last_name = request.data.get('last_name')
 
-    #check if email & user_name are unique
-    if User.objects.filter(email=email).exists():
-        return {'Error': 'the email must be unique'}
-    if User.objects.filter(user_name=user_name).exists():
-        return {'Error': 'the username must be unique'}
-
-
-
-    user_name_validator(user_name)
-    first_name_validator(first_name)
-    last_name_validator(last_name)
-    password_validator(password, password_check)
-    email_validator(email)
-
-    # TODO: better regex to verify email, more password validations, put method for user, login method
+    # TODO: validators for password
     hashed_password = make_password(password)
     #user creation
     User.objects.create(
         user_name=user_name,
         email=email,
         password=hashed_password,
-        first_name=first_name,
-        last_name=last_name,
     )
-    return {'Sucess': 'asd'}
+    return {'Sucess': 'successfully created user'}
+
+
+def edit_user(request, username):
+    username = request.data.get('username')
+    email = request.data.get('email')
+    password = request.data.get('password')
+    password_check = request.data.get('password_check')
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return {"message": "The username does not exist!"}
+    
+    if username is not None:
+        user.username = username
+    if email is not None:
+        user.email = email
+    if password and password_check is not None:
+        if password == password_check:
+            user.password = password
+    user.save()
+    
+
+def delete_user_account(request, username):
+    """
+    Deletes user account based on the email
+    """
+
+    try:
+        User.objects.get(username=username).delete()
+        return {"Success": "account deletion was successful"}
+    except User.DoesNotExist:
+        return {"Error": "An account with that username does not exist"}
+    
+
+
+def user_authentification(request) -> dict:
+    username = request.data.get('username')
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return {"message:": "Invalid username. Please try again"}
+    
+    #generete a new token for the user and delete the old one if exists.
+    try:
+        token = Token.objects.get(user=user)
+        token.delete()
+    except Token.DoesNotExist:
+        pass
+    finally:
+        token = Token.objects.create(user=user)
+    user.save()
+
+    return {"message":"Successful authentifacation"}
