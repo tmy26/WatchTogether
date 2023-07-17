@@ -29,4 +29,47 @@ def create_room(request) -> dict:
     )
     return {'Success': 'Room created'}
 
-# TODO: GET, POST, DELETE methods for rooms, join a room method
+
+def delete_room(request) -> dict:
+    """Delete room function"""
+
+    # Get room unique ID
+    room_unique_id = request.data.get('room_unique_id')
+
+    # Try deleting room
+    try:
+        Room.objects.get(room_unique_id=room_unique_id).delete()
+        return {"Success": "Room deleted"}
+    except Room.DoesNotExist:
+        return {"Error": "Room does not exist"}
+
+
+def edit_room(request) -> dict:
+    """Edit room function"""
+
+    # Get unique ID
+    room_unique_id = request.data.get('room_unique_id')
+    new_room_name = request.data.get('room_name')
+    new_room_password = request.data.get('room_password')
+
+    if Room.objects.filter(room_unique_id=room_unique_id).exists():
+        room_to_edit = Room.objects.get(room_unique_id=room_unique_id)
+        if new_room_name:
+            room_to_edit.room_name = new_room_name
+        if new_room_password:
+            room_to_edit.room_password = make_password(new_room_password)
+        room_to_edit.save()
+        return {"Success": "Room edited"}
+    else:
+        return {"Error": "Room does not exist"}
+
+
+def get_room(request) -> dict:
+    """Get room function"""
+    pass
+
+
+def join_room(request) -> dict:
+    """Join a room"""
+    pass
+# TODO: Add Get method. Investigate on how to join a room using the GET method.

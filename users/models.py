@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
 from django.conf import settings
+import uuid
+
 
 
 class User(AbstractUser):
@@ -25,9 +27,14 @@ class Room(models.Model):
         verbose_name_plural = "Rooms"
     
     # Room properties
-    room_unique_id = models.CharField(max_length=100, blank=True, unique=True)
-    room_name = models.CharField(max_length=100, blank=False)
-    room_password = models.CharField(max_length=50, blank=True)
+    room_unique_id =  models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
 
-    #TODO: If the owner user is deleted, CASCADE deletes the Room
+    room_name = models.CharField(max_length=100, blank=False)
+    room_password = models.CharField(max_length=50, blank=False)
+
+    #TODO: If the owner user is deleted, CASCADE deletes the Room, assign a room owner
+    #TODO: Make room default name -> "<Username>'s room", blank=False
 
