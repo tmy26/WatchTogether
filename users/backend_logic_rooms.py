@@ -1,8 +1,6 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password
 from .models import Room
-from rest_framework import status
-from rest_framework.response import Response
 
 def create_room(request) -> dict:
     """Room creation function"""
@@ -16,7 +14,10 @@ def create_room(request) -> dict:
     # Check if room has a unique ID (it should be unique by default)
     if Room.objects.filter(room_unique_id=room_unique_id).exists():
         return {'Error': 'Existing room ID in database'}
-    #TODO: Check if room has a owner in database
+    
+    # Check if room owner is existing user in the database (should be existing)
+    if not Room.objects.filter(room_owner=room_owner).exists():
+        return {'Error': 'Owner of the room does not exist.'}
 
     # Hash room password
     hash_password = make_password(room_password)
@@ -67,10 +68,17 @@ def edit_room(request) -> dict:
 
 def get_room(request) -> dict:
     """Get room function"""
-    pass
+
+    room_unique_id = request.data.get('room_unique_id')
+
+    try:
+        if Room.objects.filter(room_unique_id=room_unique_id).exists():
+            return {"Rooms": Room.objects.all()}
+    except Room.DoesNotExist:
+        return {"Error": "Room does not exist"}
 
 
 def join_room(request) -> dict:
     """Join a room"""
     pass
-# TODO: Add Get method. Investigate on how to join a room using the GET method.
+# TODO: Investigate on how to join a room using the GET method.

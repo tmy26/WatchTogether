@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
-from django.conf import settings
 import uuid
-
 
 
 class User(AbstractUser):
@@ -25,7 +23,6 @@ class User(AbstractUser):
 class Room(models.Model):
     class Meta:
         verbose_name_plural = "Rooms"
-        #git
     
     # Room properties
     room_unique_id =  models.UUIDField(
@@ -43,5 +40,3 @@ class Room(models.Model):
 
     def __str__(self) -> str:
         return self.room_name
-
-
