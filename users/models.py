@@ -1,22 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from rest_framework.authtoken.models import Token
-from django.conf import settings
-
+import uuid
 
 class User(AbstractUser):
 
-    username = models.CharField(max_length=20, blank=False, unique=True, default='asd')
+    user_id = models.UUIDField(primary_key=True, default=1)#uuid.uuid4, editable=False)
+    username = models.CharField(max_length=20, blank=False, unique=True)
     email = models.EmailField(blank=False)
     
     def __str__(self) -> str:
         return self.username
-    
-    @property
-    def token(self):
-        token_obj = Token.objects.filter(user=self).first()
-        if token_obj:
-            return token_obj.key
 
 
 # Rooms model

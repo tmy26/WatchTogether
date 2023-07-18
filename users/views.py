@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .backend_logic import create_user, delete_user_account, user_authentification
+from .backend_logic import create_user, delete_user_account
 from .backend_logic_rooms import create_room
 
 
@@ -10,7 +10,7 @@ class UserRegistration(APIView):
 
     def post(self, request):
         msg = create_user(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg,dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data={'Success': 'Created user'}, status=status.HTTP_200_OK)
@@ -24,14 +24,6 @@ class UserRegistration(APIView):
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
-        
-
-class UserAuthentification(APIView):
-    """User auth"""
-
-    def post(self, request):
-        msg = user_authentification(request)
-        return msg
 
 
 class RoomCreation(APIView):
