@@ -17,7 +17,7 @@ def create_user(request) -> dict:
     hashed_password = make_password(password)
     #user creation
     User.objects.create(
-        user_name=user_name,
+        username=user_name,
         email=email,
         password=hashed_password,
     )
