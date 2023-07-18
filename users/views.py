@@ -60,6 +60,3 @@ class RoomCreation(APIView):
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
     
-
-    def get(self, request):
-        pass
