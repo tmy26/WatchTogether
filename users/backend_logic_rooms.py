@@ -52,15 +52,16 @@ def edit_room(request) -> dict:
     new_room_name = request.data.get('room_name')
     new_room_password = request.data.get('room_password')
 
-    if Room.objects.filter(room_unique_id=room_unique_id).exists():
-        room_to_edit = Room.objects.get(room_unique_id=room_unique_id)
-        if new_room_name:
-            room_to_edit.room_name = new_room_name
-        if new_room_password:
-            room_to_edit.room_password = make_password(new_room_password)
-        room_to_edit.save()
+    try:
+        if Room.objects.filter(room_unique_id=room_unique_id).exists():
+            room_to_edit = Room.objects.get(room_unique_id=room_unique_id)
+            if new_room_name:
+                room_to_edit.room_name = new_room_name
+            if new_room_password:
+                room_to_edit.room_password = make_password(new_room_password)
+            room_to_edit.save()
         return {"Success": "Room edited"}
-    else:
+    except Room.DoesNotExist:
         return {"Error": "Room does not exist"}
 
 
