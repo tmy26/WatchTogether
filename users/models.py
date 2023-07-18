@@ -29,13 +29,19 @@ class Room(models.Model):
     
     # Room properties
     room_unique_id =  models.UUIDField(
-         primary_key = True,
-         default = uuid.uuid4,
-         editable = False)
+         primary_key=True,
+         default=uuid.uuid4,
+         editable=False)
+    
+    # delete rooms, if the related user is also deleted
+    room_owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-    room_name = models.CharField(max_length=100, blank=False)
-    room_password = models.CharField(max_length=50, blank=False)
+    room_name = models.CharField(max_length=100, blank=True)
+    room_password = models.CharField(max_length=50, blank=True)
 
-    #TODO: If the owner user is deleted, CASCADE deletes the Room, assign a room owner
     #TODO: Make room default name -> "<Username>'s room", blank=False
+
+    def __str__(self) -> str:
+        return self.room_name
+
 
