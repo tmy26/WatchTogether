@@ -1,0 +1,38 @@
+2023-07-18 21:26:30,047 | ERROR    | the message that should be logged
+2023-07-18 21:26:32,796 | ERROR    | the message that should be logged
+2023-07-18 21:26:32,906 | INFO     | Account with username: loggin333gTe3st was created. The account is not yet activated!
+2023-07-18 21:27:05,707 | ERROR    | the message that should be logged
+2023-07-18 21:27:05,812 | INFO     | Account with username: lo3ggin333gTe3st was created. The account is not yet activated!
+2023-07-18 21:28:59,480 | ERROR    | the message that should be logged
+2023-07-18 21:28:59,594 | INFO     | Account with username: lo3g3gin333gTe3st was created. The account is not yet activated!
+2023-07-18 21:29:09,741 | ERROR    | the message that should be logged
+2023-07-18 21:29:09,850 | INFO     | Account with username: lo3g3gin3333gTe3st was created. The account is not yet activated!
+2023-07-18 21:29:32,226 | ERROR    | the message that should be logged
+2023-07-18 21:29:33,938 | ERROR    | the message that should be logged
+2023-07-18 21:30:59,676 | ERROR | the message that should be logged
+2023-07-18 21:31:21,558 | ERROR | the message that should be logged
+2023-07-18 21:31:22,105 | ERROR | the message that should be logged
+2023-07-18 21:31:22,535 | ERROR | the message that should be logged
+2023-07-18 21:31:22,898 | ERROR | the message that should be logged
+2023-07-18 21:31:23,330 | ERROR | the message that should be logged
+2023-07-18 21:31:23,666 | ERROR | the message that should be logged
+2023-07-18 21:31:23,979 | ERROR | the message that should be logged
+2023-07-18 21:41:40,302 | ERROR    | the message that should be logged
+2023-07-18 21:42:48,961 | ERROR    | the message that should be logged
+2023-07-18 21:44:54,187 | ERROR    | the message that should be logged
+2023-07-18 21:45:10,299 | ERROR    | the message that should be logged
+2023-07-18 21:52:12,661 | ERROR    | the message that should be logged
+2023-07-18 21:52:12,775 | INFO     | Account with username: full test was created. The account is not yet activated!
+2023-07-18 21:52:15,743 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-18 21:54:11,618 | ERROR    | the message that should be logged
+2023-07-18 21:54:11,725 | INFO     | Account with username: MitioPishtova69 was created. The account is not yet activated!
+2023-07-18 21:54:13,185 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-18 22:06:24,984 | ERROR    | the message that should be logged
+2023-07-18 22:06:25,099 | INFO     | Account with username: MitioPishtova6969 was created. The account is not yet activated!
+2023-07-18 22:06:28,347 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-18 22:06:41,777 | ERROR    | the message that should be logged
+2023-07-18 22:06:41,884 | INFO     | Account with username: MitioPishtova69369 was created. The account is not yet activated!
+2023-07-18 22:06:43,411 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-18 22:09:32,121 | ERROR    | the message that should be logged
+2023-07-18 22:09:32,232 | INFO     | Account with username: MitioPishtova693369 was created. The account is not yet activated!
+2023-07-18 22:09:34,695 | INFO     | An activataion email was sent to tomcom@abv.bg 
