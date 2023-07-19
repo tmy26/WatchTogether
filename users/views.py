@@ -5,6 +5,7 @@ from .backend_logic import create_user, delete_user_account, user_authentificati
 from .backend_logic_rooms import *
 from .backend_logic_stream import * 
 
+
 class UserRegistration(APIView):
     """User registration"""
 
@@ -60,26 +61,27 @@ class RoomCreation(APIView):
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
     
-class StreamCreateion(APIView):
+
+class StreamCreation(APIView):
     """Stream creation"""
 
+
     def post(self, request):
-        msg = create_steam(request)
-        if 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
+        msg, created_object = create_steam(request)
+        return handle_response(msg), created_object
 
     def delete(self, request):
-        msg = delete_stream(request)
-        if 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
+        msg, deleted_object = delete_stream(request)
+        return handle_response(msg), deleted_object
 
     def put(self, request):
-        msg = edit_stream(request)
-        if 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
+        msg, edited_object = edit_stream(request)
+        return handle_response(msg), edited_object
+
+
+def handle_response(msg):
+    if isinstance(msg, dict) and 'Error' in msg.keys():
+        return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(data=msg, status=status.HTTP_200_OK)
+    
