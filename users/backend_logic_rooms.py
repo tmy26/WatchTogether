@@ -29,13 +29,11 @@ def create_room(request) -> dict:
     room_password = "" if room_password is None else make_password(room_password)
 
     # create a Room
-    # filter returns a list of owners, where only one owner is stored so we always get index 0
-    #TODO: See how to create custom objects method to always get the first user so we dont get by index
     Room.objects.create(
         room_unique_id = room_unique_id,
         room_name=room_name,
         room_password=room_password,
-        room_owner=User.objects.filter(id=room_owner)[0]
+        room_owner=User.objects.get(id=room_owner)
     )
     return {'Success': 'Room created'}
 
