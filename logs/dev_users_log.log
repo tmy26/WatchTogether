@@ -159,3 +159,6 @@
 2023-07-19 17:18:07,953 | INFO     | Account with username: test20 was created. The account is not yet activated!
 2023-07-19 17:18:09,899 | INFO     | An activataion email was sent to tomcom@abv.bg 
 2023-07-19 17:18:30,437 | INFO     | A new account was activated!
+2023-07-19 17:43:23,249 | INFO     | Account with username: test21 was created. The account is not yet activated!
+2023-07-19 17:43:26,709 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:43:38,151 | INFO     | A new account was activated!

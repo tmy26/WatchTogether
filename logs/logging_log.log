@@ -1188,3 +1188,6 @@ django.db.utils.IntegrityError: FOREIGN KEY constraint failed
 2023-07-19 17:27:49,447 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-07-19 17:27:58,833 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/urls.py changed, reloading.
 2023-07-19 17:27:59,019 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:43:19,789 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:44:38,479 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:44:38,660 django.utils.autoreload INFO     Watching for file changes with StatReloader

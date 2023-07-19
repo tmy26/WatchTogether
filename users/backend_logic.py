@@ -11,6 +11,8 @@ from watch_together.general_utils import get_loggers
 from .tokens import account_activation_token
 from .models import User
 
+from django.shortcuts import render, redirect
+
 
 dev_logger = get_loggers('users_dev')
 
@@ -28,9 +30,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         dev_logger.info(msg=f"A new account was activated!")
+        return redirect("https://www.google.com/")
     else:
         dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback users, backend_logic, activate") 
-
+        return redirect("https://www.google.com/")
     
 def activateEmail(request, user, to_email):
     mail_subject = "Activate your account"
