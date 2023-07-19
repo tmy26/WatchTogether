@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .backend_logic import create_user, delete_user_account, user_authentification
 from .backend_logic_rooms import *
-
+from .backend_logic_stream import * 
 
 class UserRegistration(APIView):
     """User registration"""
@@ -60,3 +60,26 @@ class RoomCreation(APIView):
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
     
+class StreamCreateion(APIView):
+    """Stream creation"""
+
+    def post(self, request):
+        msg = create_steam(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        msg = delete_stream(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        msg = edit_stream(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg, status=status.HTTP_200_OK)
