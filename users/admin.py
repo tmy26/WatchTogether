@@ -14,6 +14,6 @@ class RoomAdmin(admin.ModelAdmin):
 
 
 @admin.register(Stream)
-class RoomAdmin(admin.ModelAdmin):
+class StreamAdmin(admin.ModelAdmin):
     search_fields = ('stream_link', 'stream_room',)
     list_display = ('stream_link', 'stream_room',)
