@@ -165,3 +165,1026 @@ ValueError: Field 'id' expected a number but got 'golqmDIkk'.
 2023-07-18 22:11:05,578 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2023-07-18 22:11:33,597 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/views.py changed, reloading.
 2023-07-18 22:11:33,766 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 15:51:56,734 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 15:59:12,826 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 15:59:13,006 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 15:59:27,593 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 15:59:27,771 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 15:59:38,719 django.request WARNING  Bad Request: /api/user/user_registration
+2023-07-19 16:00:20,060 django.request ERROR    Internal Server Error: /api/user/activate/TXR0/brldrk-43c942506c80179be955391e05da65b8
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 43, in activate
+    user = User.objects.filter(username)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1412, in build_filter
+    arg, value = filter_expr
+    ^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+2023-07-19 16:01:01,290 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:01:01,473 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:01:13,831 django.request ERROR    Internal Server Error: /api/user/activate/TXR0dA/brldtu-34bfa20180dbf36d0a81ea78071f9f1b
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 43, in activate
+    user = User.objects.filter(username)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1412, in build_filter
+    arg, value = filter_expr
+    ^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+2023-07-19 16:01:34,791 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:01:34,981 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:01:46,351 django.request ERROR    Internal Server Error: /api/user/activate/TXR0dHQ/brldur-3b8524579935a0fd4e3f80a7d62f9afd
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 43, in activate
+    user = User.objects.filter(username)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1412, in build_filter
+    arg, value = filter_expr
+    ^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+2023-07-19 16:03:10,897 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:03:11,080 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:03:31,872 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:03:32,050 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:03:42,521 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:03:42,701 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:03:45,902 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:03:46,072 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:04:00,458 django.request ERROR    Internal Server Error: /api/user/activate/TTMz/brldyc-4f585054139ab1d2fe80f0aec4be4492
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 47, in activate
+    if user is not None and account_activation_token.check_token(user.id, token):
+                                                                 ^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'id'
+2023-07-19 16:06:09,334 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:06:09,512 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:06:16,880 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:06:17,059 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:06:46,157 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:06:46,335 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:06:59,640 django.request ERROR    Internal Server Error: /api/user/activate/TTMzMw/brle3c-e195bf60be3615935dcef8e5f2473df0
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2053, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'builtin_function_or_method'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 46, in activate
+    user_id = User.objects.filter(username=username, id=id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1480, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1307, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 341, in get_prep_lookup
+    return super().get_prep_lookup()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 85, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2055, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <built-in function id>.
+2023-07-19 16:07:31,077 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:07:31,273 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:07:39,674 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:07:39,848 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:07:54,308 django.request ERROR    Internal Server Error: /api/user/activate/TTMzMzM/brle4z-2f9dc86516f58ba5815b7d86e62bfa32
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2053, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'builtin_function_or_method'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 46, in activate
+    user_id = User.objects.filter(username=username, id=id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1480, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1307, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 341, in get_prep_lookup
+    return super().get_prep_lookup()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 85, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2055, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <built-in function id>.
+2023-07-19 16:13:21,613 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:13:21,797 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:13:35,373 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:13:35,561 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:13:47,912 django.request ERROR    Internal Server Error: /api/user/activate/TTMzMzMz/brleeo-6701d409d51743f0a8c085bc0d1e5a72
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2053, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'builtin_function_or_method'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 45, in activate
+    user = User.objects.filter(pk=id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1480, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1307, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 341, in get_prep_lookup
+    return super().get_prep_lookup()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/lookups.py", line 85, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2055, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <built-in function id>.
+2023-07-19 16:15:22,461 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:15:22,633 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:15:56,899 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:15:57,076 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:16:13,037 django.request ERROR    Internal Server Error: /api/user/activate/TTMzMzMzMw/brleil-3d11f849d07b5c6daa790879f81f95ff
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 44, in activate
+    user = User.objects.get(username)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1412, in build_filter
+    arg, value = filter_expr
+    ^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+2023-07-19 16:17:36,385 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:17:36,567 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:18:33,685 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:18:33,862 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:21:18,765 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:21:18,936 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:21:27,274 django.request WARNING  Bad Request: /api/user/user_registration
+2023-07-19 16:21:51,906 django.request WARNING  Bad Request: /api/user/user_registration
+2023-07-19 16:23:40,819 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:23:40,991 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:23:51,407 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:23:51,595 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:24:11,364 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:24:11,547 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:24:38,528 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdA/brlewp-717401d4cc49ec9731b20727bef18465
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 23, in activate
+    user = User.objects.get(uid)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1534, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1565, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1412, in build_filter
+    arg, value = filter_expr
+    ^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 25, in activate
+    except user.DoesNotExist:
+           ^^^^
+UnboundLocalError: cannot access local variable 'user' where it is not associated with a value
+2023-07-19 16:25:29,461 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:25:29,656 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:25:39,087 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:25:39,267 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:26:58,120 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:27:20,653 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDE/brlf14-d56edad632937d8ad374c88f89b36580
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 27, in activate
+    print(user)
+          ^^^^
+UnboundLocalError: cannot access local variable 'user' where it is not associated with a value
+2023-07-19 16:29:33,605 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:29:33,783 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:29:47,309 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:29:47,489 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:30:00,913 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDI/brlf5q-009427d05e102990241d0bd122e57d1d
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/middleware/clickjacking.py", line 34, in process_response
+    response.headers["X-Frame-Options"] = self.get_xframe_options_value(
+    ^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'headers'
+2023-07-19 16:32:52,645 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:32:52,832 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:35:41,683 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:35:41,867 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:36:16,139 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:36:16,326 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:37:09,025 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:37:09,198 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:39:02,575 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDM/brlfks-efc501cbf62e3b9630976d1384e8e1f5
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view users.backend_logic.activate didn't return an HttpResponse object. It returned None instead.
+2023-07-19 16:41:04,241 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:41:04,421 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:41:13,845 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:41:14,019 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:41:31,563 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDQ/brlfox-36dafed0d442c961bb633474376387bc
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/rest_framework/response.py", line 55, in rendered_content
+    assert renderer, ".accepted_renderer not set on Response"
+AssertionError: .accepted_renderer not set on Response
+2023-07-19 16:42:43,594 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:43:42,744 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:43:42,923 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:45:06,807 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:45:06,979 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:45:21,567 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:45:21,740 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:45:50,743 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDU/brlfw6-b3fc7ad2a6c9da44b99026dbeb1cb41a
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 43, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 16:46:20,968 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:46:21,159 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:46:53,398 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDY/brlfxt-ba8cbd038aace94b79351e6b3312469e
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 32, in activate
+    if account_activation_token.check_token(user.id, token):
+                                            ^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'id'
+2023-07-19 16:47:18,351 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:47:18,530 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:48:05,917 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:48:06,097 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:48:29,657 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDc/brlg0i-277593a03337c46e1425b07d97dbc7f3
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 42, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 16:50:51,687 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:50:51,872 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:51:14,797 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:51:14,970 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:51:35,359 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDg/brlg5l-d1cbc9c0edf3beaa1d8444a87cecc9a4
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 43, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 16:52:06,796 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:52:06,999 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:52:20,912 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDk/brlg71-c01fed00abe5825abcff3d05c27ddcb6
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 43, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 16:54:00,971 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:54:01,152 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:54:24,041 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:54:24,226 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:54:39,988 django.request ERROR    Internal Server Error: /api/user/activate/dGVzdDEw/brlgav-af54b6e14eba7f1423f8dc3e0ea25b79
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 32, in activate
+    if account_activation_token.check_token(uid, token):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 71, in check_token
+    self._make_token_with_timestamp(user, ts, secret),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 90, in _make_token_with_timestamp
+    self._make_hash_value(user, timestamp),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/tokens.py", line 8, in _make_hash_value
+    six.text_type(user.pk) + six.text_type(timestamp)  + six.text_type(user.is_active)
+                  ^^^^^^^
+AttributeError: 'str' object has no attribute 'pk'
+2023-07-19 16:56:30,207 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 16:56:30,380 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:58:51,424 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:58:51,598 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:59:21,751 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 16:59:21,930 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 16:59:38,033 django.request ERROR    Internal Server Error: /api/user/activate/MTI3/brlgj6-5adb98377c72e14e091c95f224e39b6f
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 32, in activate
+    if account_activation_token.check_token(uid, token):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 71, in check_token
+    self._make_token_with_timestamp(user, ts, secret),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 90, in _make_token_with_timestamp
+    self._make_hash_value(user, timestamp),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/tokens.py", line 8, in _make_hash_value
+    six.text_type(user.pk) + six.text_type(timestamp) + six.text_type(user.is_active)
+                  ^^^^^^^
+AttributeError: 'str' object has no attribute 'pk'
+2023-07-19 17:01:03,683 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:01:03,864 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:01:05,007 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:01:05,140 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:01:27,780 django.request ERROR    Internal Server Error: /api/user/activate/MTI4/brlgm6-06a573611b524ee4c294a46f884e940b
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 32, in activate
+    if account_activation_token.check_token(uid, token):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 71, in check_token
+    self._make_token_with_timestamp(user, ts, secret),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 90, in _make_token_with_timestamp
+    self._make_hash_value(user, timestamp),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/tokens.py", line 8, in _make_hash_value
+    six.text_type(user.pk) + six.text_type(timestamp) + six.text_type(user.is_active)
+                  ^^^^^^^
+AttributeError: 'str' object has no attribute 'pk'
+2023-07-19 17:02:16,869 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:02:17,040 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:02:52,374 django.request ERROR    Internal Server Error: /api/user/activate/MTI5/brlgoj-87d4b98a0d6008b4fe03a7b2de524670
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 38, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 17:04:27,510 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:04:27,693 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:04:40,246 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:04:40,416 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:04:44,701 django.request ERROR    Internal Server Error: /admin/users/user/129/delete/
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 313, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 2105, in delete_view
+    with transaction.atomic(using=router.db_for_write(self.model)):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/transaction.py", line 263, in __exit__
+    connection.commit()
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 337, in commit
+    self._commit()
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 312, in _commit
+    with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 313, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: FOREIGN KEY constraint failed
+2023-07-19 17:05:10,847 django.request ERROR    Internal Server Error: /api/user/activate/MTMw/brlgs6-9bca077ef4c549544ad6c6edd6f8360e
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 32, in activate
+    if account_activation_token.check_token(uid, token):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 71, in check_token
+    self._make_token_with_timestamp(user, ts, secret),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 90, in _make_token_with_timestamp
+    self._make_hash_value(user, timestamp),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/tokens.py", line 9, in _make_hash_value
+    six.text_type(User.pk) + six.text_type(timestamp) + six.text_type(User.is_active)
+                  ^^^^^^^
+AttributeError: 'str' object has no attribute 'pk'
+2023-07-19 17:05:22,070 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:05:22,241 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:06:27,614 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:06:27,786 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:07:05,164 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:07:05,350 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:07:18,392 django.request ERROR    Internal Server Error: /api/user/activate/MTMx/brlgvz-e99a46639571f84a11952c7a8cf360d5
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 38, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 17:08:10,713 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:08:10,892 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:08:26,665 django.request ERROR    Internal Server Error: /api/user/activate/MTMy/brlgxv-069e6e506e59202fed9551f331df4d62
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 37, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 17:10:20,485 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:10:20,671 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:10:58,998 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:10:59,168 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:11:24,108 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:11:24,287 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:12:14,138 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:12:14,314 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:12:27,885 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:12:28,059 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:13:38,552 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:13:38,735 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:13:47,418 django.request ERROR    Internal Server Error: /api/user/activate/MTM0/brlh36-1f4d54423ce4c661030c48c5c2bbaf04
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view users.backend_logic.activate didn't return an HttpResponse object. It returned None instead.
+2023-07-19 17:14:33,630 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:14:33,813 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:15:08,969 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:15:09,145 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:16:13,399 django.request ERROR    Internal Server Error: /api/user/activate/MTM1/brlh9o-77e7907cfea46799a4c7a217181dc99a
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 37, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 17:17:57,128 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:18:30,454 django.request ERROR    Internal Server Error: /api/user/activate/MTM2/brlhe7-b1a09860775e2faf5ba4c137522acd4d
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/users/backend_logic.py", line 37, in activate
+    return redirect('user_registration')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_registration' not found. 'user_registration' is not a valid view function or pattern name.
+2023-07-19 17:21:28,288 django.request ERROR    Internal Server Error: /admin/users/user/136/change/
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 313, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    with transaction.atomic(using=router.db_for_write(self.model)):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/transaction.py", line 263, in __exit__
+    connection.commit()
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 337, in commit
+    self._commit()
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 312, in _commit
+    with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 313, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: FOREIGN KEY constraint failed
+2023-07-19 17:21:52,756 django.request ERROR    Internal Server Error: /admin/users/user/137/change/
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 313, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1889, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1746, in changeform_view
+    with transaction.atomic(using=router.db_for_write(self.model)):
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/transaction.py", line 263, in __exit__
+    connection.commit()
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 337, in commit
+    self._commit()
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 312, in _commit
+    with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/tmy/Desktop/WatchTogether/venv/lib/python3.11/site-packages/django/db/backends/base/base.py", line 313, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: FOREIGN KEY constraint failed
+2023-07-19 17:22:55,051 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:22:55,220 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:23:20,171 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:23:20,352 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:24:30,856 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:24:31,041 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:24:32,174 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:24:32,322 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:24:35,527 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:24:35,707 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:24:49,229 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:24:49,409 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:25:16,415 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:25:16,593 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:25:40,498 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:25:40,680 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:26:23,235 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:26:23,416 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:26:44,245 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic.py changed, reloading.
+2023-07-19 17:26:44,420 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:27:03,131 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/tokens.py changed, reloading.
+2023-07-19 17:27:03,318 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:27:34,483 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/backend_logic_rooms.py changed, reloading.
+2023-07-19 17:27:34,665 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:27:49,270 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/models.py changed, reloading.
+2023-07-19 17:27:49,447 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2023-07-19 17:27:58,833 django.utils.autoreload INFO     /Users/tmy/Desktop/WatchTogether/users/urls.py changed, reloading.
+2023-07-19 17:27:59,019 django.utils.autoreload INFO     Watching for file changes with StatReloader

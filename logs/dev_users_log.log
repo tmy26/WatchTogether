@@ -36,3 +36,126 @@
 2023-07-18 22:09:32,121 | ERROR    | the message that should be logged
 2023-07-18 22:09:32,232 | INFO     | Account with username: MitioPishtova693369 was created. The account is not yet activated!
 2023-07-18 22:09:34,695 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 15:59:38,713 | ERROR    | the message that should be logged
+2023-07-19 15:59:44,174 | ERROR    | the message that should be logged
+2023-07-19 15:59:44,283 | INFO     | Account with username: Mtt was created. The account is not yet activated!
+2023-07-19 15:59:47,805 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:01:06,576 | ERROR    | the message that should be logged
+2023-07-19 16:01:06,682 | INFO     | Account with username: Mttt was created. The account is not yet activated!
+2023-07-19 16:01:07,910 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:01:39,469 | ERROR    | the message that should be logged
+2023-07-19 16:01:39,574 | INFO     | Account with username: Mtttt was created. The account is not yet activated!
+2023-07-19 16:01:41,142 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:03:48,582 | ERROR    | the message that should be logged
+2023-07-19 16:03:48,693 | INFO     | Account with username: M33 was created. The account is not yet activated!
+2023-07-19 16:03:51,155 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:06:48,796 | ERROR    | the message that should be logged
+2023-07-19 16:06:48,907 | INFO     | Account with username: M333 was created. The account is not yet activated!
+2023-07-19 16:06:52,939 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:07:47,699 | ERROR    | the message that should be logged
+2023-07-19 16:07:47,812 | INFO     | Account with username: M3333 was created. The account is not yet activated!
+2023-07-19 16:07:49,150 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:13:36,523 | ERROR    | the message that should be logged
+2023-07-19 16:13:36,637 | INFO     | Account with username: M33333 was created. The account is not yet activated!
+2023-07-19 16:13:38,948 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:15:57,673 | ERROR    | the message that should be logged
+2023-07-19 16:15:57,783 | INFO     | Account with username: M333333 was created. The account is not yet activated!
+2023-07-19 16:16:00,073 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:21:27,271 | ERROR    | the message that should be logged
+2023-07-19 16:21:29,915 | ERROR    | the message that should be logged
+2023-07-19 16:21:30,023 | INFO     | Account with username: M3333333 was created. The account is not yet activated!
+2023-07-19 16:21:51,904 | ERROR    | the message that should be logged
+2023-07-19 16:21:59,298 | ERROR    | the message that should be logged
+2023-07-19 16:21:59,397 | INFO     | Account with username: M33333333 was created. The account is not yet activated!
+2023-07-19 16:24:24,997 | ERROR    | the message that should be logged
+2023-07-19 16:24:25,112 | INFO     | Account with username: test was created. The account is not yet activated!
+2023-07-19 16:24:28,170 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:27:04,177 | ERROR    | the message that should be logged
+2023-07-19 16:27:04,285 | INFO     | Account with username: test1 was created. The account is not yet activated!
+2023-07-19 16:27:06,764 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:29:50,138 | ERROR    | the message that should be logged
+2023-07-19 16:29:50,247 | INFO     | Account with username: test2 was created. The account is not yet activated!
+2023-07-19 16:29:51,698 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:30:00,884 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:38:52,213 | ERROR    | the message that should be logged
+2023-07-19 16:38:52,324 | INFO     | Account with username: test3 was created. The account is not yet activated!
+2023-07-19 16:38:54,462 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:39:02,550 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:41:21,172 | ERROR    | the message that should be logged
+2023-07-19 16:41:21,278 | INFO     | Account with username: test4 was created. The account is not yet activated!
+2023-07-19 16:41:23,756 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:41:31,535 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:45:42,613 | ERROR    | the message that should be logged
+2023-07-19 16:45:42,721 | INFO     | Account with username: test5 was created. The account is not yet activated!
+2023-07-19 16:45:45,061 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:45:50,715 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:46:41,748 | ERROR    | the message that should be logged
+2023-07-19 16:46:41,857 | INFO     | Account with username: test6 was created. The account is not yet activated!
+2023-07-19 16:46:43,084 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:48:18,425 | ERROR    | the message that should be logged
+2023-07-19 16:48:18,536 | INFO     | Account with username: test7 was created. The account is not yet activated!
+2023-07-19 16:48:21,481 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:48:29,629 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:51:21,374 | ERROR    | the message that should be logged
+2023-07-19 16:51:21,479 | INFO     | Account with username: test8 was created. The account is not yet activated!
+2023-07-19 16:51:24,310 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:51:35,330 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:52:13,580 | ERROR    | the message that should be logged
+2023-07-19 16:52:13,684 | INFO     | Account with username: test9 was created. The account is not yet activated!
+2023-07-19 16:52:14,993 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:52:20,882 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 16:54:31,378 | ERROR    | the message that should be logged
+2023-07-19 16:54:31,491 | INFO     | Account with username: test10 was created. The account is not yet activated!
+2023-07-19 16:54:33,892 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 16:59:30,505 | ERROR    | the message that should be logged
+2023-07-19 16:59:30,618 | INFO     | Account with username: test11 was created. The account is not yet activated!
+2023-07-19 16:59:32,578 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:01:18,230 | ERROR    | the message that should be logged
+2023-07-19 17:01:18,340 | INFO     | Account with username: test12 was created. The account is not yet activated!
+2023-07-19 17:01:19,663 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:02:43,594 | ERROR    | the message that should be logged
+2023-07-19 17:02:43,701 | INFO     | Account with username: test13 was created. The account is not yet activated!
+2023-07-19 17:02:45,435 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:02:52,345 | INFO     | success account was activated
+2023-07-19 17:04:54,432 | ERROR    | the message that should be logged
+2023-07-19 17:04:54,543 | INFO     | Account with username: test14 was created. The account is not yet activated!
+2023-07-19 17:04:57,163 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:07:11,159 | ERROR    | the message that should be logged
+2023-07-19 17:07:11,268 | INFO     | Account with username: test15 was created. The account is not yet activated!
+2023-07-19 17:07:13,378 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:07:18,365 | INFO     | success account was activated
+2023-07-19 17:08:19,060 | ERROR    | the message that should be logged
+2023-07-19 17:08:19,162 | INFO     | Account with username: test16 was created. The account is not yet activated!
+2023-07-19 17:08:20,938 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:08:26,636 | INFO     | success account was activated
+2023-07-19 17:10:31,138 | ERROR    | the message that should be logged
+2023-07-19 17:10:31,242 | INFO     | Account with username: test17 was created. The account is not yet activated!
+2023-07-19 17:10:33,111 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:11:30,617 | ERROR    | the message that should be logged
+2023-07-19 17:11:30,717 | INFO     | Account with username: test18 was created. The account is not yet activated!
+2023-07-19 17:11:32,266 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:13:47,391 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user with {username} token's has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-19 17:15:24,654 | ERROR    | the message that should be logged
+2023-07-19 17:15:24,752 | INFO     | Account with username: test19 was created. The account is not yet activated!
+2023-07-19 17:15:26,196 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:16:13,383 | INFO     | A new account was activated!
+2023-07-19 17:18:07,845 | ERROR    | the message that should be logged
+2023-07-19 17:18:07,953 | INFO     | Account with username: test20 was created. The account is not yet activated!
+2023-07-19 17:18:09,899 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-19 17:18:30,437 | INFO     | A new account was activated!

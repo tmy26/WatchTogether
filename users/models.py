@@ -23,4 +23,3 @@ class Room(models.Model):
     room_password = models.CharField(max_length=50, blank=True)
 
     #TODO: If the owner user is deleted, CASCADE deletes the Room
-

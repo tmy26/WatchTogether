@@ -4,6 +4,7 @@ from .models import Room
 from rest_framework import status
 from rest_framework.response import Response
 
+
 def create_room(request) -> dict:
     """Room creation function"""
 
