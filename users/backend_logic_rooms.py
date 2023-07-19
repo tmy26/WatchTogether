@@ -76,11 +76,8 @@ def edit_room(request) -> dict:
 def get_room(request) -> dict:
     """Get room function"""
 
-    automatic_conf = Room.objects.all()
-    serialized = RoomSerializer(automatic_conf, many=True)
-    metadata = "GET"
-    module = "Room"
-    data = serialized.data
+    all_rooms_obj = Room.objects.all()
+    serialized = RoomSerializer(all_rooms_obj, many=True)
 
     try:
         return {"Rooms": serialized.data}

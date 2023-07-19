@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .backend_logic import create_user, delete_user_account, user_authentification
 from .backend_logic_rooms import *
-from .serializers import RoomSerializer
 
 
 class UserRegistration(APIView):
