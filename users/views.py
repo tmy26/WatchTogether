@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .backend_logic import create_user, delete_user_account, user_authentification
 from .backend_logic_rooms import *
+from .serializers import RoomSerializer
 
 
 class UserRegistration(APIView):
@@ -62,7 +63,10 @@ class RoomCreation(APIView):
 
     def get(self, request):
         msg = get_room(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data=msg, status=status.HTTP_200_OK)    
+            return Response(data=msg, status=status.HTTP_200_OK)
+        
+# TODO: Investigate on how to join a room using the GET method.
+# TODO: Display rooms for currently logged user

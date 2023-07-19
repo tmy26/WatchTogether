@@ -1,6 +1,8 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password
-from .models import Room
+
+from users.serializers import RoomSerializer
+from .models import Room, User
 
 def create_room(request) -> dict:
     """Room creation function"""
@@ -18,15 +20,22 @@ def create_room(request) -> dict:
     # Check if room owner is existing user in the database (should be existing)
     if not Room.objects.filter(room_owner=room_owner).exists():
         return {'Error': 'Owner of the room does not exist.'}
+    
+    # later will be set default to the logged username's room
+    if room_name == None:
+        room_name = " "
 
-    # Hash room password
-    hash_password = make_password(room_password)
+    # Hash room password, if there is one
+    room_password = "" if room_password is None else make_password(room_password)
 
     # create a Room
+    # filter returns a list of owners, where only one owner is stored so we always get index 0
+    #TODO: See how to create custom objects method to always get the first user so we dont get by index
     Room.objects.create(
         room_unique_id = room_unique_id,
         room_name=room_name,
-        room_password=hash_password,
+        room_password=room_password,
+        room_owner=User.objects.filter(id=room_owner)[0]
     )
     return {'Success': 'Room created'}
 
@@ -69,16 +78,20 @@ def edit_room(request) -> dict:
 def get_room(request) -> dict:
     """Get room function"""
 
-    room_unique_id = request.data.get('room_unique_id')
+    automatic_conf = Room.objects.all()
+    serialized = RoomSerializer(automatic_conf, many=True)
+    metadata = "GET"
+    module = "Room"
+    data = serialized.data
 
     try:
-        if Room.objects.filter(room_unique_id=room_unique_id).exists():
-            return {"Rooms": Room.objects.all()}
+        return {"Rooms": serialized.data}
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {"Error": serialized.data}
 
 
 def join_room(request) -> dict:
     """Join a room"""
     pass
 # TODO: Investigate on how to join a room using the GET method.
+# TODO: Display rooms for currently logged user
