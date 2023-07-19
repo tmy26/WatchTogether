@@ -42,7 +42,7 @@ class RoomCreation(APIView):
         if 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data={'Success': 'Created room'}, status=status.HTTP_200_OK)
+            return Response(data=msg, status=status.HTTP_200_OK)
 
 
     def delete(self, request):
@@ -68,7 +68,7 @@ class StreamCreateion(APIView):
         if 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data=msg, status=status.HTTP_201_CREATED)
+            return Response(data=msg, status=status.HTTP_200_OK)
 
     def delete(self, request):
         msg = delete_stream(request)
