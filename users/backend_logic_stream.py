@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password
 from .models import Room , Stream
 
 def create_steam(request) -> dict:
