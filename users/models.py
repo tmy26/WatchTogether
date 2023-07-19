@@ -31,9 +31,9 @@ class Room(models.Model):
          editable=False)
     
     # delete rooms, if the related user is also deleted
-    room_owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    room_owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    room_name = models.CharField(max_length=100, blank=True, null=True)
+    room_name = models.CharField(max_length=100, null=True, blank=True)
     room_password = models.CharField(max_length=50, blank=True, null=True)
 
     #TODO: Make room default name -> "<Username>'s room", blank=False

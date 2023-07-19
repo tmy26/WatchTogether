@@ -21,19 +21,22 @@ def create_room(request) -> dict:
     if not Room.objects.filter(room_owner=room_owner).exists():
         return {'Error': 'Owner of the room does not exist.'}
     
-    # later will be set default to the logged username's room
+    # Get current user info
+    user = User.objects.get(id=room_owner)
+
+    # If room name is not custom set, the default is <ownerUsername>'s room
     if room_name == None:
-        room_name = " "
+        room_name = f"{user.username}'s room"
 
     # Hash room password, if there is one
-    room_password = "" if room_password is None else make_password(room_password)
+    room_password = None if room_password is None else make_password(room_password)
 
     # create a Room
     Room.objects.create(
-        room_unique_id = room_unique_id,
+        room_unique_id=room_unique_id,
         room_name=room_name,
         room_password=room_password,
-        room_owner=User.objects.get(id=room_owner)
+        room_owner=user
     )
     return {'Success': 'Room created'}
 
