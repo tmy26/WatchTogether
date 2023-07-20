@@ -6,12 +6,11 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from watch_together.general_utils import get_loggers
 from .tokens import account_activation_token
 from .models import User
-
-from django.shortcuts import render, redirect
 
 
 dev_logger = get_loggers('users_dev')
@@ -34,6 +33,7 @@ def activate(request, uidb64, token):
     else:
         dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback users, backend_logic, activate") 
         return redirect("https://www.google.com/")
+    
     
 def activateEmail(request, user, to_email):
     mail_subject = "Activate your account"
