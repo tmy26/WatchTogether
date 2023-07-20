@@ -1,8 +1,8 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password
-from .models import Room
-from rest_framework import status
-from rest_framework.response import Response
+
+from users.serializers import RoomSerializer
+from .models import Room, User
 
 def create_room(request) -> dict:
     """Room creation function"""
@@ -12,20 +12,24 @@ def create_room(request) -> dict:
     room_name = request.data.get('room_name')
     room_owner = request.data.get('room_owner')
     room_password = request.data.get('room_password')
+    
+    # Check if room owner is existing user in the database (should be existing)
+    if not Room.objects.filter(room_owner=room_owner).exists():
+        return {'Error': 'Owner of the room does not exist.'}
+    
+    # later will be set default to the logged username's room
+    if room_name == None:
+        room_name = " "
 
-    # Check if room has a unique ID (it should be unique by default)
-    if Room.objects.filter(room_unique_id=room_unique_id).exists():
-        return {'Error': 'Existing room ID in database'}
-    #TODO: Check if room has a owner in database
-
-    # Hash room password
-    hash_password = make_password(room_password)
+    # Hash room password, if there is one
+    room_password = "" if room_password is None else make_password(room_password)
 
     # create a Room
     Room.objects.create(
         room_unique_id = room_unique_id,
         room_name=room_name,
-        room_password=hash_password,
+        room_password=room_password,
+        room_owner=User.objects.get(id=room_owner)
     )
     return {'Success': 'Room created'}
 
@@ -67,10 +71,18 @@ def edit_room(request) -> dict:
 
 def get_room(request) -> dict:
     """Get room function"""
-    pass
+
+    all_rooms_obj = Room.objects.all()
+    serialized = RoomSerializer(all_rooms_obj, many=True)
+
+    try:
+        return serialized
+    except Room.DoesNotExist:
+        return {"Error": serialized.data}
 
 
 def join_room(request) -> dict:
     """Join a room"""
     pass
-# TODO: Add Get method. Investigate on how to join a room using the GET method.
+# TODO: Investigate on how to join a room using the GET method.
+# TODO: Display rooms for currently logged user

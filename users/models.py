@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
-from django.conf import settings
 import uuid
-
 
 
 class User(AbstractUser):
@@ -25,7 +23,6 @@ class User(AbstractUser):
 class Room(models.Model):
     class Meta:
         verbose_name_plural = "Rooms"
-        #git
     
     # Room properties
     room_unique_id =  models.UUIDField(
@@ -36,8 +33,8 @@ class Room(models.Model):
     # delete rooms, if the related user is also deleted
     room_owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-    room_name = models.CharField(max_length=100, blank=True)
-    room_password = models.CharField(max_length=50, blank=True)
+    room_name = models.CharField(max_length=100, blank=True, null=True)
+    room_password = models.CharField(max_length=50, blank=True, null=True)
 
     #TODO: Make room default name -> "<Username>'s room", blank=False
 
