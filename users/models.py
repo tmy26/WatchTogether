@@ -45,8 +45,6 @@ class Room(models.Model):
         return self.room_name
 
 
-
-
 # Stream
 class Stream(models.Model):
     class Meta:
@@ -54,5 +52,4 @@ class Stream(models.Model):
  
     # Stream property
     stream_link = models.URLField()
- 
     stream_room = models.OneToOneField(Room, on_delete=models.CASCADE)

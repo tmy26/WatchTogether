@@ -1,11 +1,16 @@
 from .models import Room , Stream
 
+
 def create_steam(request) -> dict:
     """Stream creation function"""
 
     # request data
     stream_link = request.data.get('stream_link')
     stream_room = request.data.get('stream_room')
+
+    #check if requested data si null
+    if not stream_link or not stream_room:
+        return {"Error": "Invalid data. 'stream_link' and 'stream_room' are required."}
 
     # Check if the sream_room is the same as the Id of the room and if it is creates the stream 
 
@@ -17,7 +22,7 @@ def create_steam(request) -> dict:
         stream_link = stream_link,
         stream_room=stream_room
         )
-        Stream.save()
+        
         return {'Success': 'Stream created'}
     except Room.DoesNotExist:
         return {"Error": 'Create a room First and then create the stream'}
@@ -56,3 +61,4 @@ def edit_stream(request) -> dict:
         return {"Success": "Stream edited"}
     except Stream.DoesNotExist:
         return {"Error": "Stream does not exist"}
+
