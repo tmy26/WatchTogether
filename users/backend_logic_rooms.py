@@ -11,10 +11,6 @@ def create_room(request) -> dict:
     room_name = request.data.get('room_name')
     room_owner = request.data.get('room_owner')
     room_password = request.data.get('room_password')
-
-    # Check if room has a unique ID (it should be unique by default)
-    if Room.objects.filter(room_unique_id=room_unique_id).exists():
-        return {'Error': 'Existing room ID in database'}
     
     # Check if room owner is existing user in the database (should be existing)
     if not Room.objects.filter(room_owner=room_owner).exists():
@@ -78,14 +74,11 @@ def edit_room(request) -> dict:
 def get_room(request) -> dict:
     """Get room function"""
 
-    automatic_conf = Room.objects.all()
-    serialized = RoomSerializer(automatic_conf, many=True)
-    metadata = "GET"
-    module = "Room"
-    data = serialized.data
+    all_rooms_obj = Room.objects.all()
+    serialized = RoomSerializer(all_rooms_obj, many=True)
 
     try:
-        return {"Rooms": serialized.data}
+        return serialized
     except Room.DoesNotExist:
         return {"Error": serialized.data}
 
