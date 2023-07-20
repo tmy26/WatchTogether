@@ -47,6 +47,7 @@ class Room(models.Model):
 
 # Stream
 class Stream(models.Model):
+    
     class Meta:
         verbose_name_plural = "Streams"
  

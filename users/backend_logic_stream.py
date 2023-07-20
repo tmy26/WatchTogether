@@ -5,60 +5,78 @@ def create_steam(request) -> dict:
     """Stream creation function"""
 
     # request data
-    stream_link = request.data.get('stream_link')
+    stream_link = request.data.get('stream_link' )
     stream_room = request.data.get('stream_room')
 
-    #check if requested data si null
-    if not stream_link or not stream_room:
-        return {"Error": "Invalid data. 'stream_link' and 'stream_room' are required."}
+     # Check if stream_room is provided and if the room exists
+    if not stream_room or not Room.objects.filter(room_unique_id=stream_room).exists():
+        return {"Error": "Invalid 'stream_room'. The room does not exist."}
 
-    # Check if the sream_room is the same as the Id of the room and if it is creates the stream 
+    #check if requested data is null
+    if not stream_link:
+        return {"Error": "Invalid data. 'stream_link' is required."}
 
-    try:
-        room_unique_id = request.data.get('room_unique_id')
+    room = Room.objects.get(room_unique_id=stream_room)
 
-        if Stream.objects.filter(stream_room=room_unique_id).exists(): 
-         Stream.objects.create(
-        stream_link = stream_link,
-        stream_room=stream_room
-        )
+     # Check if the room already has a stream assigned
+    if Stream.objects.filter(stream_room=room).exists():
+        return {"Error": "The room already has a stream assigned."}
+    Stream.objects.create(
+    stream_link = stream_link,
+    stream_room=room
+    )
+    return {'Success': 'Stream created'}
         
-        return {'Success': 'Stream created'}
-    except Room.DoesNotExist:
-        return {"Error": 'Create a room First and then create the stream'}
-    
 
 def delete_stream(request) -> dict:
-    """Delete stream function"""
-
-    # Get the room that the stream belongs
+    """Stream deletion function"""
     stream_room = request.data.get('stream_room')
-    room_unique_id = request.data.get('room_unique_id')
+
+    # Check if stream_room is provided and if the room exists
+    if not stream_room or not Room.objects.filter(room_unique_id=stream_room).exists():
+        return {"Error": "Invalid 'stream_room'. The room does not exist."}
 
     try:
-        Stream.objects.get(stream_room=room_unique_id).delete()
-        return {"Success": "Stream deleted"}
+        stream_to_delete = Stream.objects.get(stream_room=stream_room)
+        stream_to_delete.delete()
+        return {'Success': 'Stream deleted'}
     except Stream.DoesNotExist:
         return {"Error": "Stream does not exist"}
 
 
 def edit_stream(request) -> dict:
-    """Edit stream function"""
+        """Stream editing function"""
+        stream_link = request.data.get('stream_link')
+        stream_room = request.data.get('stream_room')
 
-    # Get the id ot the room and stream properties 
-    room_unique_id = request.data.get('room_unique_id')
-    new_stream_link = request.data.get('stream_link')
-    new_stream_room = request.data.get('stream_room')
-    stream_room = request.data.get('stream_room')
+        # Check if stream_room is provided and if the room exists
+        if not stream_room or not Room.objects.filter(room_unique_id=stream_room).exists():
+            return {"Error": "Invalid 'stream_room'. The room does not exist."}
 
+        # Check if requested data is null
+        if not stream_link:
+            return {"Error": "Invalid data. 'stream_link' is required."}
 
-    try:
-        if Stream.objects.filter(stream_room=room_unique_id).exists():
+        try:
             stream_to_edit = Stream.objects.get(stream_room=stream_room)
-            if new_stream_link:
-                stream_to_edit.stream_link = new_stream_link
+            stream_to_edit.stream_link = stream_link
             stream_to_edit.save()
-        return {"Success": "Stream edited"}
-    except Stream.DoesNotExist:
-        return {"Error": "Stream does not exist"}
+            return {'Success': 'Stream edited'}
+        except Stream.DoesNotExist:
+            return {"Error": "Stream does not exist"}
+        except Room.DoesNotExist:
+            return {"Error": "Room does not exist"}
 
+
+def get_stream(request):
+    """Get all streams from the database"""
+    streams = Stream.objects.all()
+    stream_data = []
+
+    for stream in streams:
+        stream_data.append({
+            "stream_link": stream.stream_link,
+            "stream_room": stream.stream_room.room_unique_id,
+        })
+
+    return stream_data
