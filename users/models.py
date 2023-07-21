@@ -31,12 +31,20 @@ class Room(models.Model):
          editable=False)
     
     # delete rooms, if the related user is also deleted
-    room_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_room')
 
-    room_name = models.CharField(max_length=101, null=True, blank=True)
-    room_password = models.CharField(max_length=50, blank=True, null=True)
+    room_name = models.CharField(max_length=120, null=True, blank=True)
+    room_password = models.CharField(max_length=50, blank=True, null=True, default=None)
+
+    users = models.ManyToManyField(User, through='UserRoom', related_name='users_room')
 
     #TODO: Make room default name -> "<Username>'s room", blank=False
 
     def __str__(self) -> str:
         return str(self.room_name)
+
+
+# Join Room model
+class UserRoom(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=False, blank=False)
