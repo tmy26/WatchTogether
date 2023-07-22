@@ -38,8 +38,9 @@ class Room(models.Model):
 
     users = models.ManyToManyField(User, through='UserRoom', related_name='users_room')
 
-    #TODO: Make room default name -> "<Username>'s room", blank=False
-
+    # TODO: Decide, if there will be new room owner assign. Is the whole room being deleted
+    # if the owner gets deleted too.
+    
     def __str__(self) -> str:
         return str(self.room_name)
 
