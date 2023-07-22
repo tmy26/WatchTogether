@@ -22,7 +22,7 @@ def create_room(request) -> dict:
     user = User.objects.get(id=room_owner)
 
     # If room name is not custom set, the default is <ownerUsername>'s room
-    if room_name == None:
+    if room_name == None or room_name.isspace() or room_name == '':
         room_name = f"{user.username}'s room"
 
     # Hash room password, if there is one
