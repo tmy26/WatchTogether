@@ -36,7 +36,8 @@ class Room(models.Model):
     room_name = models.CharField(max_length=101, null=True, blank=True)
     room_password = models.CharField(max_length=50, blank=True, null=True)
 
-    #TODO: Make room default name -> "<Username>'s room", blank=False
+    # TODO: Decide, if there will be new room owner assign. Is the whole room being deleted
+    # if the owner gets deleted too.
 
     def __str__(self) -> str:
         return str(self.room_name)
