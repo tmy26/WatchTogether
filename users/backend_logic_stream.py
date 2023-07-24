@@ -1,6 +1,6 @@
 from .models import Room , Stream
 from users.serializers import StreamSerializer
-from django.http import JsonResponse
+
 
 def create_steam(request) -> dict:
     """Stream creation function"""
