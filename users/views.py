@@ -74,41 +74,22 @@ class RoomCreation(APIView):
 class StreamCreation(APIView):
     """Stream creation, deletion, and editing"""
 
+   
     def post(self, request):
-
-        msg = create_steam(request)
-        if isinstance(msg ,dict) and 'Error' in msg.keys():
-            return handle_response(msg)
-        else:
-            return Response(data = {"Success": "Stream was created"}, status =status.HTTP_200_OK)
-
-    def delete(self, request):
-        msg = delete_stream(request)
-        if isinstance(msg ,dict) and 'Error' in msg.keys():
-            return handle_response(msg)
-        else:
-            return Response(data = {"Success": "Stream was deleted"}, status =status.HTTP_200_OK)
-
+        return self.handle_response(create_steam(request), "Stream was created")
 
     def put(self, request):
-        msg = edit_stream(request)
-        if isinstance(msg ,dict) and 'Error' in msg.keys():
-            return handle_response(msg)
-        else:
-            return Response(data = {"Success": "Stream was edited"}, status =status.HTTP_200_OK)
+        return self.handle_response(edit_stream(request), "Stream was edited")
 
     def get(self, request):
-        msg = get_stream(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return handle_response(msg)
-        else:
-            return Response(data=msg)
+        return self.handle_response(get_stream(request))
 
-
-def handle_response(msg):
-    if isinstance(msg, dict) and 'Error' in msg.keys():
+def handle_response(self, msg, success_msg=None):
+    if isinstance(msg, dict) and 'Error' in msg:
         return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(data=msg.data, status=status.HTTP_200_OK)
-    
+        if success_msg:
+            return Response(data=msg, status=status.HTTP_200_OK)
+        else:
+            return Response(data=msg, status=status.HTTP_200_OK)
     

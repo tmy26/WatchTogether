@@ -49,5 +49,5 @@ class Stream(models.Model):
         verbose_name_plural = "Streams"
  
     # Stream property
-    stream_link = models.URLField()
-    stream_room = models.OneToOneField(Room, on_delete=models.CASCADE)
+    link = models.URLField()
+    assigned_room = models.OneToOneField(Room, on_delete=models.CASCADE)
