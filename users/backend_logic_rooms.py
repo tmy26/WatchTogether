@@ -1,6 +1,6 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password
-from users.serializers import RoomSerializer
+from users.serializers import RoomSerializer, JoinedRoomSerializer
 from .models import Room, User, UserRoom
 
 #---------RoomCreation---------#
@@ -159,16 +159,17 @@ def list_rooms_user_participates(request) -> dict: # needs fix
     """Display all the room, which the current user participates in"""
     user_id = request.data.get("user")
 
-    user = User.objects.get(id=user_id)
-
-    all_rooms_for_user = UserRoom.objects.filter(user_id=user.pk)
-
-    serialized = RoomSerializer(all_rooms_for_user, many=True)
-    try:
-        return serialized
-    except User.DoesNotExist:
-        return {"Error": serialized.data}
+    # Check if it is an existing user in DB
+    if User.objects.filter(id=user_id).exists():
+        user = User.objects.get(id=user_id)
+        all_rooms_for_user = UserRoom.objects.filter(user_id=user.pk)
+        serialized = JoinedRoomSerializer(all_rooms_for_user, many=True)
+        try:
+            return serialized
+        except Room.DoesNotExist:
+            return {"Error": serialized.data}
+    else:
+        return {"Error": "No such user"}
     
 
-# TODO: get method, to filter all rooms joined by user id and return them in a for loop or sth
 # TODO: Display rooms for currently logged user
