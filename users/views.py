@@ -87,7 +87,7 @@ class JoinRoom(APIView):
             return Response(data=msg, status=status.HTTP_200_OK)
     
 
-    def get(self, request): # needs fix
+    def get(self, request):
         msg = list_rooms_user_participates(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)

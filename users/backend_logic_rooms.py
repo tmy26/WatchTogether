@@ -157,7 +157,7 @@ def leave_room(request) -> dict:
         return {"Error": "No such room or user"}
 
 
-def list_rooms_user_participates(request) -> dict: # needs fix
+def list_rooms_user_participates(request) -> dict:
     """Display all the room, which the current user participates in"""
     user_id = request.data.get("user")
 
