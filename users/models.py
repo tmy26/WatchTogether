@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
 import uuid
+from django.utils.timezone import now
 
 
 class User(AbstractUser):
@@ -49,3 +50,4 @@ class Room(models.Model):
 class UserRoom(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, null=False, blank=False)
+    date_joined = models.DateField(blank=True, default=now)
