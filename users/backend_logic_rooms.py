@@ -15,7 +15,7 @@ def create_room(request) -> dict:
     room_password = request.data.get('room_password')
     
     # Check if room owner is existing user in the database (should be existing)
-    if User.objects.get(id=room_owner) is None:
+    if not User.objects.filter(id=room_owner).exists():
         return {'Error': 'Owner of the room does not exist.'}
     
     # Get current user info
@@ -97,14 +97,16 @@ def join_room(request) -> dict:
     room_to_join = request.data.get('room')
 
     # Check if request user exists
-    user = User.objects.get(id=user_to_join)
-    if user is None:
-        raise User.DoesNotExist
+    try:
+        user = User.objects.get(id=user_to_join)
+    except User.DoesNotExist:
+        return {"Error": "User does not exist"}
 
     # Check if request room exists
-    room = Room.objects.get(room_unique_id=room_to_join)
-    if room is None:
-        raise Room.DoesNotExist
+    try:
+        room = Room.objects.get(room_unique_id=room_to_join)
+    except Room.DoesNotExist:
+        return {"Error": "Room does not exist"}
 
     # Get password input from user
     password_input = request.data.get('password')
@@ -136,10 +138,10 @@ def leave_room(request) -> dict:
     user_to_leave = request.data.get("user")
     room_to_leave = request.data.get("room")
 
-    room = Room.objects.get(room_unique_id=room_to_leave)
-    user = User.objects.get(id=user_to_leave)
-
-    if Room.objects.get(room_unique_id=room.room_unique_id) and User.objects.get(id=user.pk):
+    if Room.objects.filter(room_unique_id=room_to_leave).exists()\
+          and User.objects.filter(id=user_to_leave).exists():
+        room = Room.objects.get(room_unique_id=room_to_leave)
+        user = User.objects.get(id=user_to_leave)
         try:
             # Remove the User from the room
             room.users.remove(user)
@@ -172,4 +174,5 @@ def list_rooms_user_participates(request) -> dict: # needs fix
         return {"Error": "No such user"}
     
 
+# TODO: Say in console that room is deleted, when the last user leaves the room
 # TODO: Display rooms for currently logged user
