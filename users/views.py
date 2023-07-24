@@ -77,7 +77,23 @@ class JoinRoom(APIView):
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
+    
+
+    def delete(self, request):
+        msg = leave_room(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg, status=status.HTTP_200_OK)
+    
+
+    def get(self, request): # needs fix
+        msg = list_rooms_user_participates(request)
+        if isinstance(msg, dict) and 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg.data, status=status.HTTP_200_OK)
         
-# TODO: Display rooms for currently logged user
+# TODO: Display all rooms for the user
 # TODO: username's room [number] - idea for a filter field
 # TODO: think of refactoring all request mapping
