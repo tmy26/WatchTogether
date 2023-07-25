@@ -76,18 +76,18 @@ class StreamCreation(APIView):
 
    
     def post(self, request):
-        return handle_response(create_steam(request), "Stream was created")
+        return handle_response(create_steam(request))
 
     def put(self, request):
-        return handle_response(edit_stream(request), "Stream was edited")
+        return handle_response(edit_stream(request))
 
     def get(self, request):
-        return handle_response(get_stream(request))
+        return handle_response(get_stream(request).data)
 
-def handle_response(self, msg, success_msg=None):
+def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg:
         return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
-        if success_msg:
-            return Response(data=msg, status=status.HTTP_200_OK)
-        
+        return Response(data=msg, status=status.HTTP_200_OK)
+#TODO : refactor handle_responce insert .data 
+    

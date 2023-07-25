@@ -1,6 +1,7 @@
 from rest_framework import  serializers
 from .models import Room , Stream
 
+
 class RoomSerializer(serializers.ModelSerializer):
 
     class Meta():
@@ -9,7 +10,6 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class StreamSerializer(serializers.ModelSerializer):
-
 
     class Meta():
         model = Stream

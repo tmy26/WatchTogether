@@ -7,18 +7,16 @@ def create_steam(request) -> dict:
 
     # request data
     link = request.data.get('link' )
-
-    #potential name assigned_room
     assigned_room = request.data.get('assigned_room')
 
-     # Check if stream_room is provided and if the room exists
+     # Check if assigned_room is provided and if the room exists
     if not assigned_room or not Room.objects.filter(room_unique_id=assigned_room).exists():
         return {"Error": "Invalid 'assigned_room'. The room does not exist."}
 
     room = Room.objects.get(room_unique_id=assigned_room)
 
      # Check if the room already has a stream assigned
-    if Stream.objects.filter(stream_room=room).exists():
+    if Stream.objects.filter(assigned_room=room).exists():
         return {"Error": "The room already has a stream assigned."}
     Stream.objects.create(
     link = link,
@@ -32,7 +30,7 @@ def edit_stream(request) -> dict:
         link = request.data.get('link')
         assigned_room = request.data.get('assigned_room')
 
-        # Check if stream_room is provided and if the room exists
+        # Check if assigned_room is provided and if the room exists
         if not assigned_room or not Room.objects.filter(room_unique_id=assigned_room).exists():
             return {"Error": "Invalid 'assigned_room'. The room does not exist."}
 
@@ -45,20 +43,18 @@ def edit_stream(request) -> dict:
             stream_to_edit.link = link
             stream_to_edit.save()
             return {'Success': 'Stream edited'}
-        except Stream.DoesNotExist:
-            return {"Error": "Stream does not exist"}
-        except Room.DoesNotExist:
-            return {"Error": "Room does not exist"}
-
+        except Stream.DoesNotExist or Room.DoesNotExist:
+            return {"Error": "Stream or Room does not exist"}
+        
 
 def get_stream(request) -> dict:
     """Get stream function"""
 
     all_stream_objs = Stream.objects.all()
-    serialized = StreamSerializer(all_stream_objs, many=True).data
+    serialized = StreamSerializer(all_stream_objs, many=True)
 
     try:
         return serialized
     except Stream.DoesNotExist:
-        return {"Error": serialized.data}
-
+        return {"Error": "Stream does not exist!"}
+    
