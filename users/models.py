@@ -31,12 +31,13 @@ class Room(models.Model):
          editable=False)
     
     # delete rooms, if the related user is also deleted
-    room_owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    room_owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    room_name = models.CharField(max_length=100, blank=True, null=True)
+    room_name = models.CharField(max_length=101, null=True, blank=True)
     room_password = models.CharField(max_length=50, blank=True, null=True)
 
-    #TODO: Make room default name -> "<Username>'s room", blank=False
+    # TODO: Decide, if there will be new room owner assign. Is the whole room being deleted
+    # if the owner gets deleted too.
 
     def __str__(self) -> str:
         return self.room_name
@@ -51,3 +52,4 @@ class Stream(models.Model):
     # Stream property
     link = models.URLField()
     assigned_room = models.OneToOneField(Room, on_delete=models.CASCADE)
+    

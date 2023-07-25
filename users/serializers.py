@@ -14,3 +14,4 @@ class StreamSerializer(serializers.ModelSerializer):
     class Meta():
         model = Stream
         fields = '__all__'
+        

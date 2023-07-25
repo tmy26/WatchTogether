@@ -17,3 +17,4 @@ class RoomAdmin(admin.ModelAdmin):
 class StreamAdmin(admin.ModelAdmin):
     search_fields = ('link', 'assigned_room',)
     list_display = ('link', 'assigned_room',)
+    

@@ -76,13 +76,13 @@ class StreamCreation(APIView):
 
    
     def post(self, request):
-        return self.handle_response(create_steam(request), "Stream was created")
+        return handle_response(create_steam(request), "Stream was created")
 
     def put(self, request):
-        return self.handle_response(edit_stream(request), "Stream was edited")
+        return handle_response(edit_stream(request), "Stream was edited")
 
     def get(self, request):
-        return self.handle_response(get_stream(request))
+        return handle_response(get_stream(request))
 
 def handle_response(self, msg, success_msg=None):
     if isinstance(msg, dict) and 'Error' in msg:
@@ -90,6 +90,4 @@ def handle_response(self, msg, success_msg=None):
     else:
         if success_msg:
             return Response(data=msg, status=status.HTTP_200_OK)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
-    
+        
