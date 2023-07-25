@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 #newly added
-#TODO: return a view when account is activated!
+from django.contrib.auth.models import Group
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
@@ -9,14 +9,18 @@ from django.utils.encoding import force_bytes, force_str
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from watch_together.general_utils import get_loggers
+from email_validator import validate_email, EmailNotValidError
 from .tokens import account_activation_token
 from .models import User
+from .serializers import UserSerializerSearchByUsername
 
 
 dev_logger = get_loggers('users_dev')
+USER_GROUP = Group.objects.get(name='user')
 
 
 def activate(request, uidb64, token):
+    """Returns the token and redirects to url"""
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -29,13 +33,14 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         dev_logger.info(msg=f"A new account was activated!")
-        return redirect("https://www.google.com/")
+        return redirect("https://github.com/tmy26/WatchTogether")
     else:
         dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback users, backend_logic, activate") 
-        return redirect("https://www.google.com/")
+        return redirect("https://github.com/tmy26/WatchTogether")
     
     
 def activateEmail(request, user, to_email):
+    """Sends email with verification link"""
     mail_subject = "Activate your account"
     message = render_to_string("account_activation_template.html",
     {
@@ -50,44 +55,55 @@ def activateEmail(request, user, to_email):
     send_email = email.send()
     if send_email:
         dev_logger.info(msg=f'An activataion email was sent to {to_email} ')
-        return {'Success': 'An activation email was successfully sent. Please check your inbox!'}
     else:
         dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: activateEmail in file: backend_logic in app: users')
-        return {'Error': 'A problem occured while trying to send email, please try again later!'}
 
 
 def create_user(request) -> None:
-    """
-    User register method
-    """
-    #data request
+    """User register method"""
 
+    #data request
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
     password_check = request.data.get('password_check')
-    #validators
+
+    #validate email
+    try:
+        check_email = validate_email(email, check_deliverability=True)
+        email = check_email.normalized
+    except EmailNotValidError as error:
+        return str(error)
+    
+    #validate password
     if len(password) < 8:
         return {'Error': 'the password is too short!'}
     if password != password_check:
         return {'Error': 'the passwords do not match!'}
+    
+    #validate user_uniqueness
     if User.objects.filter(username=username).exists():
         return {'Error': 'the username is already in use!'}
-
+    
+    #convert the pass to hash
     hashed_password = make_password(password)
-    #user creation
-    user = User.objects.create(
+
+    #create user
+    user = User(
         username=username,
         email=email,
         password=hashed_password,
         is_active=False
     )
+    # user.groups.add(USER_GROUP) // Still wondering if we are going to use groups for permissions
+    user.save()
     dev_logger.info(msg=f"Account with username: {username} was created. The account is not yet activated!")
     activateEmail(request, user, email)
     return {'Activation': f'a verification email was sent to {email}'}
 
 
 def edit_user(request, username):
+    """Edit user profile"""
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
@@ -108,14 +124,29 @@ def edit_user(request, username):
     user.save()
     
 
-def delete_user_account(request, username):
-    """
-    Deletes user account based on the email
-    """
+def delete_user_account(request):
+    """Delete user account"""
 
+    username = request.data.get('username')
     try:
         User.objects.get(username=username).delete()
         return {"Success": "account deletion was successful"}
     except User.DoesNotExist:
-        return {"Error": "a account with that username does not exist"}
+        return {"Error": "an account with that username does not exist"}
     
+
+def get_user(request):
+    """Get user's username"""
+    username = request.data.get('username')
+
+    try:
+        user = User.objects.get(username=username)
+        serialized = UserSerializerSearchByUsername(user)
+    except User.DoesNotExist:
+        return {'Error': 'The user does not exist!'}
+    return serialized
+
+#TODO: return a view when account is activated!
+#TODO: return only the usrname in func get_user
+#TODO: REFACTOR the delete and put methods!!!
+#TODO: Do some more test on activateEmailFunc

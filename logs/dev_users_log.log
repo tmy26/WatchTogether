@@ -162,3 +162,72 @@
 2023-07-19 17:43:23,249 | INFO     | Account with username: test21 was created. The account is not yet activated!
 2023-07-19 17:43:26,709 | INFO     | An activataion email was sent to tomcom@abv.bg 
 2023-07-19 17:43:38,151 | INFO     | A new account was activated!
+2023-07-20 11:35:55,257 | INFO     | Account with username: test22 was created. The account is not yet activated!
+2023-07-20 11:35:58,137 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-20 11:36:17,168 | INFO     | A new account was activated!
+2023-07-20 11:38:48,845 | INFO     | Account with username: test23 was created. The account is not yet activated!
+2023-07-20 11:38:52,346 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-20 11:39:03,800 | INFO     | A new account was activated!
+2023-07-20 11:51:24,750 | INFO     | Account with username: iskamGolqmaPista was created. The account is not yet activated!
+2023-07-20 11:51:27,025 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-20 11:52:23,590 | INFO     | A new account was activated!
+2023-07-24 11:54:51,619 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user's token has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-24 11:54:52,845 | ERROR    | Error. A error occured while trying to activate the account.
+ The possible reason is that the user's token has expired!
+ For debugging: Traceback users, backend_logic, activate
+2023-07-24 12:03:25,328 | INFO     | Account with username: tm26 was created. The account is not yet activated!
+2023-07-24 12:03:29,217 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-24 12:04:33,657 | INFO     | A new account was activated!
+2023-07-24 12:12:03,356 | INFO     | Account with username: tm26 was created. The account is not yet activated!
+2023-07-24 12:12:04,813 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-24 12:41:13,179 | INFO     | Account with username: tmy426 was created. The account is not yet activated!
+2023-07-24 12:41:16,463 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:00:27,964 | INFO     | Account with username: tmfy426 was created. The account is not yet activated!
+2023-07-24 13:00:30,282 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:16:37,782 | INFO     | Account with username: test was created. The account is not yet activated!
+2023-07-24 13:16:39,234 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:20:08,314 | INFO     | Account with username: test1233 was created. The account is not yet activated!
+2023-07-24 13:20:09,616 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:34:10,965 | INFO     | Account with username: te33t3123h33 was created. The account is not yet activated!
+2023-07-24 13:34:12,567 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:34:44,279 | INFO     | Account with username: te33t33123h33 was created. The account is not yet activated!
+2023-07-24 13:34:46,574 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:36:24,130 | INFO     | Account with username: test1 was created. The account is not yet activated!
+2023-07-24 13:36:26,904 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 13:36:55,423 | INFO     | Account with username: test2 was created. The account is not yet activated!
+2023-07-24 13:36:57,198 | INFO     | An activataion email was sent to tomcom@afbv.bg 
+2023-07-24 21:12:15,433 | INFO     | Account with username: test3 was created. The account is not yet activated!
+2023-07-24 21:12:17,322 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-24 21:19:15,102 | INFO     | Account with username: test33 was created. The account is not yet activated!
+2023-07-24 21:19:17,062 | INFO     | An activataion email was sent to tomcdasdam@bg.a 
+2023-07-24 21:19:29,597 | INFO     | Account with username: test333 was created. The account is not yet activated!
+2023-07-24 21:19:31,277 | INFO     | An activataion email was sent to tomcdasdam@bg.a3 
+2023-07-24 21:20:03,515 | INFO     | Account with username: test3333 was created. The account is not yet activated!
+2023-07-24 21:20:04,926 | INFO     | An activataion email was sent to tomcdasdam@bg.a3 
+2023-07-24 21:25:52,311 | INFO     | Account with username: test33333 was created. The account is not yet activated!
+2023-07-24 21:25:54,096 | INFO     | An activataion email was sent to tomcdasdam@bg.a3 
+2023-07-24 21:37:05,273 | INFO     | Account with username: test333333 was created. The account is not yet activated!
+2023-07-24 21:37:25,921 | INFO     | Account with username: test3333333 was created. The account is not yet activated!
+2023-07-24 21:37:27,532 | INFO     | An activataion email was sent to tomcdasdam@abv.bg 
+2023-07-24 21:38:07,448 | INFO     | Account with username: willItcreate was created. The account is not yet activated!
+2023-07-24 21:41:37,003 | INFO     | Account with username: willIt3create was created. The account is not yet activated!
+2023-07-24 21:41:47,433 | INFO     | Account with username: will3It3create was created. The account is not yet activated!
+2023-07-24 21:41:48,983 | INFO     | An activataion email was sent to tomcdasdam@a.bg 
+2023-07-24 21:44:55,916 | INFO     | Account with username: will3It3crea3te was created. The account is not yet activated!
+2023-07-24 21:44:57,614 | INFO     | An activataion email was sent to tomcdasdam@a.bg 
+2023-07-24 21:46:59,011 | INFO     | Account with username: will33It3crea3te was created. The account is not yet activated!
+2023-07-24 21:47:01,227 | INFO     | An activataion email was sent to tomcdasdam@a.bg 
+2023-07-24 22:03:23,117 | INFO     | Account with username: will333It3crea3te was created. The account is not yet activated!
+2023-07-24 22:03:24,832 | INFO     | An activataion email was sent to tomcdasdam@abv.bg 
+2023-07-24 22:06:11,485 | INFO     | Account with username: will333I3t33cr3ea3te was created. The account is not yet activated!
+2023-07-24 22:06:13,072 | INFO     | An activataion email was sent to tomcdasdam@abv.bg 
+2023-07-24 22:06:37,235 | INFO     | Account with username: will333I3t333cr3ea3te was created. The account is not yet activated!
+2023-07-24 22:06:38,643 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-24 22:06:58,196 | INFO     | A new account was activated!
+2023-07-24 22:07:20,015 | INFO     | Account with username: wtee was created. The account is not yet activated!
+2023-07-24 22:07:21,471 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-25 08:41:33,934 | INFO     | Account with username: tmy12 was created. The account is not yet activated!
+2023-07-25 08:41:35,835 | INFO     | An activataion email was sent to tomcom@abv.bg 
+2023-07-25 08:42:13,014 | INFO     | A new account was activated!
