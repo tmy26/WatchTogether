@@ -1,5 +1,6 @@
 #Windows path
 venv
+users/migrations/__pycache__
 #Mac path
 venv
 .DS_Store
