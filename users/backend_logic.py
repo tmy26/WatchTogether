@@ -16,7 +16,6 @@ from .serializers import UserSerializerSearchByUsername
 
 
 dev_logger = get_loggers('users_dev')
-USER_GROUP = Group.objects.get(name='user')
 
 
 def activate(request, uidb64, token):
