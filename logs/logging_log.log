@@ -1,7 +1,0 @@
-2023-07-26 20:15:23,302 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2023-07-26 20:15:43,104 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2023-07-26 20:16:02,511 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2023-07-26 20:17:52,237 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2023-07-26 20:23:11,423 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2023-07-26 20:23:15,168 django.request WARNING  Not Found: /favicon.ico
-2023-07-26 20:23:44,691 django.utils.autoreload INFO     Watching for file changes with StatReloader
