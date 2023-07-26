@@ -4,7 +4,7 @@ from .models import User, Room
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    search_fields = ('username',)
+    search_fields = ('username', 'password', 'email')
 
 
 @admin.register(Room)
