@@ -6,17 +6,18 @@ from django.core.exceptions import MultipleObjectsReturned
 def create_steam(request) -> dict:
     """Stream creation function"""
 
-    try:
+
         # request data
-        link = request.data.get('link')
-        assigned_room = request.data.get('assigned_room')
+    link = request.data.get('link')
+    assigned_room = request.data.get('assigned_room')
 
-        # Check if assigned_room is provided and if the room exists
-        if not assigned_room or not Room.objects.filter(room_unique_id=assigned_room).exists():
-            return {"Error": "Invalid 'assigned_room'. The room does not exist."}
-
+    # Check if assigned_room is provided and if the room exists
+    if not assigned_room or not Room.objects.filter(room_unique_id=assigned_room).exists():
+        return {"Error": "Invalid 'assigned_room'. The room does not exist."}
+    
+    try:
         room = Room.objects.get(room_unique_id=assigned_room)
-
+    
         # Check if the room already has a stream assigned
         if Stream.objects.filter(assigned_room=room).exists():
             return {"Error": "The room already has a stream assigned."}
@@ -58,6 +59,6 @@ def get_stream(request) -> dict:
         serialized = StreamSerializer(all_stream_objs, many=True)
         return serialized  
 
-    except Stream.DoesNotExist:
-        return {"Error": "Stream does not exist!"}
+    except (Stream.DoesNotExist, MultipleObjectsReturned):
+        return {"Error": "Stream does not exist or mulpiple objects returned."}
     
