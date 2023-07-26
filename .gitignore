@@ -1,5 +1,6 @@
 #Windows path
 venv
+users/migrations/__pycache__
 #Mac path
 venv
 .DS_Store
@@ -11,3 +12,4 @@ logs/
 admin_panel_credentials.txt
 permissions.txt
 roadmap.txt
+
