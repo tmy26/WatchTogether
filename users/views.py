@@ -82,8 +82,7 @@ class StreamCreation(APIView):
         return handle_response(edit_stream(request))
 
     def get(self, request):
-        #only here is .data because it is returning a serialized object 
-        return handle_response(get_stream(request).data)
+        return handle_response(get_stream(request))
     
 def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
