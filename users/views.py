@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .backend_logic import  delete_user_account, create_user, get_user
-from .backend_logic_rooms import create_room
 from .backend_logic_rooms import *
 
 
