@@ -82,12 +82,11 @@ class StreamCreation(APIView):
         return handle_response(edit_stream(request))
 
     def get(self, request):
+        #only here is .data because it is returning a serialized object 
         return handle_response(get_stream(request).data)
-
+    
 def handle_response(msg):
-    if isinstance(msg, dict) and 'Error' in msg:
+    if isinstance(msg, dict) and 'Error' in msg.keys():
         return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(data=msg, status=status.HTTP_200_OK)
-#TODO : refactor handle_responce insert .data 
-    
