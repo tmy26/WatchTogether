@@ -23,6 +23,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class StreamSerializer(serializers.ModelSerializer):
+    """Stream serializer used to return all created streams"""
 
     class Meta():
         model = Stream

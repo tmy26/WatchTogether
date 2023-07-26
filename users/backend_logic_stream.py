@@ -25,8 +25,8 @@ def create_steam(request) -> dict:
             Stream.objects.create(link=link, assigned_room=room)
             return {'Success': 'Stream created'}
 
-    except Exception as e:
-        return {"Error": "An error occurred. Please check the provided data and try again."}
+    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned) as error :
+        return {"Error": "Stream does not exist."}
     
         
 
@@ -47,18 +47,18 @@ def edit_stream(request) -> dict:
             stream_to_edit = Stream.objects.get(assigned_room=assigned_room)
             stream_to_edit.link = link
             stream_to_edit.save()
-            return {'Success': 'Stream edited'}
         except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
             return {"Error": "Stream or Room does not exist or multiple objects returned."}
         
+        return {'Success': 'Stream edited'}
+        
 
-def get_stream(request) -> dict:
+def get_stream() -> dict:
     """Get stream function"""
     try:
         all_stream_objs = Stream.objects.all()
         serialized = StreamSerializer(all_stream_objs, many=True)
-        return serialized  
-
     except (Stream.DoesNotExist, MultipleObjectsReturned):
         return {"Error": "Stream does not exist or mulpiple objects returned."}
     
+    return serialized  
