@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .backend_logic import  delete_user_account, create_user, get_user
 from .backend_logic_rooms import create_room
+from .backend_logic_rooms import *
 
 
 class UserRegistration(APIView):
@@ -48,4 +49,28 @@ class RoomCreation(APIView):
         if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
+            return Response(data={'Success': 'Created room'}, status=status.HTTP_200_OK)
+
+    def delete(self, request):
+        msg = delete_room(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg, status=status.HTTP_200_OK)
+    
+    def put(self, request):
+        msg = edit_room(request)
+        if 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data=msg, status=status.HTTP_200_OK)
+
+    def get(self, request):
+        msg = get_room(request)
+        if isinstance(msg, dict) and 'Error' in msg.keys():
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
             return Response(data=msg.data, status=status.HTTP_200_OK)
+        
+# TODO: Investigate on how to join a room using the GET method.
+# TODO: Display rooms for currently logged user

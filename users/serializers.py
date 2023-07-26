@@ -1,6 +1,7 @@
 from rest_framework import  serializers
-from .models import User
 
+from .models import User
+from .models import Room
 
 class UserSerializer(serializers.ModelSerializer):
     """User serializer, returns all fields that the user has"""
@@ -15,3 +16,9 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
         model = User
         fields = ['username']
         
+
+class RoomSerializer(serializers.ModelSerializer):
+
+    class Meta():
+        model = Room
+        fields = '__all__'
