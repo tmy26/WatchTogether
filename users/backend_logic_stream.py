@@ -56,7 +56,7 @@ def get_stream(request) -> dict:
     try:
         all_stream_objs = Stream.objects.all()
         serialized = StreamSerializer(all_stream_objs, many=True)
-        return serialized.data  # Return the serialized data instead of the entire serializer object
+        return serialized  
 
     except Stream.DoesNotExist:
         return {"Error": "Stream does not exist!"}

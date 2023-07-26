@@ -82,7 +82,7 @@ class StreamCreation(APIView):
         return handle_response(edit_stream(request))
 
     def get(self, request):
-        return handle_response(get_stream(request))
+        return handle_response(get_stream(request).data)
     
 def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
