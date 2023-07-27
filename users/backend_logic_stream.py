@@ -32,11 +32,10 @@ def edit_stream(request) -> dict:
     link = request.data.get('link')
     assigned_room = request.data.get('assigned_room')
 
-    
+    # Check if requested data is null
+    if not link or not assigned_room:
+        return {"Error": "Invalid data. 'link' and/or 'assigned_room' is required."}
     try:
-        # Check if requested data is null
-        if not link or not assigned_room:
-            return {"Error": "Invalid data. 'link' and/or 'assigned_room' is required."}
         # Check if assigned_room is provided and if the room exists
         if assigned_room and Room.objects.filter(room_unique_id=assigned_room).exists():
 
