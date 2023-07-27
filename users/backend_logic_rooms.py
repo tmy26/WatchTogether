@@ -3,6 +3,11 @@ from django.contrib.auth.hashers import make_password
 from users.serializers import RoomSerializer, JoinedRoomSerializer
 from .models import Room, User, UserRoom
 
+#---------Constants---------#
+ERROR = "Error"
+SUCCESS = "Success"
+
+
 #---------RoomCreation---------#
 
 def create_room(request) -> dict:
@@ -16,7 +21,7 @@ def create_room(request) -> dict:
     
     # Check if room owner is existing user in the database (should be existing)
     if not User.objects.filter(id=room_owner).exists():
-        return {'Error': 'Owner of the room does not exist.'}
+        return {ERROR: 'Owner of the room does not exist.'}
     
     # Get current user info
     user = User.objects.get(id=room_owner)
@@ -38,7 +43,7 @@ def create_room(request) -> dict:
     
     # Add the room owner to the users of the room, when creating
     room.users.add(user)
-    return {'Success': 'Room created'}
+    return {SUCCESS: 'Room created'}
 
 
 def delete_room(request) -> dict:
@@ -50,9 +55,9 @@ def delete_room(request) -> dict:
     # Try deleting room
     try:
         Room.objects.get(room_unique_id=room_unique_id).delete()
-        return {"Success": "Room deleted"}
+        return {SUCCESS: "Room deleted"}
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {ERROR: "Room does not exist"}
 
 
 def edit_room(request) -> dict:
@@ -71,9 +76,9 @@ def edit_room(request) -> dict:
             if new_room_password:
                 room_to_edit.room_password = make_password(new_room_password)
             room_to_edit.save()
-        return {"Success": "Room edited"}
+        return {SUCCESS: "Room edited"}
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {ERROR: "Room does not exist"}
 
 
 def get_room(request) -> dict:
@@ -85,7 +90,7 @@ def get_room(request) -> dict:
     try:
         return serialized
     except Room.DoesNotExist:
-        return {"Error": serialized.data}
+        return {ERROR: "Room does not exist"}
 
 #---------JoinRoom---------#
 
@@ -100,13 +105,13 @@ def join_room(request) -> dict:
     try:
         user = User.objects.get(id=user_to_join)
     except User.DoesNotExist:
-        return {"Error": "User does not exist"}
+        return {ERROR: "User does not exist"}
 
     # Check if request room exists
     try:
         room = Room.objects.get(room_unique_id=room_to_join)
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {ERROR: "Room does not exist"}
 
     # Get password input from user
     password_input = request.data.get('password')
@@ -127,9 +132,9 @@ def join_room(request) -> dict:
         #     return {"Error": "The user is already in that room"}
         # else:
         room.users.add(user)
-        return {"Success": "User joined the room"}
+        return {SUCCESS: "User joined the room"}
     else:
-        return {"Error": "Room password does not match"}
+        return {ERROR: "Room password does not match"}
 
 
 def leave_room(request) -> dict:
@@ -150,11 +155,11 @@ def leave_room(request) -> dict:
             if not UserRoom.objects.filter(room_id=room.room_unique_id).exists():
                 room.delete()
                 # Add a message where it says "Room deleted" in the logger
-            return {"Success": "User left the room"}
+            return {SUCCESS: "User left the room"}
         except user.DoesNotExist:
-            return {"Error": "User is not in the room"}
+            return {ERROR: "User is not in the room"}
     else:
-        return {"Error": "No such room or user"}
+        return {ERROR: "No such room or user"}
 
 
 def list_rooms_user_participates(request) -> dict:
@@ -169,9 +174,9 @@ def list_rooms_user_participates(request) -> dict:
         try:
             return serialized
         except Room.DoesNotExist:
-            return {"Error": serialized.data}
+            return {ERROR: "Room does not exist"}
     else:
-        return {"Error": "No such user"}
+        return {ERROR: "No such user"}
     
 
 # TODO: Say in console that room is deleted, when the last user leaves the room

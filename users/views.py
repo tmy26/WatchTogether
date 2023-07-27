@@ -39,7 +39,7 @@ class RoomCreation(APIView):
 
     def post(self, request):
         msg = create_room(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data={'Success': 'Created room'}, status=status.HTTP_200_OK)
@@ -47,7 +47,7 @@ class RoomCreation(APIView):
 
     def delete(self, request):
         msg = delete_room(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
@@ -55,7 +55,7 @@ class RoomCreation(APIView):
 
     def put(self, request):
         msg = edit_room(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
@@ -73,7 +73,7 @@ class JoinRoom(APIView):
 
     def post(self, request):
         msg = join_room(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
@@ -81,7 +81,7 @@ class JoinRoom(APIView):
 
     def delete(self, request):
         msg = leave_room(request)
-        if 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
