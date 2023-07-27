@@ -9,7 +9,4 @@ db.sqlite3
 **/__pycache__
 logs/
 #txt files
-admin_panel_credentials.txt
-permissions.txt
-roadmap.txt
-
+*.txt
