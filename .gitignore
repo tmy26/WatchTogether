@@ -1,9 +1,12 @@
-.venv/
-./venv/
-!venv
-.venv
+#Windows path
+venv
+users/migrations/__pycache__
+#Mac path
+venv
 .DS_Store
 db.sqlite3
+#Global path
 **/__pycache__
-
-#add here the files that you want to be ignored by git
+logs/
+#txt files
+*.txt

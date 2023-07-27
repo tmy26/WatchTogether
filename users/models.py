@@ -4,20 +4,13 @@ from rest_framework.authtoken.models import Token
 import uuid
 from django.utils.timezone import now
 
-
 class User(AbstractUser):
 
-    username = models.CharField(max_length=20, blank=False, unique=True, default='asd')
+    username = models.CharField(max_length=20, blank=False, unique=True)
     email = models.EmailField(blank=False)
     
     def __str__(self) -> str:
         return self.username
-    
-    @property
-    def token(self):
-        token_obj = Token.objects.filter(user=self).first()
-        if token_obj:
-            return token_obj.key
 
 
 # Rooms model
