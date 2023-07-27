@@ -10,7 +10,10 @@ def create_steam(request) -> dict:
     link = request.data.get('link')
     assigned_room = request.data.get('assigned_room')
     try:
-    # Check if assigned_room is provided and if the room exists
+        # Check if assigned_room is provided and if the room exists
+        if not assigned_room:
+            return {"Error": "Assigned room is required."}  
+        # Check if assigned_room is provided and if the room exists
         if assigned_room and Room.objects.filter(room_unique_id=assigned_room).exists():
             room = Room.objects.get(room_unique_id=assigned_room)
 
@@ -29,10 +32,11 @@ def edit_stream(request) -> dict:
     link = request.data.get('link')
     assigned_room = request.data.get('assigned_room')
 
-    # Check if requested data is null
-    if not link:
-        return {"Error": "Invalid data. 'link' is required."}
+    
     try:
+        # Check if requested data is null
+        if not link or not assigned_room:
+            return {"Error": "Invalid data. 'link' and/or 'assigned_room' is required."}
         # Check if assigned_room is provided and if the room exists
         if assigned_room and Room.objects.filter(room_unique_id=assigned_room).exists():
 
