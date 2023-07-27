@@ -1,58 +1,50 @@
 from .models import Room , Stream
 from users.serializers import StreamSerializer
-from django.core.exceptions import MultipleObjectsReturned
+from django.core.exceptions import MultipleObjectsReturned ,ValidationError
 
 
 def create_steam(request) -> dict:
     """Stream creation function"""
 
-
         # request data
     link = request.data.get('link')
     assigned_room = request.data.get('assigned_room')
-
-    # Check if assigned_room is provided and if the room exists
-    if not assigned_room or not Room.objects.filter(room_unique_id=assigned_room).exists():
-        return {"Error": "Invalid 'assigned_room'. The room does not exist."}
-    
     try:
-        room = Room.objects.get(room_unique_id=assigned_room)
-    
-        # Check if the room already has a stream assigned
-        if Stream.objects.filter(assigned_room=room).exists():
-            return {"Error": "The room already has a stream assigned."}
-        else:
-            Stream.objects.create(link=link, assigned_room=room)
-            return {'Success': 'Stream created'}
+    # Check if assigned_room is provided and if the room exists
+        if assigned_room and Room.objects.filter(room_unique_id=assigned_room).exists():
+            room = Room.objects.get(room_unique_id=assigned_room)
 
-    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned) as error :
-        return {"Error": "Stream does not exist."}
+        # Check if the room already has a stream assigned
+            if Stream.objects.filter(assigned_room=room).exists():
+                return {"Error": "The room already has a stream assigned."}
+            else:
+                Stream.objects.create(link=link, assigned_room=room)
+                return {'Success': 'Stream created'}
+    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned, ValidationError):
+            return {"Error": "Something went wrong with the data you provided please check if the data is correct and try again."}
     
-        
 
 def edit_stream(request) -> dict:
-        """Stream editing function"""
-        link = request.data.get('link')
-        assigned_room = request.data.get('assigned_room')
+    """Stream editing function"""
+    link = request.data.get('link')
+    assigned_room = request.data.get('assigned_room')
 
+    # Check if requested data is null
+    if not link:
+        return {"Error": "Invalid data. 'link' is required."}
+    try:
         # Check if assigned_room is provided and if the room exists
-        if not assigned_room or not Room.objects.filter(room_unique_id=assigned_room).exists():
-            return {"Error": "Invalid 'assigned_room'. The room does not exist."}
+        if assigned_room and Room.objects.filter(room_unique_id=assigned_room).exists():
 
-        # Check if requested data is null
-        if not link:
-            return {"Error": "Invalid data. 'link' is required."}
-
-        try:
             stream_to_edit = Stream.objects.get(assigned_room=assigned_room)
             stream_to_edit.link = link
             stream_to_edit.save()
-        except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
-            return {"Error": "Stream or Room does not exist or multiple objects returned."}
+    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned, ValidationError):
+        return {"Error": "Something went wrong with the data you provided please check if the data is correct and try again."}
         
-        return {'Success': 'Stream edited'}
+    return {'Success': 'Stream edited'}    
         
-
+        
 def get_stream() -> dict:
     """Get stream function"""
     try:

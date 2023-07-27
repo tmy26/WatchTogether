@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserRegistration, UserAuthentification, RoomCreation, StreamCreation
+from .views import UserRegistration, EditUser, RoomCreation, StreamCreation
 from . import backend_logic
 
 
