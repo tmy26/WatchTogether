@@ -27,7 +27,7 @@ class Room(models.Model):
     # delete rooms, if the related user is also deleted
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_room')
 
-    room_name = models.CharField(max_length=120, null=True, blank=True)
+    room_name = models.CharField(max_length=100, null=True, blank=True)
     room_password = models.CharField(max_length=50, blank=True, null=True, default=None)
 
     users = models.ManyToManyField(User, through='UserRoom', related_name='users_room')

@@ -98,6 +98,5 @@ class JoinRoom(APIView):
         else:
             return Response(data=msg.data, status=status.HTTP_200_OK)
         
-# TODO: Display all rooms for the user
 # TODO: username's room [number] - idea for a filter field
 # TODO: think of refactoring all request mapping

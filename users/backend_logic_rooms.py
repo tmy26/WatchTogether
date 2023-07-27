@@ -2,6 +2,7 @@
 from django.contrib.auth.hashers import make_password
 from users.serializers import RoomSerializer, JoinedRoomSerializer
 from .models import Room, User, UserRoom
+from django.core.exceptions import MultipleObjectsReturned
 
 #---------Constants---------#
 ERROR = "Error"
@@ -34,12 +35,14 @@ def create_room(request) -> dict:
     room_password = None if room_password is None or room_password == "" else make_password(room_password)
 
     # create a Room
-    room = Room.objects.create(
+    room = Room(
         room_unique_id=room_unique_id,
         room_name=room_name,
         room_password=room_password,
         owner=user
     )
+
+    room.save()
     
     # Add the room owner to the users of the room, when creating
     room.users.add(user)
@@ -164,20 +167,18 @@ def leave_room(request) -> dict:
 
 def list_rooms_user_participates(request) -> dict:
     """Display all the room, which the current user participates in"""
+
     user_id = request.data.get("user")
 
-    # Check if it is an existing user in DB
-    if User.objects.filter(id=user_id).exists():
+    # Return all rooms, that user participates in, if user exists
+    try:
         user = User.objects.get(id=user_id)
         all_rooms_for_user = UserRoom.objects.filter(user_id=user.pk)
         serialized = JoinedRoomSerializer(all_rooms_for_user, many=True)
-        try:
-            return serialized
-        except Room.DoesNotExist:
-            return {ERROR: "Room does not exist"}
-    else:
-        return {ERROR: "No such user"}
-    
+
+        return serialized
+    except (User.DoesNotExist, MultipleObjectsReturned):
+            return {ERROR: "User does not exist"}
 
 # TODO: Say in console that room is deleted, when the last user leaves the room
 # TODO: Display rooms for currently logged user
