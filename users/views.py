@@ -85,9 +85,7 @@ class StreamCreation(APIView):
     def put(self, request):
         return handle_response(edit_stream(request))
 
-    def get(self, request):
-        return handle_response(get_stream().data)
-    
+
 def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
         return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
