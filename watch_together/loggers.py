@@ -36,11 +36,11 @@ LOGGING = {
             'formatter': 'file',
             'filename': os.path.join(LOG_DIR, 'logging_log.log')
         },
-        'users_dev': {
+        'wt_mobile_dev': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'developer_format',
-            'filename': os.path.join(LOG_DIR, 'dev_users_log.log')
+            'filename': os.path.join(LOG_DIR, 'dev_mobile_log.log')
         }
     },
     'loggers': {
@@ -48,9 +48,9 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['console', 'file']
         },
-        'users_dev' : {
+        'wt_mobile_dev' : {
             'level': 'DEBUG',
-            'handlers': ['console', 'users_dev'],
+            'handlers': ['console', 'wt_mobile_dev'],
             'propagate': False
         }
     }

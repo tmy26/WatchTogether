@@ -1,7 +1,6 @@
-from django.contrib.auth.hashers import make_password
-#newly added
-from django.contrib.auth.models import Group
 from django.core.mail import EmailMessage
+from django.core.exceptions import MultipleObjectsReturned
+from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -15,7 +14,7 @@ from .models import User
 from .serializers import UserSerializerSearchByUsername
 
 
-dev_logger = get_loggers('users_dev')
+dev_logger = get_loggers('wt_mobile_dev')
 
 
 def activate(request, uidb64, token):
@@ -31,16 +30,16 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        dev_logger.info(msg=f"A new account was activated!")
+        dev_logger.info(msg=f'A new account was activated!')
         return redirect("https://github.com/tmy26/WatchTogether")
     else:
-        dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate")
+        dev_logger.error(msg='Error. A error occured while trying to activate the account.\n The possible reason is that the user token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate')
         return redirect("https://github.com/tmy26/WatchTogether")
     
     
 def activateEmail(request, user, to_email):
     """Sends email with verification link"""
-    mail_subject = "Activate your account"
+    mail_subject = 'Activate your account'
     message = render_to_string("account_activation_template.html",
     {
         'user': user,
@@ -96,7 +95,7 @@ def create_user(request) -> None:
     )
     # user.groups.add(USER_GROUP) // Still wondering if we are going to use groups for permissions
     user.save()
-    dev_logger.info(msg=f"Account with username: {username} was created. The account is not yet activated!")
+    dev_logger.info(msg=f'Account with username: {username} was created. The account is not yet activated!')
     activateEmail(request, user, email)
     return {'Activation': f'a verification email was sent to {email}'}
 
@@ -110,8 +109,8 @@ def edit_user(request, username):
 
     try:
         user = User.objects.get(username=username)
-    except User.DoesNotExist:
-        return {"message": "The username does not exist!"}
+    except (User.DoesNotExist, MultipleObjectsReturned):
+        return {'Error': 'The user does not exist!'}
     
     if username is not None:
         user.username = username
@@ -129,9 +128,9 @@ def delete_user_account(request):
     username = request.data.get('username')
     try:
         User.objects.get(username=username).delete()
-        return {"Success": "account deletion was successful"}
-    except User.DoesNotExist:
-        return {"Error": "an account with that username does not exist"}
+        return {'Success': 'account deletion was successful'}
+    except (User.DoesNotExist, MultipleObjectsReturned):
+        return {'Error': 'an account with that username does not exist'}
     
 
 def get_user(request):
@@ -141,7 +140,7 @@ def get_user(request):
     try:
         user = User.objects.get(username=username)
         serialized = UserSerializerSearchByUsername(user)
-    except User.DoesNotExist:
+    except (User.DoesNotExist, MultipleObjectsReturned):
         return {'Error': 'The user does not exist!'}
     return serialized
 

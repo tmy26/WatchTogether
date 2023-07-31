@@ -2,7 +2,8 @@ from .models import Room, Stream
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
 
 
-error_message = {"Error": "Something went wrong with the data you provided. Please check if the data is correct and try again."}
+error_message = {'Error': 'Something went wrong with the data you provided. Please check if the data is correct and try again.'}
+
 
 def create_steam(request) -> dict:
     """Stream creation function"""

@@ -72,8 +72,6 @@ class RoomCreation(APIView):
         else:
             return Response(data=msg.data, status=status.HTTP_200_OK)
         
-# TODO: Investigate on how to join a room using the GET method.
-# TODO: Display rooms for currently logged user
 
 class StreamCreation(APIView):
     """Stream creation, deletion, and editing"""
@@ -91,3 +89,6 @@ def handle_response(msg):
         return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(data=msg, status=status.HTTP_200_OK)
+
+# TODO: Investigate on how to join a room using the GET method.
+# TODO: Display rooms for currently logged user

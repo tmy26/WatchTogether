@@ -1,7 +1,6 @@
-# The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password
 from .models import Room, User
-from wt_mobile.serializers import RoomSerializer
+from .serializers import RoomSerializer
 
 
 def create_room(request) -> dict:
@@ -46,9 +45,9 @@ def delete_room(request) -> dict:
     # Try deleting room
     try:
         Room.objects.get(room_unique_id=room_unique_id).delete()
-        return {"Success": "Room deleted"}
+        return {'Success': 'Room deleted'}
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {'Error': 'Room does not exist'}
 
 
 def edit_room(request) -> dict:
@@ -67,9 +66,9 @@ def edit_room(request) -> dict:
             if new_room_password:
                 room_to_edit.room_password = make_password(new_room_password)
             room_to_edit.save()
-        return {"Success": "Room edited"}
+        return {'Success': 'Room edited'}
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {'Error': 'Room does not exist'}
 
 
 def get_room(request) -> dict:
@@ -81,11 +80,13 @@ def get_room(request) -> dict:
     try:
         return serialized
     except Room.DoesNotExist:
-        return {"Error": serialized.data}
+        return {'Error': serialized.data}
 
 
 def join_room(request) -> dict:
     """Join a room"""
     pass
+
+
 # TODO: Investigate on how to join a room using the GET method.
 # TODO: Display rooms for currently logged user
