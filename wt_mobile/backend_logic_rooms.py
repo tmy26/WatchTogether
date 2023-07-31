@@ -5,7 +5,7 @@ from wt_mobile.serializers import RoomSerializer, JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
 
-# ---------Constants--------- #
+# ---------Defines--------- #
 
 # dev_loggers = get_loggers('wt_mobile_dev')
 ERROR = "Error"
