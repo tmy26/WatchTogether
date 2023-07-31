@@ -34,7 +34,7 @@ def activate(request, uidb64, token):
         dev_logger.info(msg=f"A new account was activated!")
         return redirect("https://github.com/tmy26/WatchTogether")
     else:
-        dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback users, backend_logic, activate") 
+        dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate")
         return redirect("https://github.com/tmy26/WatchTogether")
     
     
@@ -55,7 +55,7 @@ def activateEmail(request, user, to_email):
     if send_email:
         dev_logger.info(msg=f'An activataion email was sent to {to_email} ')
     else:
-        dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: activateEmail in file: backend_logic in app: users')
+        dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: activateEmail in file: backend_logic in app: wt_mobile')
 
 
 def create_user(request) -> None:

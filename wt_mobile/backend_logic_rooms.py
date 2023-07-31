@@ -1,7 +1,7 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password
 from .models import Room, User
-from users.serializers import RoomSerializer
+from wt_mobile.serializers import RoomSerializer
 
 
 def create_room(request) -> dict:
