@@ -16,7 +16,7 @@ def create_steam(request) -> dict:
         return {'Error': 'Assigned room is required.'}  
     try:
         # Check if the room exists
-        room = Room.objects.get(room_unique_id=assigned_room)
+        room = Room.objects.get(unique_id=assigned_room)
     
         # Check if the room already has a stream assigned
         if Stream.objects.filter(assigned_room=room).exists():
@@ -40,7 +40,7 @@ def edit_stream(request) -> dict:
         return error_message
     try:
         # Check if assigned_room is provided and if the room exists
-        if assigned_room and Room.objects.filter(room_unique_id=assigned_room).exists():
+        if assigned_room and Room.objects.filter(unique_id=assigned_room).exists():
 
             stream_to_edit = Stream.objects.get(assigned_room=assigned_room)
             stream_to_edit.link = link

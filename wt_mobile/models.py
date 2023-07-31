@@ -18,22 +18,23 @@ class Room(models.Model):
         verbose_name_plural = "Rooms"
     
     # Room properties
-    room_unique_id =  models.UUIDField(
+    unique_id =  models.UUIDField(
          primary_key=True,
          default=uuid.uuid4,
          editable=False)
     
     # delete rooms, if the related user is also deleted
-    room_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    room_name = models.CharField(max_length=101, null=True, blank=True)
-    room_password = models.CharField(max_length=50, blank=True, null=True)
+    # Room name and password
+    name = models.CharField(max_length=101, null=True, blank=True)
+    password = models.CharField(max_length=50, blank=True, null=True)
 
     # TODO: Decide, if there will be new room owner assign. Is the whole room being deleted
     # if the owner gets deleted too.
 
     def __str__(self) -> str:
-        return str(self.room_name)
+        return str(self.name)
 
 
 # Stream

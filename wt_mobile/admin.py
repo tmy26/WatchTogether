@@ -9,8 +9,8 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    search_fields = ('room_unique_id', 'room_name',)
-    list_display = ('room_unique_id', 'room_name', 'room_password')
+    search_fields = ('unique_id', 'name',)
+    list_display = ('unique_id', 'name', 'password')
 
 
 @admin.register(Stream)

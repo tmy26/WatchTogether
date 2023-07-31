@@ -2,72 +2,84 @@
 from django.contrib.auth.hashers import make_password
 from .models import Room, User
 from wt_mobile.serializers import RoomSerializer
+from django.core.exceptions import MultipleObjectsReturned
 
+
+# ---------Constants--------- #
+
+ERROR = "Error"
+SUCCESS = "Success"
+
+#---------RoomCreation---------#
 
 def create_room(request) -> dict:
     """Room creation function"""
 
     # request data
-    room_unique_id = request.data.get('room_unique_id')
-    room_name = request.data.get('room_name')
-    room_owner = request.data.get('room_owner')
-    room_password = request.data.get('room_password')
+    unique_id = request.data.get('unique_id')
+    name = request.data.get('name')
+    owner = request.data.get('owner_id')
+    password = request.data.get('password')
     
     # Check if room owner is existing user in the database (should be existing)
-    if not User.objects.filter(id=room_owner).exists():
-        return {'Error': 'Owner of the room does not exist.'}
+    if not User.objects.filter(id=owner).exists():
+        return {ERROR: 'Owner of the room does not exist.'}
     
     # Get current user info
-    user = User.objects.get(id=room_owner)
+    user = User.objects.get(id=owner)
 
     # If room name is not custom set, the default is <ownerUsername>'s room
-    if room_name == None or room_name.isspace() or room_name == '':
-        room_name = f"{user.username}'s room"
+    if name == None or name.isspace() or name == '':
+        name = f"{user.username}'s room"
 
     # Hash room password, if there is one
-    room_password = None if room_password is None else make_password(room_password)
+    password = None if password is None else make_password(password)
 
     # create a Room
-    Room.objects.create(
-        room_unique_id=room_unique_id,
-        room_name=room_name,
-        room_password=room_password,
-        room_owner=user
+    room = Room(
+        unique_id=unique_id,
+        name=name,
+        password=password,
+        owner=user
     )
-    return {'Success': 'Room created'}
+
+    room.save()
+
+    # Add the room owner to the users of the room, when created
+    return {SUCCESS: 'Room created'}
 
 
 def delete_room(request) -> dict:
     """Delete room function"""
 
     # Get room unique ID
-    room_unique_id = request.data.get('room_unique_id')
+    unique_id = request.data.get('unique_id')
 
     # Try deleting room
     try:
-        Room.objects.get(room_unique_id=room_unique_id).delete()
-        return {"Success": "Room deleted"}
+        Room.objects.get(unique_id=unique_id).delete()
+        return {SUCCESS: "Room deleted"}
     except Room.DoesNotExist:
-        return {"Error": "Room does not exist"}
+        return {SUCCESS: "Room does not exist"}
 
 
 def edit_room(request) -> dict:
     """Edit room function"""
 
     # Get unique ID
-    room_unique_id = request.data.get('room_unique_id')
-    new_room_name = request.data.get('room_name')
-    new_room_password = request.data.get('room_password')
+    unique_id = request.data.get('unique_id')
+    new_name = request.data.get('new_name')
+    new_password = request.data.get('new_password')
 
     try:
-        if Room.objects.filter(room_unique_id=room_unique_id).exists():
-            room_to_edit = Room.objects.get(room_unique_id=room_unique_id)
-            if new_room_name:
-                room_to_edit.room_name = new_room_name
-            if new_room_password:
-                room_to_edit.room_password = make_password(new_room_password)
+        if Room.objects.filter(unique_id=unique_id).exists():
+            room_to_edit = Room.objects.get(unique_id=unique_id)
+            if new_name:
+                room_to_edit.name = new_name
+            if new_password:
+                room_to_edit.password = make_password(new_password)
             room_to_edit.save()
-        return {"Success": "Room edited"}
+        return {SUCCESS: "Room edited"}
     except Room.DoesNotExist:
         return {"Error": "Room does not exist"}
 
@@ -81,7 +93,7 @@ def get_room(request) -> dict:
     try:
         return serialized
     except Room.DoesNotExist:
-        return {"Error": serialized.data}
+        return {SUCCESS: "Room does not exist"}
 
 
 def join_room(request) -> dict:
