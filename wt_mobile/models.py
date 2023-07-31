@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
 import uuid
+from django.utils.timezone import now
 
 class User(AbstractUser):
 
@@ -30,11 +31,24 @@ class Room(models.Model):
     name = models.CharField(max_length=101, null=True, blank=True)
     password = models.CharField(max_length=50, blank=True, null=True)
 
+    users = models.ManyToManyField(User, through='UserRoom', related_name='users_room')
+
     # TODO: Decide, if there will be new room owner assign. Is the whole room being deleted
     # if the owner gets deleted too.
 
     def __str__(self) -> str:
         return str(self.name)
+
+
+# Join User-Room model
+class UserRoom(models.Model):
+    class Meta:
+        # Set db name from default to 'room_participants'
+        db_table = "%s_%s" % (__package__, "room_participants")
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=False, blank=False)
+    date_joined = models.DateField(blank=True, default=now)
 
 
 # Stream
