@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .backend_logic import  delete_user_account, create_user, get_user
+from .backend_logic import delete_user_account, create_user, get_user
 from .backend_logic_rooms import *
-from .backend_logic_stream import * 
+from .backend_logic_stream import *
 
 
 class UserRegistrationView(APIView):
@@ -12,7 +12,7 @@ class UserRegistrationView(APIView):
 
     def post(self, request):
         msg = create_user(request)
-        if isinstance(msg,dict) and 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
@@ -31,7 +31,7 @@ class EditUserView(APIView):
 
     def put(self):
         pass
-    
+
     def delete(self, request):
         msg = delete_user_account(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
@@ -47,17 +47,14 @@ class RoomCreationView(APIView):
     def post(self, request):
         return handle_response(create_room(request))
 
-
     def delete(self, request):
         return handle_response(delete_room(request))
-
 
     def put(self, request):
         return handle_response(edit_room(request))
 
-
-    def get(self, request):
-        msg = get_room(request)
+    def get(self):
+        msg = get_room()
         if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -69,11 +66,9 @@ class JoinRoomView(APIView):
 
     def post(self, request):
         return handle_response(join_room(request))
-    
 
     def delete(self, request):
         return handle_response(leave_room(request))
-
 
     def get(self, request):
         msg = list_rooms_user_participates(request)
@@ -86,7 +81,6 @@ class JoinRoomView(APIView):
 class StreamCreationView(APIView):
     """Stream creation, deletion, and editing"""
 
-   
     def post(self, request):
         return handle_response(create_steam(request))
 

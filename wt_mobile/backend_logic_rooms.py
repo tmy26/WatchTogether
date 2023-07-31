@@ -5,14 +5,14 @@ from wt_mobile.serializers import RoomSerializer, JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
 
-
 # ---------Constants--------- #
 
-dev_loggers = get_loggers('wt_mobile_dev')
+# dev_loggers = get_loggers('wt_mobile_dev')
 ERROR = "Error"
 SUCCESS = "Success"
 
 ERROR_MSG = f"{ERROR}: Provided data is wrong"
+
 
 # ---------RoomCreation--------- #
 
@@ -24,16 +24,16 @@ def create_room(request) -> dict:
     name = request.data.get('name')
     owner = request.data.get('owner_id')
     password = request.data.get('password')
-    
+
     # Check if room owner is existing user in the database (should be existing)
     if not User.objects.filter(id=owner).exists():
         return {ERROR: 'Owner of the room does not exist.'}
-    
+
     # Get current user info
     user = User.objects.get(id=owner)
 
     # If room name is not custom set, the default is <ownerUsername>'s room
-    if name == None or name.isspace() or name == '':
+    if name is None or name.isspace() or name == '':
         name = f"{user.username}'s room"
 
     # Hash room password, if there is one
@@ -89,7 +89,7 @@ def edit_room(request) -> dict:
         return ERROR_MSG
 
 
-def get_room(request) -> dict:
+def get_room() -> dict:
     """Get room function"""
 
     all_rooms_obj = Room.objects.all()
@@ -99,6 +99,7 @@ def get_room(request) -> dict:
         return serialized
     except Room.DoesNotExist:
         return {SUCCESS: 'Room does not exist'}
+
 
 # ---------JoinRoom--------- #
 
@@ -119,14 +120,14 @@ def join_room(request) -> dict:
     # Check if password from request == room password, if there is one
     is_password_matching = False
 
-    if room.password != None:
+    if room.password is not None:
         # If both hashed passwords are matching, set is_password_matching to True
         if check_password(password_input, room.password):
             is_password_matching = True
     else:
         # The room password == None
         is_password_matching = True
-    
+
     # If matching passwords, user can join
     if is_password_matching:
         # TODO: Check if the user already in the party
