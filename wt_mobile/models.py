@@ -33,7 +33,7 @@ class Room(models.Model):
     # if the owner gets deleted too.
 
     def __str__(self) -> str:
-        return self.room_name
+        return str(self.room_name)
 
 
 # Stream
@@ -43,6 +43,6 @@ class Stream(models.Model):
         verbose_name_plural = "Streams"
  
     # Stream property
-    link = models.URLField()
+    link = models.URLField(blank=True, null=True, default=None)
     assigned_room = models.OneToOneField(Room, on_delete=models.CASCADE)
     
