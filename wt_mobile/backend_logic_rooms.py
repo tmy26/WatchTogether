@@ -13,6 +13,8 @@ SUCCESS = "Success"
 
 ERROR_MSG = {ERROR: "Provided data is wrong"}
 
+dev_logger = get_loggers('wt_mobile_dev')
+
 
 # ---------RoomCreation--------- #
 
@@ -48,6 +50,7 @@ def create_room(request) -> dict:
     )
 
     room.save()
+    dev_logger.info(msg='A new room was created sucessfully')
 
     # Add the room owner to the users of the room, when created
     room.users.add(user)
@@ -98,7 +101,7 @@ def get_room() -> dict:
     try:
         return serialized
     except Room.DoesNotExist:
-        return {SUCCESS: 'Room does not exist'}
+        return {ERROR: 'Room does not exist'}
 
 
 # ---------JoinRoom--------- #
@@ -154,7 +157,7 @@ def leave_room(request) -> dict:
         # If the room is empty, it will not exist in UserRoom db. Delete the room if so
         if not UserRoom.objects.filter(unique_id=room.unique_id).exists():
             room.delete()
-            # Add message where it says "Room deleted, because all users left" in the logger
+            dev_logger.info('Room deleted, because all users left')
         return {SUCCESS: 'User left the room'}
     except (User.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG

@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from rest_framework.authtoken.models import Token
 import uuid
 from django.utils.timezone import now
+
 
 class User(AbstractUser):
 

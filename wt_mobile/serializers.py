@@ -1,6 +1,7 @@
 from rest_framework import  serializers
 from .models import Room, User, Stream, UserRoom
 
+
 class UserSerializer(serializers.ModelSerializer):
     """User serializer, returns all fields that the user has"""
     class Meta:
