@@ -11,7 +11,7 @@ from watch_together.general_utils import get_loggers
 ERROR = "Error"
 SUCCESS = "Success"
 
-ERROR_MSG = f"{ERROR}: Provided data is wrong"
+ERROR_MSG = {ERROR: "Provided data is wrong"}
 
 
 # ---------RoomCreation--------- #
