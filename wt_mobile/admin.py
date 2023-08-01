@@ -10,7 +10,7 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     search_fields = ('unique_id', 'name',)
-    list_display = ('unique_id', 'name', 'password')
+    list_display = ('unique_id', 'name', 'password',)
 
 
 @admin.register(Stream)

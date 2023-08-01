@@ -53,7 +53,7 @@ class RoomCreationView(APIView):
     def put(self, request):
         return handle_response(edit_room(request))
 
-    def get(self):
+    def get(self, request):
         msg = get_room()
         if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)

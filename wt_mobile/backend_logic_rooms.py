@@ -1,17 +1,17 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Room, User, UserRoom
-from wt_mobile.serializers import RoomSerializer, JoinedRoomSerializer
+from .serializers import RoomSerializer, JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
 
 # ---------Defines--------- #
 
 # dev_loggers = get_loggers('wt_mobile_dev')
-ERROR = "Error"
-SUCCESS = "Success"
+ERROR = 'Error'
+SUCCESS = 'Success'
 
-ERROR_MSG = {ERROR: "Provided data is wrong"}
+ERROR_MSG = {ERROR: 'Provided data is wrong'}
 
 dev_logger = get_loggers('wt_mobile_dev')
 
@@ -87,7 +87,7 @@ def edit_room(request) -> dict:
             if new_password:
                 room_to_edit.password = make_password(new_password)
             room_to_edit.save()
-        return {SUCCESS: 'Room edited'}
+            return {SUCCESS: 'Room edited'}
     except (Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG
 
@@ -95,10 +95,9 @@ def edit_room(request) -> dict:
 def get_room() -> dict:
     """Get room function"""
 
-    all_rooms_obj = Room.objects.all()
-    serialized = RoomSerializer(all_rooms_obj, many=True)
-
     try:
+        all_rooms_obj = Room.objects.all()
+        serialized = RoomSerializer(all_rooms_obj, many=True)
         return serialized
     except Room.DoesNotExist:
         return {ERROR: 'Room does not exist'}
@@ -158,7 +157,7 @@ def leave_room(request) -> dict:
         if not UserRoom.objects.filter(unique_id=room.unique_id).exists():
             room.delete()
             dev_logger.info('Room deleted, because all users left')
-        return {SUCCESS: 'User left the room'}
+            return {SUCCESS: 'User left the room'}
     except (User.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG
 
