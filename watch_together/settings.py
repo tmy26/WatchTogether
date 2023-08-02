@@ -164,3 +164,5 @@ PASSWORD_RESET_TIMEOUT = 864000
 #         }
 #     }
 # }
+# https://www.section.io/engineering-education/django-google-oauth/?fbclid=IwAR2JrvSowStYu7q4pCeFvO8gLXUeCQyzxPIPHklP1PyE_aLvxthhI_GnlbQ
+# https://pylessons.com/django-google-oauth?fbclid=IwAR2oTQd16jbUNd0rDTjJyL6iqHdU0lVcO9gnlduPXPvSe3IFq4UUv6MDWWo
