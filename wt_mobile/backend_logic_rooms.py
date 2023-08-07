@@ -154,7 +154,6 @@ def join_room(request) -> dict:
 
     # If matching passwords, user can join
     if is_password_matching:
-        # TODO: Check if the user already in the party
         room.users.add(user)
     else:
         return {ERROR: 'Provided password did not match the room password'}
