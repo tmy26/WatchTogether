@@ -95,8 +95,10 @@ def edit_room(request) -> dict:
             room_to_edit = Room.objects.get(unique_id=unique_id)
             if new_name:
                 room_to_edit.name = new_name
+                dev_logger.info(msg=f'Room name changed to {new_name}')
             if new_password:
                 room_to_edit.password = make_password(new_password)
+                dev_logger.info(msg='Room password changed')
             room_to_edit.save()
     except (Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG
@@ -185,6 +187,14 @@ def leave_room(request) -> dict:
         if not UserRoom.objects.filter(room_id=room.unique_id).exists():
             room.delete()
             dev_logger.info('Room deleted, because all users left')
+        # Check if the user who leaves is the owner of the room, reassign the owner if the room is not empty
+        elif user == room.owner:
+            # Get the first joined user, after the creator
+            id_of_next_owner = UserRoom.objects.filter(room_id=room_to_leave).first()
+
+            # Reassign room owner to the first joined user, if the current owner gets deleted
+            reassign_owner(room, id_of_next_owner)
+
     except (User.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG
     return {SUCCESS: 'User left the room'}
@@ -229,3 +239,20 @@ def is_int(id):
         return True
     else:
         return False
+
+
+def reassign_owner(room, id_next_owner):
+    """Reassign room owner to the first joined user, if the current owner gets deleted"""
+
+    try:
+        # Get the instance of the next onwer
+        new_owner = User.objects.get(id=id_next_owner.user_id)
+
+        # Change owner to the first joined user
+        room.owner = new_owner
+        room.save()
+        dev_logger.info(f'New room owner is {new_owner.username}')
+
+        return {SUCCESS: "The owner of the room was changed"}
+    except (Room.DoesNotExist, User.DoesNotExist, MultipleObjectsReturned):
+        return {ERROR: "Could not reassign the owner of the room"}
