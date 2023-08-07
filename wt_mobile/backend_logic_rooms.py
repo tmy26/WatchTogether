@@ -23,13 +23,12 @@ def create_room(request) -> dict:
     """Room creation function"""
 
     # request data
-    unique_id = request.data.get('unique_id')
     name = request.data.get('name')
     owner = request.data.get('owner_id')
     password = request.data.get('password')
 
     # Check request data validity
-    if not is_uuid(unique_id) or not is_int(owner):
+    if not is_int(owner):
         return ERROR_MSG
 
     # Check if room owner is existing user in the database (should be existing)
@@ -48,7 +47,6 @@ def create_room(request) -> dict:
 
     # create a Room
     room = Room(
-        unique_id=unique_id,
         name=name,
         password=password,
         owner=user
