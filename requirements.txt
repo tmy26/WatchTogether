@@ -5,3 +5,4 @@ pytz==2023.3
 sqlparse==0.4.4
 six
 email_validator
+django_request_mapping-0.0.12 # TODO fix this requirement

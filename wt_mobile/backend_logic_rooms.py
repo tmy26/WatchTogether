@@ -20,7 +20,7 @@ dev_logger = get_loggers('wt_mobile_dev')
 # ---------RoomCreation--------- #
 
 def create_room(request) -> dict:
-    """Room creation function"""
+    """ Room creation function """
 
     # request data
     name = request.data.get('name')
@@ -66,7 +66,7 @@ def create_room(request) -> dict:
 
 
 def delete_room(request) -> dict:
-    """Delete room function"""
+    """ Delete room function """
 
     # Get room unique ID
     unique_id = request.data.get('unique_id')
@@ -84,7 +84,7 @@ def delete_room(request) -> dict:
 
 
 def edit_room(request) -> dict:
-    """Edit room function"""
+    """ Edit room function """
 
     # Get unique ID
     unique_id = request.data.get('unique_id')
@@ -119,7 +119,7 @@ def edit_room(request) -> dict:
 # ---------JoinRoom--------- #
 
 def join_room(request) -> dict:
-    """Join a room"""
+    """ Join a room """
 
     # Get request data
     user_to_join = request.data.get('user')
@@ -164,7 +164,7 @@ def join_room(request) -> dict:
 
 
 def leave_room(request) -> dict:
-    """User option to leave the room"""
+    """ User option to leave the room """
 
     user_to_leave = request.data.get('user')
     room_to_leave = request.data.get('room')
@@ -203,7 +203,7 @@ def leave_room(request) -> dict:
 
 
 def list_rooms_user_participates(request) -> dict:
-    """Display all the rooms, which are user participates in"""
+    """ Display all the rooms, which are user participates in """
 
     user_id = request.data.get('user')
 
@@ -225,7 +225,8 @@ def list_rooms_user_participates(request) -> dict:
 # ---------Support Functions--------- #
 
 def is_uuid(id):
-    """Check if data=uuid"""
+    """ Check if data=uuid """
+
     try:
         UUID(str(id))
 
@@ -235,7 +236,7 @@ def is_uuid(id):
 
 
 def is_int(id):
-    """Check if provided data is int, because pk are integers"""
+    """ Check if provided data is int, because pk are integers """
 
     if isinstance(id, int):
         return True
@@ -244,7 +245,7 @@ def is_int(id):
 
 
 def reassign_owner(room, id_next_owner):
-    """Reassign room owner to the first joined user, if the current owner gets deleted"""
+    """ Reassign room owner to the first joined user, if the current owner gets deleted """
 
     try:
         # Get the instance of the next onwer

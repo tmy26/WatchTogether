@@ -10,53 +10,41 @@ from django.http import JsonResponse
 
 @request_mapping('/user')
 class UserView(APIView):
-    """User Controller"""
+    """ User Controller """
 
-    @request_mapping('/create', method='post')
+    @request_mapping('', method='post')
     def create(self, request):
-        msg = create_user(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return JsonResponse(data=msg, status=status.HTTP_200_OK)
-
-    @request_mapping('/get", method="get')
+        return handle_response(create_user(request))
+    
+    @request_mapping('', method='get')
     def get(self, request):
-        msg = get_user(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return JsonResponse(data=msg.data, status=status.HTTP_200_OK)
+        return handle_response(get_user(request))
 
-    @request_mapping('/remove', method='delete')
+    @request_mapping('', method='delete')
     def remove(self, request):
-        msg = delete_user_account(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+        return handle_response(delete_user_account(request))
 
 # ---------End of User Controller--------- #
 
 
-@request_mapping("/room")
+@request_mapping('/room')
 class RoomView(APIView):
-    """Room Controller"""
+    """ Room Controller """
     permission_classes = [IsAuthenticated]
 
-    @request_mapping("/create", method="post")
+    @request_mapping('', method='post')
     def create(self, request):
         return handle_response(create_room(request))
 
-    @request_mapping("/delete", method="delete")
+    @request_mapping('', method='delete')
     def delete(self, request):
         return handle_response(delete_room(request))
 
-    @request_mapping("/edit", method="put")
+    @request_mapping('', method='put')
     def edit(self, request):
         return handle_response(edit_room(request))
 
-    @request_mapping("/list", method="get")
+    @request_mapping('', method='get')
     def get(self, request):
         msg = list_rooms_user_participates(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
@@ -64,26 +52,26 @@ class RoomView(APIView):
         else:
             return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
 
-    @request_mapping("/join", method="post")
+    @request_mapping('/join', method='post')
     def join(self, request):
         return handle_response(join_room(request))
 
-    @request_mapping("/leave", method="delete")
+    @request_mapping('/leave', method='delete')
     def leave(self, request):
         return handle_response(leave_room(request))
 
 # ---------End of Room Controller--------- #
 
 
-@request_mapping("/stream")
+@request_mapping('/stream')
 class StreamView(APIView):
-    """Stream Controller"""
+    """ Stream Controller """
 
-    @request_mapping("/create", method="post")
+    @request_mapping('', method='post')
     def create(self, request):
         return handle_response(create_steam(request))
 
-    @request_mapping("/edit", method="put")
+    @request_mapping('', method='put')
     def edit(self, request):
         return handle_response(edit_stream(request))
     
