@@ -18,7 +18,11 @@ class UserView(APIView):
     
     @request_mapping('/search_user', method='get')
     def get(self, request):
-        return handle_response(get_user(request))
+        msg = get_user(request)
+        if isinstance(msg, dict) and 'Error' in msg.keys():
+            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
 
     @request_mapping('/delete_user', method='delete')
     def remove(self, request):

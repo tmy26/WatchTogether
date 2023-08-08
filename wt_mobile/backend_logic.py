@@ -68,9 +68,9 @@ def create_user(request) -> None:
 
     # validate email
     try:
-        check_email = validate_email(email, check_deliverability=False)
+        check_email = validate_email(email, allow_smtputf8=False)
         if check_email:
-            email = check_email.normalized
+            email = check_email.ascii_email
     except EmailNotValidError as error:
         return str(error)
     
