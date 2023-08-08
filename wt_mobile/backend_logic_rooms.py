@@ -1,7 +1,7 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Room, User, UserRoom
-from .serializers import RoomSerializer, JoinedRoomSerializer
+from .serializers import JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
 from uuid import UUID
@@ -114,17 +114,6 @@ def edit_room(request) -> dict:
     except (Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG
     return {SUCCESS: 'Room edited'}
-
-
-def get_room() -> dict:
-    """Get room function"""
-
-    try:
-        all_rooms_obj = Room.objects.all()
-        serialized = RoomSerializer(all_rooms_obj, many=True)
-    except Room.DoesNotExist:
-        return {ERROR: 'Room does not exist'}
-    return serialized
 
 
 # ---------JoinRoom--------- #

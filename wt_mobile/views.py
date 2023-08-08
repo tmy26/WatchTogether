@@ -1,97 +1,100 @@
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .backend_logic import delete_user_account, create_user, get_user
 from .backend_logic_rooms import *
 from .backend_logic_stream import *
+from django_request_mapping import request_mapping
+from django.http import JsonResponse
 
 
-class UserRegistrationView(APIView):
-    """User registration"""
+@request_mapping('/user')
+class UserView(APIView):
+    """User Controller"""
 
-    def post(self, request):
+    @request_mapping('/create', method='post')
+    def create(self, request):
         msg = create_user(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data=msg, status=status.HTTP_200_OK)
+            return JsonResponse(data=msg, status=status.HTTP_200_OK)
 
-
-class EditUserView(APIView):
-    """R.U.D methods for user"""
-    permission_classes = [IsAuthenticated]
-
+    @request_mapping('/get", method="get')
     def get(self, request):
         msg = get_user(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data=msg.data, status=status.HTTP_200_OK)
+            return JsonResponse(data=msg.data, status=status.HTTP_200_OK)
 
-    def put(self):
-        pass
-
-    def delete(self, request):
+    @request_mapping('/remove', method='delete')
+    def remove(self, request):
         msg = delete_user_account(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data=msg.data, status=status.HTTP_200_OK)
+            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+
+# ---------End of User Controller--------- #
 
 
-class RoomCreationView(APIView):
-    """Room creation"""
+@request_mapping("/room")
+class RoomView(APIView):
+    """Room Controller"""
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    @request_mapping("/create", method="post")
+    def create(self, request):
         return handle_response(create_room(request))
 
+    @request_mapping("/delete", method="delete")
     def delete(self, request):
         return handle_response(delete_room(request))
 
-    def put(self, request):
+    @request_mapping("/edit", method="put")
+    def edit(self, request):
         return handle_response(edit_room(request))
 
-    def get(self, request):
-        msg = get_room()
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg.data, status=status.HTTP_200_OK)
-
-
-class JoinRoomView(APIView):
-    """Other users join/leave rooms"""
-
-    def post(self, request):
-        return handle_response(join_room(request))
-
-    def delete(self, request):
-        return handle_response(leave_room(request))
-
+    @request_mapping("/list", method="get")
     def get(self, request):
         msg = list_rooms_user_participates(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data=msg.data, status=status.HTTP_200_OK)
+            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+
+    @request_mapping("/join", method="post")
+    def join(self, request):
+        return handle_response(join_room(request))
+
+    @request_mapping("/leave", method="delete")
+    def leave(self, request):
+        return handle_response(leave_room(request))
+
+# ---------End of Room Controller--------- #
 
 
-class StreamCreationView(APIView):
-    """Stream creation, deletion, and editing"""
+@request_mapping("/stream")
+class StreamView(APIView):
+    """Stream Controller"""
 
-    def post(self, request):
+    @request_mapping("/create", method="post")
+    def create(self, request):
         return handle_response(create_steam(request))
 
-    def put(self, request):
+    @request_mapping("/edit", method="put")
+    def edit(self, request):
         return handle_response(edit_stream(request))
+    
+
+# ---------End of Stream Controller--------- #
 
 
 # ---------Support Functions--------- #
 
 def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
-        return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(data=msg, status=status.HTTP_200_OK)
+        return JsonResponse(data=msg, status=status.HTTP_200_OK)

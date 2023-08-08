@@ -1,5 +1,5 @@
 from rest_framework import  serializers
-from .models import Room, User, Stream, UserRoom
+from .models import User, Stream, UserRoom
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,14 +14,6 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
-        
-
-class RoomSerializer(serializers.ModelSerializer):
-    """Serializer for displaying all fields of the Room"""
-
-    class Meta():
-        model = Room
-        fields = ['name']
 
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
