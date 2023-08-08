@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .backend_logic import delete_user_account, create_user, get_user
 from .backend_logic_rooms import *
-from .backend_logic_stream import *
+from .backend_logic_stream import create_stream, edit_stream
 
 
 class UserRegistrationView(APIView):
@@ -79,10 +79,10 @@ class JoinRoomView(APIView):
 
 
 class StreamCreationView(APIView):
-    """Stream creation, deletion, and editing"""
+    """Stream creation and editing"""
 
     def post(self, request):
-        return handle_response(create_steam(request))
+        return handle_response(create_stream(request))
 
     def put(self, request):
         return handle_response(edit_stream(request))
