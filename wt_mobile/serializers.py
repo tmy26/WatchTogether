@@ -21,7 +21,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Room
-        fields = '__all__'
+        fields = ['name']
 
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class JoinedRoomSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = UserRoom
-        fields = ['room', 'date_joined']
+        fields = ['room_name', 'date_joined']
 
 
 class StreamSerializer(serializers.ModelSerializer):

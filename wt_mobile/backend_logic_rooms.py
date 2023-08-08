@@ -57,6 +57,11 @@ def create_room(request) -> dict:
 
     # Add the room owner to the users of the room, when created
     room.users.add(user)
+    
+    # Change the name of the room in JoinRoom table
+    join_room = UserRoom.objects.filter(room_id=room.unique_id)
+    if join_room:
+        join_room.update(room_name=name)
     return {SUCCESS: 'Room created'}
 
 
@@ -91,11 +96,17 @@ def edit_room(request) -> dict:
         return ERROR_MSG
 
     try:
+        join_room = UserRoom.objects.filter(room_id=unique_id)
         if Room.objects.filter(unique_id=unique_id).exists():
             room_to_edit = Room.objects.get(unique_id=unique_id)
             if new_name:
                 room_to_edit.name = new_name
+
+                # Change in JoinRoom table, if the room exists there
+                if join_room:
+                    join_room.update(room_name=new_name)
                 dev_logger.info(msg=f'Room name changed to {new_name}')
+
             if new_password:
                 room_to_edit.password = make_password(new_password)
                 dev_logger.info(msg='Room password changed')
@@ -155,6 +166,9 @@ def join_room(request) -> dict:
     # If matching passwords, user can join
     if is_password_matching:
         room.users.add(user)
+        # Add the name of the room in the join table UserRooms
+        join_room = UserRoom.objects.filter(room_id=room.unique_id)
+        join_room.update(room_name=room.name)
     else:
         return {ERROR: 'Provided password did not match the room password'}
     return {SUCCESS: 'User joined the room'}
