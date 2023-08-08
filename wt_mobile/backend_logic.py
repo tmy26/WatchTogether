@@ -22,7 +22,7 @@ def activate(request, uidb64, token):
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        #get the username object
+        # get the username object
         user = User.objects.get(pk=uid)
     except:
         user = None
@@ -60,33 +60,34 @@ def activateEmail(request, user, to_email):
 def create_user(request) -> None:
     """User register method"""
 
-    #data request
+    # data request
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
     password_check = request.data.get('password_check')
 
-    #validate email
+    # validate email
     try:
-        check_email = validate_email(email, check_deliverability=True)
-        email = check_email.normalized
+        check_email = validate_email(email, check_deliverability=False)
+        if check_email:
+            email = check_email.normalized
     except EmailNotValidError as error:
         return str(error)
     
-    #validate password
+    # validate password
     if len(password) < 8:
         return {'Error': 'the password is too short!'}
     if password != password_check:
         return {'Error': 'the passwords do not match!'}
     
-    #validate user_uniqueness
+    # validate user_uniqueness
     if User.objects.filter(username=username).exists():
         return {'Error': 'the username is already in use!'}
     
-    #convert the pass to hash
+    # convert the pass to hash
     hashed_password = make_password(password)
 
-    #create user
+    # create user
     user = User(
         username=username,
         email=email,

@@ -12,15 +12,15 @@ from django.http import JsonResponse
 class UserView(APIView):
     """ User Controller """
 
-    @request_mapping('', method='post')
+    @request_mapping('/register_user', method='post')
     def create(self, request):
         return handle_response(create_user(request))
     
-    @request_mapping('', method='get')
+    @request_mapping('/search_user', method='get')
     def get(self, request):
         return handle_response(get_user(request))
 
-    @request_mapping('', method='delete')
+    @request_mapping('/delete_user', method='delete')
     def remove(self, request):
         return handle_response(delete_user_account(request))
 
@@ -32,19 +32,19 @@ class RoomView(APIView):
     """ Room Controller """
     permission_classes = [IsAuthenticated]
 
-    @request_mapping('', method='post')
+    @request_mapping('/create_room', method='post')
     def create(self, request):
         return handle_response(create_room(request))
 
-    @request_mapping('', method='delete')
+    @request_mapping('/remove_room', method='delete')
     def delete(self, request):
         return handle_response(delete_room(request))
 
-    @request_mapping('', method='put')
+    @request_mapping('/edit_room', method='put')
     def edit(self, request):
         return handle_response(edit_room(request))
 
-    @request_mapping('', method='get')
+    @request_mapping('/list_rooms', method='get')
     def get(self, request):
         msg = list_rooms_user_participates(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
@@ -52,11 +52,11 @@ class RoomView(APIView):
         else:
             return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
 
-    @request_mapping('/join', method='post')
+    @request_mapping('/join_room', method='post')
     def join(self, request):
         return handle_response(join_room(request))
 
-    @request_mapping('/leave', method='delete')
+    @request_mapping('/leave_room', method='delete')
     def leave(self, request):
         return handle_response(leave_room(request))
 
@@ -67,11 +67,11 @@ class RoomView(APIView):
 class StreamView(APIView):
     """ Stream Controller """
 
-    @request_mapping('', method='post')
+    @request_mapping('/create_stream', method='post')
     def create(self, request):
         return handle_response(create_steam(request))
 
-    @request_mapping('', method='put')
+    @request_mapping('/edit_stream', method='put')
     def edit(self, request):
         return handle_response(edit_stream(request))
     
