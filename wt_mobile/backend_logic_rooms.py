@@ -251,7 +251,7 @@ def reassign_owner(room, id_next_owner):
         room.owner = new_owner
         room.save()
         dev_logger.info(f'New room owner is {new_owner.username}')
-
-        return {SUCCESS: "The owner of the room was changed"}
     except (Room.DoesNotExist, User.DoesNotExist, MultipleObjectsReturned):
         return {ERROR: "Could not reassign the owner of the room"}
+    
+    return {SUCCESS: "The owner of the room was changed"}

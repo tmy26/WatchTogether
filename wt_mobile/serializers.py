@@ -25,11 +25,11 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
-    """Serializer for displaying all fields of the joined UserRoom table"""
+    """Serializer for displaying the following fields of the joined UserRoom table"""
 
     class Meta():
         model = UserRoom
-        fields = '__all__'
+        fields = ['room', 'date_joined']
 
 
 class StreamSerializer(serializers.ModelSerializer):
