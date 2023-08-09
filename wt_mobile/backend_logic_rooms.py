@@ -4,7 +4,6 @@ from .models import Room, User, UserRoom
 from .serializers import JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
-from uuid import UUID
 
 # ---------Defines--------- #
 
@@ -71,10 +70,6 @@ def delete_room(request) -> dict:
     # Get room unique ID
     unique_id = request.data.get('unique_id')
 
-    # Check request data validity
-    if not is_uuid(unique_id):
-        return ERROR_MSG
-
     # Try deleting room
     try:
         Room.objects.get(unique_id=unique_id).delete()
@@ -90,10 +85,6 @@ def edit_room(request) -> dict:
     unique_id = request.data.get('unique_id')
     new_name = request.data.get('new_name')
     new_password = request.data.get('new_password')
-
-    # Check request data validity
-    if not is_uuid(unique_id):
-        return ERROR_MSG
 
     try:
         join_room = UserRoom.objects.filter(room_id=unique_id)
@@ -124,8 +115,9 @@ def join_room(request) -> dict:
     # Get request data
     user_to_join = request.data.get('user')
     room_to_join = request.data.get('room')
-    # Check if request 'user' is ID and 'room' is UUID
-    if not isinstance(user_to_join, int) or not is_uuid(room_to_join):
+
+    # Check if request 'user' is ID
+    if not isinstance(user_to_join, int):
         return ERROR_MSG
     
     password_input = request.data.get('password')
@@ -168,10 +160,6 @@ def leave_room(request) -> dict:
 
     user_to_leave = request.data.get('user')
     room_to_leave = request.data.get('room')
-
-    # Check request data validity
-    if not is_uuid(room_to_leave) or not is_int(user_to_leave):
-        return ERROR_MSG
 
     # Get room and user from db
     try:
@@ -223,17 +211,6 @@ def list_rooms_user_participates(request) -> dict:
 
 
 # ---------Support Functions--------- #
-
-def is_uuid(id):
-    """ Check if data=uuid """
-
-    try:
-        UUID(str(id))
-
-        return True
-    except ValueError:
-        return False
-
 
 def is_int(id):
     """ Check if provided data is int, because pk are integers """
