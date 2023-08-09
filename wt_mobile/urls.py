@@ -1,7 +1,8 @@
-# Spring-like request mappings for djnago. All urls are defined in the main url.py
+# Spring-like request mappings for djnago. All urls are registered in the project url.py
 
 from django.urls import path
 from wt_mobile import backend_logic
+from django.contrib import admin
 
 
 urlpatterns = [
