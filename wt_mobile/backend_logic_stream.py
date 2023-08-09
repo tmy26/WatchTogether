@@ -1,8 +1,6 @@
 from .models import Room, Stream
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
-from bs4 import BeautifulSoup
-import validators
-import urllib.request
+import requests
 
 # dev_loggers = get_loggers('wt_mobile_dev')
 ERROR = 'Error'
@@ -40,7 +38,7 @@ def create_stream(request):
 
     except Room.DoesNotExist:
         return {ERROR: 'Assigned room does not exist.'}
-    except (Stream.DoesNotExist, MultipleObjectsReturned, ValidationError):
+    except (Stream.DoesNotExist, MultipleObjectsReturned, ValidationError, requests.exceptions.InvalidURL):
         return ERROR_MESSAGE
 
     # Return a success message
@@ -72,7 +70,7 @@ def edit_stream(request) -> dict:
             stream_to_edit.link = link
             stream_to_edit.save()
 
-    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned, ValidationError, urllib.error.URLError):
+    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned, ValidationError, requests.exceptions.InvalidURL):
         return ERROR_MESSAGE
         
     return {SUCCESS: 'Stream edited'}
@@ -80,32 +78,13 @@ def edit_stream(request) -> dict:
 
 # ---------Support Functions--------- #
 
-def validate_link(link) -> dict:
-
-    # Validate the link using validators
-    if not validators.url(link):
-        return {ERROR: 'Invalid URL'}
-    
+def validate_link(link):
     try:
-        # Fetch the URL content
-        response = urllib.request.urlopen(link)
-        
-        # Check if the response status is OK (200)
-        if response.status == 200:
-            content = response.read()
-            soup = BeautifulSoup(content, 'html.parser')
-
-            # Check for video tags or elements
-            video_tags = soup.find_all('video')
-            iframe_tags = soup.find_all('iframe')
-
-            # Check if there's exactly one video tag or iframe tag
-            if len(video_tags) == 1 or len(iframe_tags) == 1:
-                return None  # Validation passes
-            else:
-                return {ERROR: 'The link should contain exactly one video or video player.'}
-    except urllib.error.URLError:
-        return {ERROR: 'fetching URL'}
-
-    # If validation passes, return None
-    return None
+        response = requests.get(link)
+        if response.status_code == 200:
+            #if the method is able to open the website it returns none
+            return None
+        else:
+            return {ERROR: 'Link is valid, but the website returned a non-OK status code.'}
+    except requests.exceptions.RequestException:
+        return {ERROR: 'Link is not valid or could not be accessed.'}
