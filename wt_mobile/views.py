@@ -12,11 +12,11 @@ from django.http import JsonResponse
 class UserView(APIView):
     """ User Controller """
 
-    @request_mapping('/register_user', method='post')
+    @request_mapping('/register', method='post')
     def create(self, request):
         return handle_response(create_user(request))
     
-    @request_mapping('/search_user', method='get')
+    @request_mapping('/search', method='get')
     def get(self, request):
         msg = get_user(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
@@ -24,7 +24,7 @@ class UserView(APIView):
         else:
             return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
 
-    @request_mapping('/delete_user', method='delete')
+    @request_mapping('/delete', method='delete')
     def remove(self, request):
         return handle_response(delete_user_account(request))
 
@@ -36,19 +36,19 @@ class RoomView(APIView):
     """ Room Controller """
     permission_classes = [IsAuthenticated]
 
-    @request_mapping('/create_room', method='post')
+    @request_mapping('/create', method='post')
     def create(self, request):
         return handle_response(create_room(request))
 
-    @request_mapping('/remove_room', method='delete')
+    @request_mapping('/remove', method='delete')
     def delete(self, request):
         return handle_response(delete_room(request))
 
-    @request_mapping('/edit_room', method='put')
+    @request_mapping('/edit', method='put')
     def edit(self, request):
         return handle_response(edit_room(request))
 
-    @request_mapping('/list_rooms', method='get')
+    @request_mapping('/list', method='get')
     def get(self, request):
         msg = list_rooms_user_participates(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
@@ -56,11 +56,11 @@ class RoomView(APIView):
         else:
             return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
 
-    @request_mapping('/join_room', method='post')
+    @request_mapping('/join', method='post')
     def join(self, request):
         return handle_response(join_room(request))
 
-    @request_mapping('/leave_room', method='delete')
+    @request_mapping('/leave', method='delete')
     def leave(self, request):
         return handle_response(leave_room(request))
 
@@ -71,11 +71,11 @@ class RoomView(APIView):
 class StreamView(APIView):
     """ Stream Controller """
 
-    @request_mapping('/create_stream', method='post')
+    @request_mapping('/create', method='post')
     def create(self, request):
         return handle_response(create_steam(request))
 
-    @request_mapping('/edit_stream', method='put')
+    @request_mapping('/edit', method='put')
     def edit(self, request):
         return handle_response(edit_stream(request))
     

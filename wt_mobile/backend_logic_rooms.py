@@ -4,6 +4,7 @@ from .models import Room, User, UserRoom
 from .serializers import JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
+import shortuuid
 
 # ---------Defines--------- #
 
@@ -44,11 +45,15 @@ def create_room(request) -> dict:
     # Hash room password, if there is one
     password = None if password is None else make_password(password)
 
+    # Get unique ID
+    unique_id = get_unique_id()
+
     # create a Room
     room = Room(
         name=name,
         password=password,
-        owner=user
+        owner=user,
+        unique_id=unique_id
     )
 
     room.save()
@@ -236,3 +241,14 @@ def reassign_owner(room, id_next_owner):
         return {ERROR: "Could not reassign the owner of the room"}
     
     return {SUCCESS: "The owner of the room was changed"}
+
+
+def get_unique_id():
+    """ Generates unique ID for room """
+    
+    while True:
+        unique_id = shortuuid.ShortUUID().random(length=6)
+
+        if Room.objects.filter(unique_id=unique_id).count() == 0:
+            break
+    return unique_id

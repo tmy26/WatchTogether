@@ -21,10 +21,9 @@ class Room(models.Model):
     # Room properties
     unique_id =  models.CharField(
         max_length=8,
-         primary_key=True,
-         default=shortuuid.ShortUUID().random(length=6),
-         editable=False,
-         unique=True)
+        primary_key=True,
+        editable=False,
+        unique=True)
     
     # delete rooms, if the related user is also deleted
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
