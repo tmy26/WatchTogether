@@ -2,12 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .backend_logic import  delete_user_account, create_user, get_user
+from .backend_logic import create_user, get_user
 from .backend_logic_rooms import *
 from .backend_logic_stream import * 
 
 
-class UserRegistration(APIView):
+class UserRegistrationView(APIView):
     """User registration"""
 
     def post(self, request):
@@ -18,8 +18,8 @@ class UserRegistration(APIView):
             return Response(data=msg, status=status.HTTP_200_OK)
 
 
-class EditUser(APIView):
-    """R.U.D methods for user"""
+class GetUserView(APIView):
+    """Search for user"""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -29,18 +29,8 @@ class EditUser(APIView):
         else:
             return Response(data=msg.data, status=status.HTTP_200_OK)
 
-    def put(self):
-        pass
-    
-    def delete(self, request):
-        msg = delete_user_account(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg.data, status=status.HTTP_200_OK)
 
-
-class RoomCreation(APIView):
+class RoomCreationView(APIView):
     """Room creation"""
     permission_classes = [IsAuthenticated]
 
@@ -73,9 +63,9 @@ class RoomCreation(APIView):
             return Response(data=msg.data, status=status.HTTP_200_OK)
         
 
-class StreamCreation(APIView):
+class StreamCreationView(APIView):
     """Stream creation, deletion, and editing"""
-
+    permission_classes = [IsAuthenticated]
    
     def post(self, request):
         return handle_response(create_steam(request))
