@@ -66,12 +66,15 @@ def create_user(request) -> None:
     password = request.data.get('password')
     password_check = request.data.get('password_check')
 
-    #validate email
+    #validate email and check for uniqness
     try:
         check_email = validate_email(email, check_deliverability=True)
         email = check_email.normalized
     except EmailNotValidError as error:
         return str(error)
+    
+    if User.objects.filter(email=email).exists():
+        return {'This email is already in use!'}
     
     #validate password
     if len(password) < 8:
