@@ -1,12 +1,14 @@
 from .models import Room, Stream
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
 import requests
+from watch_together.general_utils import get_loggers
 
 # dev_loggers = get_loggers('wt_mobile_dev')
 ERROR = 'Error'
 SUCCESS = 'Success'
 ERROR_MESSAGE = {'Error': 'Something went wrong with the data you provided. Please check if the data is correct and try again.'}
 
+dev_logger = get_loggers('wt_mobile_dev')
 
 def create_stream(request):
     """Stream creation function"""
@@ -36,14 +38,16 @@ def create_stream(request):
         created_stream = Stream(link=link, assigned_room=room)
         created_stream.save()
 
-    except Room.DoesNotExist:
-        return {ERROR: 'Assigned room does not exist.'}
-    except (Stream.DoesNotExist, MultipleObjectsReturned, ValidationError, requests.exceptions.InvalidURL):
-        return ERROR_MESSAGE
+    except (Stream.DoesNotExist, ValidationError, requests.exceptions.InvalidURL):
+        dev_logger.error('An error occured while creating the stream. For debugging: Traceback wt_mobile, backend_logic_stream, create ')
+        return ERROR_MESSAGE  
+    except (MultipleObjectsReturned):
+        return dev_logger.error(msg='Multiple Objects returned while creating the stream. For debugging: Traceback wt_mobile, backend_logic_stream, create')
 
     # Return a success message
     return {SUCCESS: 'Stream created'}
     
+
 def edit_stream(request) -> dict:
     """Stream editing function"""
 
@@ -70,9 +74,12 @@ def edit_stream(request) -> dict:
             stream_to_edit.link = link
             stream_to_edit.save()
 
-    except (Stream.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned, ValidationError, requests.exceptions.InvalidURL):
+    except (Stream.DoesNotExist, Room.DoesNotExist, ValidationError, requests.exceptions.InvalidURL):
+        dev_logger.error('An error occured while editing the stream. For debugging: Traceback wt_mobile, backend_logic_stream, edit ')
         return ERROR_MESSAGE
-        
+    except (MultipleObjectsReturned):
+        return dev_logger.error(msg='Multiple Objects returned while editing the stream. For debugging: Traceback wt_mobile, backend_logic_stream, edit')
+    
     return {SUCCESS: 'Stream edited'}
 
 
