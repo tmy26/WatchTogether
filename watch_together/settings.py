@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'wt_mobile',
-    'website',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -132,7 +135,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 #SMTP Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -143,3 +145,23 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 864000
+#TODO: To be implemented google auth / facebook auth
+#setup authentication with google
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'allauth.account.auth_backends.AuthenticationBackend'
+# ]
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE' : [
+#             'profile',
+#             'email',
+#         ],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     }
+# }
+# https://www.section.io/engineering-education/django-google-oauth/?fbclid=IwAR2JrvSowStYu7q4pCeFvO8gLXUeCQyzxPIPHklP1PyE_aLvxthhI_GnlbQ
+# https://pylessons.com/django-google-oauth?fbclid=IwAR2oTQd16jbUNd0rDTjJyL6iqHdU0lVcO9gnlduPXPvSe3IFq4UUv6MDWWo

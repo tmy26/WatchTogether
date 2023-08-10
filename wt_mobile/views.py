@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .backend_logic import delete_user_account, create_user, get_user
+from .backend_logic import create_user, get_user
 from .backend_logic_rooms import *
 from .backend_logic_stream import create_stream, edit_stream
 
@@ -18,22 +18,12 @@ class UserRegistrationView(APIView):
             return Response(data=msg, status=status.HTTP_200_OK)
 
 
-class EditUserView(APIView):
-    """R.U.D methods for user"""
+class GetUserView(APIView):
+    """Search for user"""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         msg = get_user(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg.data, status=status.HTTP_200_OK)
-
-    def put(self):
-        pass
-
-    def delete(self, request):
-        msg = delete_user_account(request)
         if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -79,8 +69,9 @@ class JoinRoomView(APIView):
 
 
 class StreamCreationView(APIView):
-    """Stream creation and editing"""
-
+    """Stream creation, deletion, and editing"""
+    permission_classes = [IsAuthenticated]
+   
     def post(self, request):
         return handle_response(create_stream(request))
 
