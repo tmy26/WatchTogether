@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .backend_logic import create_user, get_user
 from .backend_logic_rooms import *
-from .backend_logic_stream import * 
+from .backend_logic_stream import *
 
 
 class UserRegistrationView(APIView):
@@ -12,7 +12,7 @@ class UserRegistrationView(APIView):
 
     def post(self, request):
         msg = create_user(request)
-        if isinstance(msg,dict) and 'Error' in msg.keys():
+        if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg, status=status.HTTP_200_OK)
@@ -29,39 +29,25 @@ class GetUserView(APIView):
         else:
             return Response(data=msg.data, status=status.HTTP_200_OK)
 
-
 class RoomCreationView(APIView):
     """Room creation"""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        msg = create_room(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
+        return handle_response(create_room(request))
 
     def delete(self, request):
-        msg = delete_room(request)
-        if 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
-    
+        return handle_response(delete_room(request))
+
     def put(self, request):
-        msg = edit_room(request)
-        if 'Error' in msg.keys():
-            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(data=msg, status=status.HTTP_200_OK)
+        return handle_response(edit_room(request))
 
     def get(self, request):
-        msg = get_room(request)
+        msg = get_room()
         if isinstance(msg, dict) and 'Error' in msg.keys():
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data=msg.data, status=status.HTTP_200_OK)
-        
 
 class StreamCreationView(APIView):
     """Stream creation, deletion, and editing"""
@@ -74,11 +60,10 @@ class StreamCreationView(APIView):
         return handle_response(edit_stream(request))
 
 
+# ---------Support Functions--------- #
+
 def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
         return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(data=msg, status=status.HTTP_200_OK)
-
-# TODO: Investigate on how to join a room using the GET method.
-# TODO: Display rooms for currently logged user
