@@ -74,7 +74,10 @@ def create_user(request) -> None:
     except EmailNotValidError as error:
         return str(error)
     
-    # validate password
+    if User.objects.filter(email=email).exists():
+        return {'This email is already in use!'}
+    
+    #validate password
     if len(password) < 8:
         return {'Error': 'the password is too short!'}
     if password != password_check:
@@ -99,39 +102,6 @@ def create_user(request) -> None:
     dev_logger.info(msg=f'Account with username: {username} was created. The account is not yet activated!')
     activateEmail(request, user, email)
     return {'Activation': f'a verification email was sent to {email}'}
-
-
-def edit_user(request, username):
-    """Edit user profile"""
-    username = request.data.get('username')
-    email = request.data.get('email')
-    password = request.data.get('password')
-    password_check = request.data.get('password_check')
-
-    try:
-        user = User.objects.get(username=username)
-    except (User.DoesNotExist, MultipleObjectsReturned):
-        return {'Error': 'The user does not exist!'}
-    
-    if username is not None:
-        user.username = username
-    if email is not None:
-        user.email = email
-    if password and password_check is not None:
-        if password == password_check:
-            user.password = password
-    user.save()
-    
-
-def delete_user_account(request):
-    """Delete user account"""
-
-    username = request.data.get('username')
-    try:
-        User.objects.get(username=username).delete()
-        return {'Success': 'account deletion was successful'}
-    except (User.DoesNotExist, MultipleObjectsReturned):
-        return {'Error': 'an account with that username does not exist'}
     
 
 def get_user(request):
@@ -146,6 +116,3 @@ def get_user(request):
     return serialized
 
 #TODO: return a view when account is activated!
-#TODO: return only the usrname in func get_user
-#TODO: REFACTOR the delete and put methods!!!
-#TODO: Do some more test on activateEmailFunc

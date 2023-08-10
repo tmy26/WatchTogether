@@ -101,11 +101,9 @@ def edit_room(request) -> dict:
                 # Change in JoinRoom table, if the room exists there
                 if join_room:
                     join_room.update(room_name=new_name)
-                dev_logger.info(msg=f'Room name changed to {new_name}')
 
             if new_password:
                 room_to_edit.password = make_password(new_password)
-                dev_logger.info(msg='Room password changed')
             room_to_edit.save()
     except (Room.DoesNotExist, MultipleObjectsReturned):
         return ERROR_MSG
@@ -181,7 +179,6 @@ def leave_room(request) -> dict:
         # If the room is empty, it will not exist in UserRoom db. Delete the room if so
         if not UserRoom.objects.filter(room_id=room.unique_id).exists():
             room.delete()
-            dev_logger.info('Room deleted, because all users left')
         # Check if the user who leaves is the owner of the room, reassign the owner if the room is not empty
         elif user == room.owner:
             # Get the first joined user, after the creator
@@ -236,7 +233,6 @@ def reassign_owner(room, id_next_owner):
         # Change owner to the first joined user
         room.owner = new_owner
         room.save()
-        dev_logger.info(f'New room owner is {new_owner.username}')
     except (Room.DoesNotExist, User.DoesNotExist, MultipleObjectsReturned):
         return {ERROR: "Could not reassign the owner of the room"}
     

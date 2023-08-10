@@ -11,4 +11,3 @@ urlpatterns.register(UserView)
 urlpatterns.register(StreamView)
 urlpatterns.register(RoomView)
 
-urlpatterns += [path('activate/<uidb64>/<token>', activate, name='activate')]

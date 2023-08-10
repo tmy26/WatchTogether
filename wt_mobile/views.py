@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .backend_logic import delete_user_account, create_user, get_user
+from .backend_logic import create_user, get_user
 from .backend_logic_rooms import *
 from .backend_logic_stream import *
 from django_request_mapping import request_mapping
@@ -23,10 +23,6 @@ class UserView(APIView):
             return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
         else:
             return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
-
-    @request_mapping('/delete', method='delete')
-    def remove(self, request):
-        return handle_response(delete_user_account(request))
 
 # ---------End of User Controller--------- #
 
@@ -89,4 +85,8 @@ def handle_response(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
         return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return JsonResponse(data=msg, status=status.HTTP_200_OK)
+        # If the obj is type set return list(obj)
+        if isinstance(msg, set):
+            return JsonResponse(data=list(msg), status=status.HTTP_200_OK, safe=False)
+        else:
+            return JsonResponse(data=msg, status=status.HTTP_200_OK)
