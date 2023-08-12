@@ -38,13 +38,14 @@ def create_stream(request):
         created_stream = Stream(link=link, assigned_room=room)
         created_stream.save()
 
-    except (Stream.DoesNotExist, ValidationError, requests.exceptions.InvalidURL) as err:
-        dev_logger.error(msg=err, exc_info=True)  
-    except MultipleObjectsReturned as err:
+    except (ValidationError, requests.exceptions.InvalidURL):
+        return {ERROR: 'Invalid link!'} 
+    except (MultipleObjectsReturned,Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
+        return ERROR_MESSAGE
 
     # Return a success message
-    return {SUCCESS: 'Stream created'}
+    return {SUCCESS: 'Stream created!'}
     
 
 def edit_stream(request) -> dict:
@@ -73,12 +74,13 @@ def edit_stream(request) -> dict:
             stream_to_edit.link = link
             stream_to_edit.save()
 
-    except (Stream.DoesNotExist, Room.DoesNotExist, ValidationError, requests.exceptions.InvalidURL) as err:
-        dev_logger.error(msg=err, exc_info=True)  
-    except MultipleObjectsReturned:
-        dev_logger.error(msg=err, exc_info=True) 
+    except (ValidationError, requests.exceptions.InvalidURL):
+        return {ERROR: 'Invalid link!'} 
+    except (MultipleObjectsReturned, Stream.DoesNotExist, Room.DoesNotExist) as err:
+        dev_logger.error(msg=err, exc_info=True)
+        return ERROR_MESSAGE
     
-    return {SUCCESS: 'Stream edited'}
+    return {SUCCESS: 'Stream link edited!'}
 
 
 # ---------Support Functions--------- #
@@ -93,3 +95,5 @@ def validate_link(link):
             return {ERROR: 'Link is valid, but the website returned a non-OK status code.'}
     except requests.exceptions.RequestException:
         return {ERROR: 'Link is not valid or could not be accessed.'}
+
+#TODO: add client logger when it is created!
