@@ -89,4 +89,4 @@ def handle_response(msg):
         if isinstance(msg, set):
             return JsonResponse(data=list(msg), status=status.HTTP_200_OK, safe=False)
         else:
-            return JsonResponse(data=msg, status=status.HTTP_200_OK)
+            return JsonResponse(data=msg, status=status.HTTP_200_OK, safe=False)
