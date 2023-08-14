@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import uuid
 from django.utils.timezone import now
+import shortuuid
 
 
 class User(AbstractUser):
@@ -19,10 +19,11 @@ class Room(models.Model):
         verbose_name_plural = "Rooms"
     
     # Room properties
-    unique_id =  models.UUIDField(
-         primary_key=True,
-         default=uuid.uuid4,
-         editable=False)
+    unique_id =  models.CharField(
+        max_length=8,
+        primary_key=True,
+        editable=False,
+        unique=True)
     
     # delete rooms, if the related user is also deleted
     owner = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,10 +1,10 @@
 # The whole rooms logic, used in views
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Room, User, UserRoom
-from .serializers import RoomSerializer, JoinedRoomSerializer
+from .serializers import JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
-from uuid import UUID
+import shortuuid
 
 # ---------Defines--------- #
 
@@ -20,7 +20,7 @@ dev_logger = get_loggers('wt_mobile_dev')
 # ---------RoomCreation--------- #
 
 def create_room(request) -> dict:
-    """Room creation function"""
+    """ Room creation function """
 
     # request data
     name = request.data.get('name')
@@ -45,11 +45,15 @@ def create_room(request) -> dict:
     # Hash room password, if there is one
     password = None if password is None else make_password(password)
 
+    # Get unique ID
+    unique_id = get_unique_id()
+
     # create a Room
     room = Room(
         name=name,
         password=password,
-        owner=user
+        owner=user,
+        unique_id=unique_id
     )
 
     room.save()
@@ -66,14 +70,10 @@ def create_room(request) -> dict:
 
 
 def delete_room(request) -> dict:
-    """Delete room function"""
+    """ Delete room function """
 
     # Get room unique ID
     unique_id = request.data.get('unique_id')
-
-    # Check request data validity
-    if not is_uuid(unique_id):
-        return ERROR_MSG
 
     # Try deleting room
     try:
@@ -84,16 +84,12 @@ def delete_room(request) -> dict:
 
 
 def edit_room(request) -> dict:
-    """Edit room function"""
+    """ Edit room function """
 
     # Get unique ID
     unique_id = request.data.get('unique_id')
     new_name = request.data.get('new_name')
     new_password = request.data.get('new_password')
-
-    # Check request data validity
-    if not is_uuid(unique_id):
-        return ERROR_MSG
 
     try:
         join_room = UserRoom.objects.filter(room_id=unique_id)
@@ -114,27 +110,17 @@ def edit_room(request) -> dict:
     return {SUCCESS: 'Room edited'}
 
 
-def get_room() -> dict:
-    """Get room function"""
-
-    try:
-        all_rooms_obj = Room.objects.all()
-        serialized = RoomSerializer(all_rooms_obj, many=True)
-    except Room.DoesNotExist:
-        return {ERROR: 'Room does not exist'}
-    return serialized
-
-
 # ---------JoinRoom--------- #
 
 def join_room(request) -> dict:
-    """Join a room"""
+    """ Join a room """
 
     # Get request data
     user_to_join = request.data.get('user')
     room_to_join = request.data.get('room')
-    # Check if request 'user' is ID and 'room' is UUID
-    if not isinstance(user_to_join, int) or not is_uuid(room_to_join):
+
+    # Check if request 'user' is ID
+    if not isinstance(user_to_join, int):
         return ERROR_MSG
     
     password_input = request.data.get('password')
@@ -173,14 +159,10 @@ def join_room(request) -> dict:
 
 
 def leave_room(request) -> dict:
-    """User option to leave the room"""
+    """ User option to leave the room """
 
     user_to_leave = request.data.get('user')
     room_to_leave = request.data.get('room')
-
-    # Check request data validity
-    if not is_uuid(room_to_leave) or not is_int(user_to_leave):
-        return ERROR_MSG
 
     # Get room and user from db
     try:
@@ -211,7 +193,7 @@ def leave_room(request) -> dict:
 
 
 def list_rooms_user_participates(request) -> dict:
-    """Display all the rooms, which are user participates in"""
+    """ Display all the rooms, which are user participates in """
 
     user_id = request.data.get('user')
 
@@ -232,18 +214,8 @@ def list_rooms_user_participates(request) -> dict:
 
 # ---------Support Functions--------- #
 
-def is_uuid(id):
-    """Check if data=uuid"""
-    try:
-        UUID(str(id))
-
-        return True
-    except ValueError:
-        return False
-
-
 def is_int(id):
-    """Check if provided data is int, because pk are integers"""
+    """ Check if provided data is int, because pk are integers """
 
     if isinstance(id, int):
         return True
@@ -252,7 +224,7 @@ def is_int(id):
 
 
 def reassign_owner(room, id_next_owner):
-    """Reassign room owner to the first joined user, if the current owner gets deleted"""
+    """ Reassign room owner to the first joined user, if the current owner gets deleted """
 
     try:
         # Get the instance of the next onwer
@@ -265,3 +237,14 @@ def reassign_owner(room, id_next_owner):
         return {ERROR: "Could not reassign the owner of the room"}
     
     return {SUCCESS: "The owner of the room was changed"}
+
+
+def get_unique_id():
+    """ Generates unique ID for room """
+    
+    while True:
+        unique_id = shortuuid.ShortUUID().random(length=6)
+
+        if Room.objects.filter(unique_id=unique_id).count() == 0:
+            break
+    return unique_id

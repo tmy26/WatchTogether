@@ -22,7 +22,7 @@ def activate(request, uidb64, token):
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        #get the username object
+        # get the username object
         user = User.objects.get(pk=uid)
     except:
         user = None
@@ -39,6 +39,7 @@ def activate(request, uidb64, token):
     
 def activateEmail(request, user, to_email):
     """Sends email with verification link"""
+
     mail_subject = 'Activate your account'
     message = render_to_string("account_activation_template.html",
     {
@@ -60,36 +61,41 @@ def activateEmail(request, user, to_email):
 def create_user(request) -> None:
     """User register method"""
 
-    #data request
+    # data request
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
     password_check = request.data.get('password_check')
-
-    #validate email and check for uniqness
-    try:
-        check_email = validate_email(email, check_deliverability=True)
-        email = check_email.normalized
-    except EmailNotValidError as error:
-        return str(error)
     
+    # validate email len
+    if len(str(email))==0:
+        return {'Error': 'Email was not provided!'}
+    # validate username len
+    if len(username) <= 2:
+        return {'Error', f'the username: {username} is too short'}
+    # validate email uniqness
     if User.objects.filter(email=email).exists():
         return {'This email is already in use!'}
-    
-    #validate password
+    # validate password
     if len(password) < 8:
         return {'Error': 'the password is too short!'}
     if password != password_check:
         return {'Error': 'the passwords do not match!'}
-    
-    #validate user_uniqueness
+    # validate username uniqueness
     if User.objects.filter(username=username).exists():
         return {'Error': 'the username is already in use!'}
+    # validate email
+    try:
+        check_email = validate_email(email, allow_smtputf8=False)
+        if check_email:
+            email = check_email.ascii_email
+    except EmailNotValidError as error:
+        return str(error)
     
-    #convert the pass to hash
+    # convert the pass to hash
     hashed_password = make_password(password)
 
-    #create user
+    # create user
     user = User(
         username=username,
         email=email,
@@ -115,3 +121,4 @@ def get_user(request):
     return serialized
 
 #TODO: return a view when account is activated!
+#TODO: add client logger
