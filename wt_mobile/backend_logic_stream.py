@@ -8,7 +8,8 @@ ERROR = 'Error'
 SUCCESS = 'Success'
 ERROR_MESSAGE = {'Error': 'Something went wrong with the data you provided. Please check if the data is correct and try again.'}
 
-dev_logger = get_loggers('wt_mobile_dev')
+dev_logger = get_loggers('dev_logger')
+client_logger = get_loggers('client_logger')
 
 def create_stream(request):
     """Stream creation function"""
@@ -39,6 +40,7 @@ def create_stream(request):
         created_stream.save()
 
     except (ValidationError, requests.exceptions.InvalidURL):
+        client_logger.error(msg='The provided link is invalid - create_stream function in backend_logic_stream')
         return {ERROR: 'Invalid link!'} 
     except (MultipleObjectsReturned,Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
@@ -75,11 +77,12 @@ def edit_stream(request) -> dict:
             stream_to_edit.save()
 
     except (ValidationError, requests.exceptions.InvalidURL):
+        client_logger.error(msg='The provided link was invalid!')
         return {ERROR: 'Invalid link!'} 
     except (MultipleObjectsReturned, Stream.DoesNotExist, Room.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
         return ERROR_MESSAGE
-    
+    client_logger.info(msg='The stream link was successfully edited!')
     return {SUCCESS: 'Stream link edited!'}
 
 

@@ -14,7 +14,8 @@ from .models import User
 from .serializers import UserSerializerSearchByUsername
 
 
-dev_logger = get_loggers('wt_mobile_dev')
+dev_logger = get_loggers('dev_logger')
+client_logger = get_loggers('client_logger')
 
 
 def activate(request, uidb64, token):
@@ -26,11 +27,12 @@ def activate(request, uidb64, token):
         user = User.objects.get(pk=uid)
     except:
         user = None
+        dev_logger.error('There is problem with token - activate function in backend_logic!')
 
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        dev_logger.info(msg=f'A new account was activated!')
+        client_logger.info(msg=f'A new account was activated!')
         return redirect("https://github.com/tmy26/WatchTogether")
     else:
         dev_logger.error(msg='Error. A error occured while trying to activate the account.\n The possible reason is that the user token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate')
@@ -53,7 +55,7 @@ def activateEmail(request, user, to_email):
     email = EmailMessage(subject=mail_subject, body=message, to=[to_email])
     send_email = email.send()
     if send_email:
-        dev_logger.info(msg=f'An activataion email was sent to {to_email} ')
+        client_logger.info(msg=f'An activataion email was sent to {to_email} ')
     else:
         dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: activateEmail in file: backend_logic in app: wt_mobile')
 
@@ -90,6 +92,7 @@ def create_user(request) -> None:
         if check_email:
             email = check_email.ascii_email
     except EmailNotValidError as error:
+        client_logger.error(f'The provided email was invalid {email}')
         return str(error)
     
     # convert the pass to hash
@@ -104,7 +107,9 @@ def create_user(request) -> None:
     )
     # user.groups.add(USER_GROUP) // Still wondering if we are going to use groups for permissions
     user.save()
-    dev_logger.info(msg=f'Account with username: {username} was created. The account is not yet activated!')
+    info = f'Account with username: {username} was created. The account is not yet activated!'
+    client_logger.info(msg=info)
+    dev_logger.info(msg=info)
     activateEmail(request, user, email)
     return {'Activation': f'a verification email was sent to {email}'}
     
@@ -116,9 +121,12 @@ def get_user(request):
     try:
         user = User.objects.get(username=username)
         serialized = UserSerializerSearchByUsername(user)
-    except (User.DoesNotExist, MultipleObjectsReturned):
+    except User.DoesNotExist:
+        return {'Error': 'The user does not exist!'}
+    except MultipleObjectsReturned:
+        dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
         return {'Error': 'The user does not exist!'}
     return serialized
 
 #TODO: return a view when account is activated!
-#TODO: add client logger
+#TODO: add edit and delete account method + dj knox
