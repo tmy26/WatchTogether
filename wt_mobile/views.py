@@ -69,7 +69,7 @@ class StreamView(APIView):
 
     @request_mapping('/create', method='post')
     def create(self, request):
-        return handle_response(create_steam(request))
+        return handle_response(create_stream(request))
 
     @request_mapping('/edit', method='put')
     def edit(self, request):
