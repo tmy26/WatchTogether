@@ -13,8 +13,10 @@ ERROR = 'Error'
 SUCCESS = 'Success'
 
 ERROR_MSG = {ERROR: 'Provided data is wrong'}
+DO_NOT_EXIST = 'Either the user or the room does not exist!'
 
-dev_logger = get_loggers('wt_mobile_dev')
+dev_logger = get_loggers('dev_logger')
+client_logger = get_loggers('client_logger')
 
 
 # ---------RoomCreation--------- #
@@ -57,7 +59,7 @@ def create_room(request) -> dict:
     )
 
     room.save()
-    dev_logger.info(msg='A new room was created sucessfully')
+    
 
     # Add the room owner to the users of the room, when created
     room.users.add(user)
@@ -66,7 +68,9 @@ def create_room(request) -> dict:
     join_room = UserRoom.objects.filter(room_id=room.unique_id)
     if join_room:
         join_room.update(room_name=name)
-    return {SUCCESS: 'Room created'}
+    info = 'A new room was created sucessfully!'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
 
 
 def delete_room(request) -> dict:
@@ -78,9 +82,14 @@ def delete_room(request) -> dict:
     # Try deleting room
     try:
         Room.objects.get(unique_id=unique_id).delete()
-    except (Room.DoesNotExist, MultipleObjectsReturned):
+    except Room.DoesNotExist: 
         return ERROR_MSG
-    return {SUCCESS: 'Room deleted'}
+    except MultipleObjectsReturned:
+        dev_logger.error(msg='Multiple objects were returned in delete_room function in backend_logic_rooms, something is wrong with the database!')
+        return ERROR_MSG
+    info = 'Successfully deleted the room!'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
 
 
 def edit_room(request) -> dict:
@@ -105,7 +114,10 @@ def edit_room(request) -> dict:
             if new_password:
                 room_to_edit.password = make_password(new_password)
             room_to_edit.save()
-    except (Room.DoesNotExist, MultipleObjectsReturned):
+    except Room.DoesNotExist:
+        return ERROR_MSG
+    except MultipleObjectsReturned:
+        dev_logger.error(msg='Multiple objects were returned by edit_room in backend_logic_rooms, there is something wrong with the database!')
         return ERROR_MSG
     return {SUCCESS: 'Room edited'}
 
@@ -129,12 +141,17 @@ def join_room(request) -> dict:
     try:
         user = User.objects.get(id=user_to_join)
         room = Room.objects.get(unique_id=room_to_join)
-    except (User.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
+    except (User.DoesNotExist, Room.DoesNotExist): 
+        return ERROR_MSG
+    except MultipleObjectsReturned:
+        dev_logger.error(msg='Multiple objects were returned in join_room func in backend_logic_rooms, something is wrong with the database!')
         return ERROR_MSG
 
     # Check if the user is already joined to that room
     if UserRoom.objects.filter(room_id=room_to_join, user_id=user_to_join).exists():
-        return {ERROR: "User already in the room"}
+        info_err = 'The user is already in the room!'
+        client_logger.info(msg=info_err)
+        return {ERROR: info_err}
 
     # Check if password from request == room password, if there is one
     is_password_matching = False
@@ -154,8 +171,12 @@ def join_room(request) -> dict:
         join_room = UserRoom.objects.filter(room_id=room.unique_id)
         join_room.update(room_name=room.name)
     else:
-        return {ERROR: 'Provided password did not match the room password'}
-    return {SUCCESS: 'User joined the room'}
+        err = 'Provided password did not match the room password'
+        client_logger.error(msg=err)
+        return {ERROR: err}
+    info = 'User joined the room'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
 
 
 def leave_room(request) -> dict:
@@ -171,7 +192,9 @@ def leave_room(request) -> dict:
 
         # Check if the user is in that room
         if not UserRoom.objects.filter(room_id=room_to_leave, user_id=user_to_leave).exists():
-            return {ERROR: "User is not in the room"}
+            info = 'User is not in the room'
+            client_logger.info(msg=info)
+            return {ERROR: info}
 
         # Remove the user from the room
         room.users.remove(user)
@@ -187,7 +210,11 @@ def leave_room(request) -> dict:
             # Reassign room owner to the first joined user, if the current owner gets deleted
             reassign_owner(room, id_of_next_owner)
 
-    except (User.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
+    except (User.DoesNotExist, Room.DoesNotExist):
+        client_logger.error(msg=DO_NOT_EXIST)
+        return ERROR_MSG
+    except MultipleObjectsReturned:
+        dev_logger.error(msg='Multiple objects returned at leave_room in backend_logic_rooms, there is something wrong with the db!')
         return ERROR_MSG
     return {SUCCESS: 'User left the room'}
 
@@ -207,7 +234,11 @@ def list_rooms_user_participates(request) -> dict:
         all_rooms_for_user = UserRoom.objects.filter(user_id=user.pk)
         serialized = JoinedRoomSerializer(all_rooms_for_user, many=True)
 
-    except (User.DoesNotExist, Room.DoesNotExist, MultipleObjectsReturned):
+    except (User.DoesNotExist, Room.DoesNotExist): 
+        client_logger.error(msg=DO_NOT_EXIST)
+        return ERROR_MSG
+    except MultipleObjectsReturned:
+        dev_logger.error(msg='Multiple objects returned in list_rooms_user_participates in backend_logic_rooms, there is something wrong with the db!')
         return ERROR_MSG
     return serialized
 
@@ -233,10 +264,13 @@ def reassign_owner(room, id_next_owner):
         # Change owner to the first joined user
         room.owner = new_owner
         room.save()
-    except (Room.DoesNotExist, User.DoesNotExist, MultipleObjectsReturned):
-        return {ERROR: "Could not reassign the owner of the room"}
-    
-    return {SUCCESS: "The owner of the room was changed"}
+    except (Room.DoesNotExist, User.DoesNotExist):
+        client_logger.info(msg=DO_NOT_EXIST)
+        return {ERROR: 'Could not reassign the owner of the room'}
+    except MultipleObjectsReturned:
+        dev_logger.error(msg='Multiple objects returned in reassing_owner in backend_logic_room, there is something wrong with the database!')
+        return {ERROR: 'Could not reassign the owner of the room'}
+    return {SUCCESS: 'The owner of the room was changed'}
 
 
 def get_unique_id():
