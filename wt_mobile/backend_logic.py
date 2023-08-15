@@ -69,30 +69,31 @@ def create_user(request) -> None:
     password = request.data.get('password')
     password_check = request.data.get('password_check')
     
+    # validate email uniqness
+    if User.objects.filter(email=email).exists():
+        return {'This email is already in use!'}
+    # validate username uniqueness
+    if User.objects.filter(username=username).exists():
+        return {'Error': 'the username is already in use!'}
     # validate email len
     if len(str(email))==0:
         return {'Error': 'Email was not provided!'}
     # validate username len
     if len(username) <= 2:
         return {'Error', f'the username: {username} is too short'}
-    # validate email uniqness
-    if User.objects.filter(email=email).exists():
-        return {'This email is already in use!'}
     # validate password
     if len(password) < 8:
         return {'Error': 'the password is too short!'}
     if password != password_check:
         return {'Error': 'the passwords do not match!'}
-    # validate username uniqueness
-    if User.objects.filter(username=username).exists():
-        return {'Error': 'the username is already in use!'}
+
     # validate email
     try:
         check_email = validate_email(email, allow_smtputf8=False)
         if check_email:
             email = check_email.ascii_email
     except EmailNotValidError as error:
-        client_logger.error(f'The provided email was invalid {email}')
+        client_logger.error(f'The provided email was invalid {email} !')
         return str(error)
     
     # convert the pass to hash
@@ -105,11 +106,9 @@ def create_user(request) -> None:
         password=hashed_password,
         is_active=False
     )
-    # user.groups.add(USER_GROUP) // Still wondering if we are going to use groups for permissions
     user.save()
     info = f'Account with username: {username} was created. The account is not yet activated!'
     client_logger.info(msg=info)
-    dev_logger.info(msg=info)
     activateEmail(request, user, email)
     return {'Activation': f'a verification email was sent to {email}'}
     

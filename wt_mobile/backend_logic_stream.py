@@ -7,6 +7,7 @@ from watch_together.general_utils import get_loggers
 ERROR = 'Error'
 SUCCESS = 'Success'
 ERROR_MESSAGE = {'Error': 'Something went wrong with the data you provided. Please check if the data is correct and try again.'}
+ERROR_LINK_NOT_VALID = 'The provided link is invalid'
 
 dev_logger = get_loggers('dev_logger')
 client_logger = get_loggers('client_logger')
@@ -40,14 +41,16 @@ def create_stream(request):
         created_stream.save()
 
     except (ValidationError, requests.exceptions.InvalidURL):
-        client_logger.error(msg='The provided link is invalid - create_stream function in backend_logic_stream')
-        return {ERROR: 'Invalid link!'} 
+        client_logger.error(msg=ERROR_LINK_NOT_VALID)
+        return {ERROR: ERROR_LINK_NOT_VALID} 
     except (MultipleObjectsReturned,Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
         return ERROR_MESSAGE
 
     # Return a success message
-    return {SUCCESS: 'Stream created!'}
+    info = 'Stream created'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
     
 
 def edit_stream(request) -> dict:
@@ -77,13 +80,14 @@ def edit_stream(request) -> dict:
             stream_to_edit.save()
 
     except (ValidationError, requests.exceptions.InvalidURL):
-        client_logger.error(msg='The provided link was invalid!')
-        return {ERROR: 'Invalid link!'} 
+        client_logger.error(msg=ERROR_LINK_NOT_VALID)
+        return {ERROR: ERROR_LINK_NOT_VALID} 
     except (MultipleObjectsReturned, Stream.DoesNotExist, Room.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
         return ERROR_MESSAGE
-    client_logger.info(msg='The stream link was successfully edited!')
-    return {SUCCESS: 'Stream link edited!'}
+    info = 'The stream link was successfully edited!'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
 
 
 # ---------Support Functions--------- #
