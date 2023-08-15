@@ -75,6 +75,14 @@ class StreamView(APIView):
     def edit(self, request):
         return handle_response(edit_stream(request))
     
+    @request_mapping('/display_history', method='get')
+    def display(self, request):
+        msg = display_history(request)
+        if isinstance(msg, dict) and 'Error' in msg.keys():
+            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+    
 
 # ---------End of Stream Controller--------- #
 

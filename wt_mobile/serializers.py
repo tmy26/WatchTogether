@@ -1,5 +1,5 @@
 from rest_framework import  serializers
-from .models import User, Stream, UserRoom
+from .models import User, Stream, UserRoom, StreamHistory
 
 
 class UserSerializerSearchByUsername(serializers.ModelSerializer):
@@ -23,4 +23,11 @@ class StreamSerializer(serializers.ModelSerializer):
     class Meta():
         model = Stream
         fields = '__all__'
-        
+
+
+class StreamHistorySerializer(serializers.ModelSerializer):
+    """ Display the history for the current stream """
+
+    class Meta():
+        model = StreamHistory
+        fields = ('link', 'time_when_played')

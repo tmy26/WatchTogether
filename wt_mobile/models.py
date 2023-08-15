@@ -32,6 +32,7 @@ class Room(models.Model):
     name = models.CharField(max_length=101, null=True, blank=True)
     password = models.CharField(max_length=50, blank=True, null=True)
 
+    # Join Table
     users = models.ManyToManyField(User, through='UserRoom', related_name='users_room')
 
     def __str__(self) -> str:
@@ -57,6 +58,22 @@ class Stream(models.Model):
         verbose_name_plural = "Streams"
  
     # Stream property
-    link = models.URLField(blank=True, null=True, default=None)
+    link = models.URLField(blank=True, null=True, default='https://www.youtube.com/watch?v=71Gt46aX9Z4')
     assigned_room = models.OneToOneField(Room, on_delete=models.CASCADE)
+
+
+# Stream History Model - Join table, Room -> Stream
+class StreamHistory(models.Model):
+    """ Will store all the link played for the room """
+    
+    class Meta:
+        verbose_name_plural = "StreamHistories"
+
+        # Set db name from default to 'stream_history'
+        db_table = "%s_%s" % (__package__, "stream_history")
+    
+    # Properties
+    stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=False)
+    time_when_played = models.CharField(max_length=30, blank=True)
+    link = models.URLField(blank=True, null=True)
     
