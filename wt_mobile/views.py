@@ -18,11 +18,7 @@ class UserView(APIView):
     
     @request_mapping('/search', method='get')
     def get(self, request):
-        msg = get_user(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+        return handle_respons_data(get_user(request))
 
 # ---------End of User Controller--------- #
 
@@ -46,11 +42,7 @@ class RoomView(APIView):
 
     @request_mapping('/list', method='get')
     def get(self, request):
-        msg = list_rooms_user_participates(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+        return handle_respons_data(list_rooms_user_participates(request))
 
     @request_mapping('/join', method='post')
     def join(self, request):
@@ -77,11 +69,7 @@ class StreamView(APIView):
     
     @request_mapping('/display_history', method='get')
     def display(self, request):
-        msg = display_history(request)
-        if isinstance(msg, dict) and 'Error' in msg.keys():
-            return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
+        return handle_respons_data(display_history(request))
     
 
 # ---------End of Stream Controller--------- #
@@ -98,3 +86,16 @@ def handle_response(msg):
             return JsonResponse(data=list(msg), status=status.HTTP_200_OK, safe=False)
         else:
             return JsonResponse(data=msg, status=status.HTTP_200_OK, safe=False)
+
+
+def handle_respons_data(msg):
+    """ Handles response using .data """
+
+    if isinstance(msg, dict) and 'Error' in msg.keys():
+        return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        # If the obj is type set return list(obj)
+        if isinstance(msg, set):
+            return JsonResponse(data=list(msg).data, status=status.HTTP_200_OK, safe=False)
+        else:
+            return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
