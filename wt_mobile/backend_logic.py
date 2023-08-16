@@ -1,5 +1,6 @@
 from django.core.mail import EmailMessage
 from django.core.exceptions import MultipleObjectsReturned
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
@@ -12,6 +13,7 @@ from email_validator import validate_email, EmailNotValidError
 from .tokens import account_activation_token
 from .models import User
 from .serializers import UserSerializerSearchByUsername
+from knox.models import AuthToken
 
 
 dev_logger = get_loggers('dev_logger')
@@ -32,6 +34,7 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+        token = AuthToken.objects.create(user)
         client_logger.info(msg=f'A new account was activated!')
         return redirect("https://github.com/tmy26/WatchTogether")
     else:
