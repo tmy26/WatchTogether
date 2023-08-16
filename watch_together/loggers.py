@@ -36,11 +36,17 @@ LOGGING = {
             'formatter': 'file',
             'filename': os.path.join(LOG_DIR, 'logging_log.log')
         },
-        'wt_mobile_dev': {
+        'dev_logger': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'developer_format',
-            'filename': os.path.join(LOG_DIR, 'dev_mobile_log.log')
+            'filename': os.path.join(LOG_DIR, 'dev_logger.log')
+        },
+        'client_logger': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'developer_format',
+            'filename': os.path.join(LOG_DIR, 'client_logger.log')
         }
     },
     'loggers': {
@@ -48,10 +54,17 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['console', 'file']
         },
-        'wt_mobile_dev' : {
+        'dev_logger' : {
             'level': 'DEBUG',
-            'handlers': ['console', 'wt_mobile_dev'],
+            'handlers': ['console', 'dev_logger'],
+            'propagate': False
+        },
+        'client_logger': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'client_logger'],
             'propagate': False
         }
     }
 }
+
+#TODO: cli logger might need refactoring.. 

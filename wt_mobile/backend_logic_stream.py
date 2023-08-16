@@ -9,8 +9,10 @@ from .serializers import StreamHistorySerializer
 ERROR = 'Error'
 SUCCESS = 'Success'
 ERROR_MESSAGE = {'Error': 'Something went wrong with the data you provided. Please check if the data is correct and try again.'}
+ERROR_LINK_NOT_VALID = 'The provided link is invalid'
 
-dev_logger = get_loggers('wt_mobile_dev')
+dev_logger = get_loggers('dev_logger')
+client_logger = get_loggers('client_logger')
 
 
 def create_stream(request):
@@ -36,13 +38,16 @@ def create_stream(request):
         created_stream.save()
 
     except (ValidationError, requests.exceptions.InvalidURL):
-        return {ERROR: 'Invalid link!'} 
+        client_logger.error(msg=ERROR_LINK_NOT_VALID)
+        return {ERROR: ERROR_LINK_NOT_VALID} 
     except (MultipleObjectsReturned,Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
         return ERROR_MESSAGE
 
     # Return a success message
-    return {SUCCESS: 'Stream created!'}
+    info = 'Stream created'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
     
 
 def edit_stream(request) -> dict:
@@ -75,8 +80,9 @@ def edit_stream(request) -> dict:
     except (MultipleObjectsReturned, Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
         return ERROR_MESSAGE
-    
-    return {SUCCESS: 'Stream link edited!'}
+    info = 'The stream link was successfully edited!'
+    client_logger.info(msg=info)
+    return {SUCCESS: info}
 
 
 def display_history(request):
@@ -90,8 +96,11 @@ def display_history(request):
 
         all_links = StreamHistory.objects.filter(stream_id=stream.pk)
         serialized = StreamHistorySerializer(all_links, many=True)
-    except (Stream.DoesNotExist, MultipleObjectsReturned):
-        ERROR_MESSAGE
+    except (Stream.DoesNotExist):
+        return {ERROR: 'Stream does not exist'}
+    except MultipleObjectsReturned:
+        dev_logger.error('Multiple objects returned in display_history() in backend_logic_stream')
+        return ERROR_MESSAGE
     return serialized
 
 
@@ -124,8 +133,13 @@ def add_to_history(stream):
             link=stream.link
         )
         stream_history.save()
-        return {SUCCESS: 'Added to history'} # instead return, change to logger
-    except (Room.DoesNotExist, Stream.DoesNotExist, MultipleObjectsReturned):
+        info = 'Stream link added to history'
+        client_logger.info(msg=info)
+        return {SUCCESS: info}
+    except (Room.DoesNotExist, Stream.DoesNotExist):
+        return ERROR_MESSAGE
+    except MultipleObjectsReturned:
+        dev_logger.error('Multiple objects have returned by add_to_history() in backed_logic_stream')
         return ERROR_MESSAGE
 
 #TODO: add client logger when it is created!
