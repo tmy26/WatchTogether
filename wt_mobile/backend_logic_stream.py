@@ -141,5 +141,3 @@ def add_to_history(stream):
     except MultipleObjectsReturned:
         dev_logger.error('Multiple objects have returned by add_to_history() in backed_logic_stream')
         return ERROR_MESSAGE
-
-#TODO: add client logger when it is created!
