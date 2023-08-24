@@ -96,7 +96,7 @@ def display_history(request):
 
         all_links = StreamHistory.objects.filter(stream_id=stream.pk)
         serialized = StreamHistorySerializer(all_links, many=True)
-    except (Stream.DoesNotExist):
+    except (Stream.DoesNotExist, ValueError):
         return {ERROR: 'Stream does not exist'}
     except MultipleObjectsReturned:
         dev_logger.error('Multiple objects returned in display_history() in backend_logic_stream')
