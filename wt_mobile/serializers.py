@@ -7,7 +7,7 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
-
+        
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
     """Serializer for displaying the following fields of the joined UserRoom table"""
@@ -23,4 +23,3 @@ class StreamSerializer(serializers.ModelSerializer):
     class Meta():
         model = Stream
         fields = '__all__'
-        

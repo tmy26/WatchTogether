@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # 'allauth.account',
     # 'allauth.socialaccount',
     # 'allauth.socialaccount.providers.google',
+    #TODO: maybe use different method for pass reset
 ]
 
 MIDDLEWARE = [

@@ -8,5 +8,7 @@ urlpatterns = [
     path('', include('wt_mobile.urls')),
     path('admin/', admin.site.urls),
     path('activate/<uidb64>/<token>', activate, name='activate'),
-    path('logout',knox_views.LogoutView.as_view(), name="knox-logout"),
+    path('logout',knox_views.LogoutView.as_view(), name='knox-logout'),
+    path('logoutall',knox_views.LogoutAllView.as_view(), name='knox-logout-all'),
 ]
+#TODO: maybe add logoutall / logout single sesssion
