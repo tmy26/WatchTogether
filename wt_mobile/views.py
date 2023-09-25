@@ -20,6 +20,11 @@ class UserView(APIView):
         return handle_response(create_user(request))
     
 
+    @request_mapping('/search', method='get')
+    def get(self, request):
+        return handle_response_data(get_user(request))
+
+
 @request_mapping('/login')
 class UserLogin(KnoxLoginView):
     """User login"""
@@ -93,6 +98,14 @@ class StreamView(APIView):
     @request_mapping('/edit', method='put')
     def edit(self, request):
         return handle_response(edit_stream(request))
+    
+    @request_mapping('/display_history', method='get')
+    def display(self, request):
+        return handle_response_data(display_history(request))
+    
+
+# ---------End of Stream Controller--------- #
+
 
 
 # ---------Support Functions--------- #
@@ -112,6 +125,6 @@ def handle_response_data(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
         return JsonResponse(data=msg, status=status.HTTP_200_OK, safe=False)
     else:
-        return JsonResponse(msg.data, status=status.HTTP_200_OK)
+        return JsonResponse(data=msg.data, status=status.HTTP_200_OK)
     
 #TODO: refactor views
