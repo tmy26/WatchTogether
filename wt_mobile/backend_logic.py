@@ -2,19 +2,17 @@ from django.core.mail import EmailMessage
 from django.core.exceptions import MultipleObjectsReturned
 from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, authenticate
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from watch_together.general_utils import get_loggers
 from email_validator import validate_email, EmailNotValidError
+from knox.models import AuthToken
 from .tokens import account_activation_token
 from .models import User
 from .serializers import UserSerializerSearchByUsername
-from knox.models import AuthToken
-#newly
-from django.contrib.auth import login, authenticate
 from .backend_utils import findUser
 
 
@@ -37,10 +35,10 @@ def activate(request, uidb64, token) -> None:
         user.is_active = True
         user.save()
         client_logger.info(msg=f'A new account was activated!')
-        return redirect("https://github.com/tmy26/WatchTogether")
+        return redirect("http://127.0.0.1:8000/account")
     else:
         dev_logger.error(msg='Error. A error occured while trying to activate the account.\n The possible reason is that the user token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate')
-        return redirect("https://github.com/tmy26/WatchTogether")
+        return redirect("http://127.0.0.1:8000")
     
     
 def activateEmail(request, user, to_email) -> None:
@@ -166,7 +164,7 @@ def edit_profile(request) -> dict:
     """Edit profile method"""
     token = request.META.get('HTTP_AUTHORIZATION')
     user = findUser(token)
-    method = 'asd'
+    method = 'password'
     #TODO: add request method func
     if user is None:
         return {'Error': 'User not found!'}
@@ -222,6 +220,3 @@ def delete_profile(request) -> dict:
     
 
 #TODO: return a view when account is activated!
-#TODO: https://pypi.org/project/django-rest-passwordreset/ password reset
-#TODO refactoring
-#TODO login user check for right usage of token
