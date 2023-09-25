@@ -7,7 +7,7 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
-
+        
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
     """Serializer for displaying the following fields of the joined UserRoom table"""
@@ -31,3 +31,4 @@ class StreamHistorySerializer(serializers.ModelSerializer):
     class Meta():
         model = StreamHistory
         fields = ('link', 'time_when_played')
+
