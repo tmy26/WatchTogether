@@ -217,6 +217,20 @@ def delete_profile(request) -> dict:
         User.objects.filter(username=username).delete()
         client_logger.info(f'{user.username} has deleted his account!')
         return {'Success': 'You have successfully deleted your account!'}
-    
 
-#TODO: return a view when account is activated!
+
+def is_user_active(request):
+    """Checks if user is active"""
+    username = request.data.get('username')
+
+    try:
+        user = User.objects.get(username=username)
+        serialized = UserSerializerCheckIfUserActive(user)
+    except User.DoesNotExist:
+        return {'Error': 'User does not exist!'}
+
+    except MultipleObjectsReturned:
+        dev_logger.error('Something is wrong with the db, function is_user_active in backend logic has returned more than one object')
+        return {'Error': 'The user does not exist!'}
+
+    return serialized
