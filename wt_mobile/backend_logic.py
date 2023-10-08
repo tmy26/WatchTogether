@@ -12,8 +12,9 @@ from email_validator import validate_email, EmailNotValidError
 from knox.models import AuthToken
 from .tokens import account_activation_token
 from .models import User
-from .serializers import UserSerializerSearchByUsername
+from .serializers import UserSerializerSearchByUsername, UserSerializerCheckIfUserActive
 from .backend_utils import findUser
+from django.shortcuts import render
 
 
 dev_logger = get_loggers('dev_logger')
@@ -21,7 +22,7 @@ client_logger = get_loggers('client_logger')
 
 
 def activate(request, uidb64, token) -> None:
-    """Returns the token and redirects to url"""
+    """ Activates account, sets field is_active to True """
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -35,10 +36,10 @@ def activate(request, uidb64, token) -> None:
         user.is_active = True
         user.save()
         client_logger.info(msg=f'A new account was activated!')
-        return redirect("http://127.0.0.1:8000/account")
+        return render(request, 'activated_account_page.html')
     else:
         dev_logger.error(msg='Error. A error occured while trying to activate the account.\n The possible reason is that the user token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate')
-        return redirect("http://127.0.0.1:8000")
+        return render(request, 'activation_page_something_went_wrong.html')
     
     
 def activateEmail(request, user, to_email) -> None:
@@ -131,7 +132,7 @@ def get_user(request):
 
 
 def login_user(request) -> dict:
-    """Login method"""
+    """Login method, returns the header token"""
     username = request.data.get('username')
     password = request.data.get('password')
     ERROR = {'Error': 'Invalid credintials!'}
@@ -152,10 +153,8 @@ def login_user(request) -> dict:
         if logged_devices >= 4:
             return {'Error': 'Maximum limit of logged devices is reached!'}
         token = AuthToken.objects.create(user_obj)
-        print(token)
         login(request, flag)
-        serialized = UserSerializerSearchByUsername(user_obj)
-        return serialized
+        return token[1]
     else:
         return ERROR
     

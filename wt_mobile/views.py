@@ -26,7 +26,7 @@ class UserLogin(KnoxLoginView):
     permission_classes = (AllowAny,)
     
     def post(self, request):
-        return handle_response_data(login_user(request))
+        return handle_response(login_user(request))
     
 
 class UserProfile(APIView):
@@ -106,4 +106,4 @@ def handle_response_data(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
         return JsonResponse(data=msg, status=status.HTTP_200_OK, safe=False)
     else:
-        return JsonResponse(data=msg.data, status=status.HTTP_200_OK)
+        return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
