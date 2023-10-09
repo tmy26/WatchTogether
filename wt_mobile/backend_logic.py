@@ -15,6 +15,7 @@ from .models import User
 from .serializers import UserSerializerSearchByUsername, UserSerializerCheckIfUserActive
 from .backend_utils import findUser
 from django.shortcuts import render
+import re
 
 
 dev_logger = get_loggers('dev_logger')
@@ -163,46 +164,49 @@ def edit_profile(request) -> dict:
     """Edit profile method"""
     token = request.META.get('HTTP_AUTHORIZATION')
     user = findUser(token)
-    method = 'password'
-    #TODO: add request method func
+
     if user is None:
         return {'Error': 'User not found!'}
     else:
-        match method:
-            case 'password':
-                password = request.data.get('password')
-                password_check = request.data.get('password_check')
-                # validate password
-                if len(password) < 8:
-                    return {'Error': 'the password is too short!'}
-                if password != password_check:
-                    return {'Error': 'the passwords do not match!'}
-                user.set_password(password)
-                user.save()
-                client_logger.info(f'{user.username} has changed his password!')
-                return {'Successs': 'Password changed successfully!'}
-            case 'email':
-                email = request.data.get('email')
-                if User.objects.filter(email=email).exists():
+        # which field should be edited
+        field = edit_method(request)
+
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        new_password_check = request.data.get('new_password_check')
+
+        match field:
+            case "email":
+                new_email = request.data.get('new_email')
+
+                if User.objects.filter(email=new_email).exists():
                     return {'This email is already in use!'}
-                # validate email len
-                if len(str(email))==0:
-                    return {'Error': 'Email was not provided!'}
-                # validate email
+
+                # validate data
                 try:
-                    check_email = validate_email(email, allow_smtputf8=False)
-                    if check_email:
-                        email = check_email.ascii_email
-                except EmailNotValidError as error:
-                    client_logger.error(f'The provided email was invalid {email} !')
-                    return str(error)
-                user.email=email
-                user.save()
-                client_logger.info(f'{user.username} has changed his email!')
-                return {'Successs': 'Email changed successfully!'}
-            case _:
-                return {'Error': 'Please select what you want to edit!'}
+                    validate_email(new_email)
+                except EmailNotValidError as e:
+                    client_logger.info('Provided email is not valid, details: ', e)
+                    return {'Error': 'Provided email is not valid'}
+                else:
+                    client_logger.info(f'Email of {user.username} was changed')
+                    user.save()
+                    return {'Success': 'Email changed'}
+            case "password":
+                if user.password != make_password(old_password):
+                    return {'Error': 'Old password do not match'}
+                if len(new_password) < 8:
+                    return {'Error': 'New password is too short'}
+                if new_password != new_password_check:
+                    return {'Error': 'Passwords do not match'}
                 
+                user.password = make_password(new_password)
+                user.save()
+                client_logger.info(f'{user.username} has changed its password')
+                return {'Success': 'Password changed'}
+            case _:
+                return {'Error': 'Something went wrong'}
+
 
 def delete_profile(request) -> dict:
     """Delete profile method"""
@@ -220,6 +224,7 @@ def delete_profile(request) -> dict:
 
 def is_user_active(request):
     """Checks if user is active"""
+
     username = request.data.get('username')
 
     try:
@@ -233,3 +238,13 @@ def is_user_active(request):
         return {'Error': 'The user does not exist!'}
 
     return serialized
+
+
+def edit_method(request):
+    """ Choose what user field will edit """
+
+    field = request.data.get("field")
+
+    if field != "password" and field != "email":
+        return {'Error': 'Not editable field'}
+    return field
