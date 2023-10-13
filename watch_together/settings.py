@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-0wu5y4nf5_g3e$r#o%tl)7@=d#$%&=5@db!gx-nhi*jh_k&n4*
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.63.14']
 AUTH_USER_MODEL = 'wt_mobile.User'
 
 

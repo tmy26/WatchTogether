@@ -15,12 +15,6 @@ class UserSerializerCheckIfUserActive(serializers.ModelSerializer):
     class Meta():
         model = User
         fields = ['is_active']
-
-
-class UserSerializerLoginResponse(serializers.ModelSerializer):
-    """ Returns all the data for User, after login """
-
-    pass    
         
 
 class JoinedRoomSerializer(serializers.ModelSerializer):

@@ -5,7 +5,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model, login, authenticate
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from watch_together.general_utils import get_loggers
 from email_validator import validate_email, EmailNotValidError
@@ -15,7 +14,6 @@ from .models import User
 from .serializers import UserSerializerSearchByUsername, UserSerializerCheckIfUserActive
 from .backend_utils import findUser
 from django.shortcuts import render
-import re
 
 
 dev_logger = get_loggers('dev_logger')
