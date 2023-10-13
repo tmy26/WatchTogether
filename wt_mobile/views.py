@@ -104,6 +104,6 @@ def handle_response(msg):
 
 def handle_response_data(msg):
     if isinstance(msg, dict) and 'Error' in msg.keys():
-        return JsonResponse(data=msg, status=status.HTTP_200_OK, safe=False)
+        return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST, safe=False)
     else:
         return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)

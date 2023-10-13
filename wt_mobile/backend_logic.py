@@ -153,7 +153,11 @@ def login_user(request) -> dict:
             return {'Error': 'Maximum limit of logged devices is reached!'}
         token = AuthToken.objects.create(user_obj)
         login(request, flag)
-        return token[1]
+
+        # returning username and token, so they can be stored as encrypted preferences in android
+        user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
+
+        return user_info
     else:
         return ERROR
     
