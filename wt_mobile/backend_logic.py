@@ -73,7 +73,7 @@ def create_user(request) -> dict:
     
     # validate email uniqness
     if User.objects.filter(email=email).exists():
-        return {'This email is already in use!'}
+        return {'Error': 'This email is already in use!'}
     # validate username uniqueness
     if User.objects.filter(username=username).exists():
         return {'Error': 'the username is already in use!'}
