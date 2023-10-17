@@ -174,9 +174,7 @@ def edit_profile(request) -> dict:
         field = edit_method(request)
 
         old_password = request.data.get('old_password')
-        new_password = request.data.get('new_password')
-        new_password_check = request.data.get('new_password_check')
-
+        
         match field:
             case "email":
                 new_email = request.data.get('new_email')
@@ -186,15 +184,23 @@ def edit_profile(request) -> dict:
 
                 # validate data
                 try:
-                    validate_email(new_email)
+                    if make_password(old_password) == user.password:
+                        validate_email(new_email)
+                        user.email = new_email
+                        client_logger.info(f'Email of {user.username} was changed')
+                        user.save()
+                        return {'Success': 'Email changed'}
+                    else:
+                        client_logger.info(f'Old passwords do not match')
+                        return {'Error': 'Password of user does not match'}
                 except EmailNotValidError as e:
                     client_logger.info('Provided email is not valid, details: ', e)
                     return {'Error': 'Provided email is not valid'}
-                else:
-                    client_logger.info(f'Email of {user.username} was changed')
-                    user.save()
-                    return {'Success': 'Email changed'}
+
             case "password":
+                new_password = request.data.get('new_password')
+                new_password_check = request.data.get('new_password_check')
+
                 if user.password != make_password(old_password):
                     return {'Error': 'Old password do not match'}
                 if len(new_password) < 8:
