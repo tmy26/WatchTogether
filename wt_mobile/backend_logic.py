@@ -5,15 +5,15 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model, login, authenticate
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from watch_together.general_utils import get_loggers
 from email_validator import validate_email, EmailNotValidError
 from knox.models import AuthToken
 from .tokens import account_activation_token
 from .models import User
-from .serializers import UserSerializerSearchByUsername
+from .serializers import UserSerializerSearchByUsername, UserSerializerCheckIfUserActive
 from .backend_utils import findUser
+from django.shortcuts import render
 
 
 dev_logger = get_loggers('dev_logger')
@@ -21,7 +21,7 @@ client_logger = get_loggers('client_logger')
 
 
 def activate(request, uidb64, token) -> None:
-    """Returns the token and redirects to url"""
+    """ Activates account, sets field is_active to True """
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -35,10 +35,10 @@ def activate(request, uidb64, token) -> None:
         user.is_active = True
         user.save()
         client_logger.info(msg=f'A new account was activated!')
-        return redirect("http://127.0.0.1:8000/account")
+        return render(request, 'activated_account_page.html')
     else:
         dev_logger.error(msg='Error. A error occured while trying to activate the account.\n The possible reason is that the user token has expired!\n For debugging: Traceback wt_mobile, backend_logic, activate')
-        return redirect("http://127.0.0.1:8000")
+        return render(request, 'activation_page_something_went_wrong.html')
     
     
 def activateEmail(request, user, to_email) -> None:
@@ -73,7 +73,7 @@ def create_user(request) -> dict:
     
     # validate email uniqness
     if User.objects.filter(email=email).exists():
-        return {'This email is already in use!'}
+        return {'Error': 'This email is already in use!'}
     # validate username uniqueness
     if User.objects.filter(username=username).exists():
         return {'Error': 'the username is already in use!'}
@@ -131,7 +131,7 @@ def get_user(request):
 
 
 def login_user(request) -> dict:
-    """Login method"""
+    """Login method, returns the header token"""
     username = request.data.get('username')
     password = request.data.get('password')
     ERROR = {'Error': 'Invalid credintials!'}
@@ -152,10 +152,12 @@ def login_user(request) -> dict:
         if logged_devices >= 4:
             return {'Error': 'Maximum limit of logged devices is reached!'}
         token = AuthToken.objects.create(user_obj)
-        print(token)
         login(request, flag)
-        serialized = UserSerializerSearchByUsername(user_obj)
-        return serialized
+
+        # returning username and token, so they can be stored as encrypted preferences in android
+        user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
+
+        return user_info
     else:
         return ERROR
     
@@ -164,46 +166,55 @@ def edit_profile(request) -> dict:
     """Edit profile method"""
     token = request.META.get('HTTP_AUTHORIZATION')
     user = findUser(token)
-    method = 'password'
-    #TODO: add request method func
+
     if user is None:
         return {'Error': 'User not found!'}
     else:
-        match method:
-            case 'password':
-                password = request.data.get('password')
-                password_check = request.data.get('password_check')
-                # validate password
-                if len(password) < 8:
-                    return {'Error': 'the password is too short!'}
-                if password != password_check:
-                    return {'Error': 'the passwords do not match!'}
-                user.set_password(password)
-                user.save()
-                client_logger.info(f'{user.username} has changed his password!')
-                return {'Successs': 'Password changed successfully!'}
-            case 'email':
-                email = request.data.get('email')
-                if User.objects.filter(email=email).exists():
+        # which field should be edited
+        field = edit_method(request)
+
+        old_password = request.data.get('old_password')
+        
+        match field:
+            case "email":
+                new_email = request.data.get('new_email')
+
+                if User.objects.filter(email=new_email).exists():
                     return {'This email is already in use!'}
-                # validate email len
-                if len(str(email))==0:
-                    return {'Error': 'Email was not provided!'}
-                # validate email
+
+                # validate data
                 try:
-                    check_email = validate_email(email, allow_smtputf8=False)
-                    if check_email:
-                        email = check_email.ascii_email
-                except EmailNotValidError as error:
-                    client_logger.error(f'The provided email was invalid {email} !')
-                    return str(error)
-                user.email=email
-                user.save()
-                client_logger.info(f'{user.username} has changed his email!')
-                return {'Successs': 'Email changed successfully!'}
-            case _:
-                return {'Error': 'Please select what you want to edit!'}
+                    if make_password(old_password) == user.password:
+                        validate_email(new_email)
+                        user.email = new_email
+                        client_logger.info(f'Email of {user.username} was changed')
+                        user.save()
+                        return {'Success': 'Email changed'}
+                    else:
+                        client_logger.info(f'Old passwords do not match')
+                        return {'Error': 'Password of user does not match'}
+                except EmailNotValidError as e:
+                    client_logger.info('Provided email is not valid, details: ', e)
+                    return {'Error': 'Provided email is not valid'}
+
+            case "password":
+                new_password = request.data.get('new_password')
+                new_password_check = request.data.get('new_password_check')
+
+                if user.password != make_password(old_password):
+                    return {'Error': 'Old password do not match'}
+                if len(new_password) < 8:
+                    return {'Error': 'New password is too short'}
+                if new_password != new_password_check:
+                    return {'Error': 'Passwords do not match'}
                 
+                user.password = make_password(new_password)
+                user.save()
+                client_logger.info(f'{user.username} has changed its password')
+                return {'Success': 'Password changed'}
+            case _:
+                return {'Error': 'Something went wrong'}
+
 
 def delete_profile(request) -> dict:
     """Delete profile method"""
@@ -217,6 +228,31 @@ def delete_profile(request) -> dict:
         User.objects.filter(username=username).delete()
         client_logger.info(f'{user.username} has deleted his account!')
         return {'Success': 'You have successfully deleted your account!'}
-    
 
-#TODO: return a view when account is activated!
+
+def is_user_active(request):
+    """Checks if user is active"""
+
+    username = request.data.get('username')
+
+    try:
+        user = User.objects.get(username=username)
+        serialized = UserSerializerCheckIfUserActive(user)
+    except User.DoesNotExist:
+        return {'Error': 'User does not exist!'}
+
+    except MultipleObjectsReturned:
+        dev_logger.error('Something is wrong with the db, function is_user_active in backend logic has returned more than one object')
+        return {'Error': 'The user does not exist!'}
+
+    return serialized
+
+
+def edit_method(request):
+    """ Choose what user field will edit """
+
+    field = request.data.get("field")
+
+    if field != "password" and field != "email":
+        return {'Error': 'Not editable field'}
+    return field

@@ -7,6 +7,14 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
+
+
+class UserSerializerCheckIfUserActive(serializers.ModelSerializer):
+    """ Returns the is_active field """
+    
+    class Meta():
+        model = User
+        fields = ['is_active']
         
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
@@ -14,7 +22,7 @@ class JoinedRoomSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = UserRoom
-        fields = ['room_name', 'date_joined']
+        fields = ['room_id', 'room_name', 'date_joined', 'user_id']
 
 
 class StreamSerializer(serializers.ModelSerializer):

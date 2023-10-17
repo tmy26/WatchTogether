@@ -5,6 +5,8 @@ from .serializers import JoinedRoomSerializer
 from django.core.exceptions import MultipleObjectsReturned
 from watch_together.general_utils import get_loggers
 import shortuuid
+from .backend_utils import findUser
+import re
 
 # ---------Defines--------- #
 
@@ -26,8 +28,14 @@ def create_room(request) -> dict:
 
     # request data
     name = request.data.get('name')
-    owner = request.data.get('owner_id')
     password = request.data.get('password')
+    token = request.META.get('HTTP_AUTHORIZATION')
+
+    user = findUser(token)
+    owner = user.id
+
+    # Remove trailing whitespaces and unwanted tabs
+    name = re.sub('\s{2,}', ' ', name)
 
     # Check request data validity
     if not is_int(owner):
@@ -100,18 +108,29 @@ def edit_room(request) -> dict:
     new_name = request.data.get('new_name')
     new_password = request.data.get('new_password')
 
+    # Remove trailing whitespaces and unwanted tabs
+    new_name = re.sub('\s{2,}', ' ', new_name)
+
+    # If fields are empty consider them as a null
+    if new_name:
+        if len(new_name) < 1 or not new_name.isalpha():
+            new_name = None
+    if new_password:
+        if len(new_password) < 1:
+            new_password = None
+
     try:
         join_room = UserRoom.objects.filter(room_id=unique_id)
         if Room.objects.filter(unique_id=unique_id).exists():
             room_to_edit = Room.objects.get(unique_id=unique_id)
-            if new_name:
+            if new_name != None:
                 room_to_edit.name = new_name
 
                 # Change in JoinRoom table, if the room exists there
                 if join_room:
                     join_room.update(room_name=new_name)
 
-            if new_password:
+            if new_password != None:
                 room_to_edit.password = make_password(new_password)
             room_to_edit.save()
     except Room.DoesNotExist:
@@ -128,18 +147,19 @@ def join_room(request) -> dict:
     """ Join a room """
 
     # Get request data
-    user_to_join = request.data.get('user')
+    token = request.META.get('HTTP_AUTHORIZATION')
+    user_to_join = findUser(token)
     room_to_join = request.data.get('room')
 
     # Check if request 'user' is ID
-    if not isinstance(user_to_join, int):
+    if not isinstance(user_to_join.id, int):
         return ERROR_MSG
     
     password_input = request.data.get('password')
 
     # Check if request data exists
     try:
-        user = User.objects.get(id=user_to_join)
+        user = User.objects.get(id=user_to_join.id)
         room = Room.objects.get(unique_id=room_to_join)
     except (User.DoesNotExist, Room.DoesNotExist): 
         return ERROR_MSG
@@ -182,12 +202,13 @@ def join_room(request) -> dict:
 def leave_room(request) -> dict:
     """ User option to leave the room """
 
-    user_to_leave = request.data.get('user')
+    token = request.META.get('HTTP_AUTHORIZATION')
+    user_to_leave = findUser(token)
     room_to_leave = request.data.get('room')
 
     # Get room and user from db
     try:
-        user = User.objects.get(id=user_to_leave)
+        user = User.objects.get(id=user_to_leave.id)
         room = Room.objects.get(unique_id=room_to_leave)
 
         # Check if the user is in that room
@@ -222,7 +243,7 @@ def leave_room(request) -> dict:
 def list_rooms_user_participates(request) -> dict:
     """ Display all the rooms, which are user participates in """
 
-    user_id = request.data.get('user')
+    user_id = get_owner_id_from_token(request)
 
     # Check if user ID is an integer
     if not is_int(user_id):
@@ -282,3 +303,15 @@ def get_unique_id():
         if Room.objects.filter(unique_id=unique_id).count() == 0:
             break
     return unique_id
+
+
+def get_owner_id_from_token(request):
+    """ Gets the owner id from token """
+
+    token = request.META.get('HTTP_AUTHORIZATION')
+    user = findUser(token)
+
+    if user is None:
+        return {'Error': 'User not found'}
+
+    return user.id
