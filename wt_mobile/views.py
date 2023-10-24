@@ -7,7 +7,7 @@ from .backend_logic_stream import *
 from django.http import JsonResponse
 from knox.views import LoginView as KnoxLoginView
 from knox.auth import TokenAuthentication
-
+from .backend_utils import custom_exception_handler, handle_response
 
 
 class UserView(APIView):
@@ -15,10 +15,22 @@ class UserView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        return handle_response(create_user(request))
+
+        # try creating the user, else return the appropriate exception
+        try:
+            message = create_user(request)
+            status_code = status.HTTP_201_CREATED
+            return handle_response(status_code, message)
+        except Exception as e:
+            return custom_exception_handler(e)
     
     def get(self, request):
-        return handle_response_data(is_user_active(request))
+        
+        try:
+            message = is_user_active(request)
+            return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
+        except Exception as e:
+            return custom_exception_handler(e)
 
 
 class UserLogin(KnoxLoginView):
@@ -26,22 +38,46 @@ class UserLogin(KnoxLoginView):
     permission_classes = (AllowAny,)
     
     def post(self, request):
-        return handle_response(login_user(request))
+        try:
+            message = login_user(request)
+            status_code = 202
+            return handle_response(status_code, message)
+        except Exception as e:
+            return custom_exception_handler(e)
     
 
 class UserProfile(APIView):
     """User S.E.D(search, edit, delete)"""
+
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
     def put(self, request):
-        return handle_response(edit_profile(request))
+        try:
+            message = edit_profile(request)
+            status_code = 200
+            return handle_response(status_code, message)
+        except Exception as e:
+            return custom_exception_handler(e)
+
         
     def delete(self, request):
-        return handle_response(delete_profile(request))
+        try:
+            message = delete_profile(request)
+            status_code = 200
+            return handle_response(status_code, message)
+        except Exception as e:
+            return custom_exception_handler(e)
+
         
     def get(self, request):
-        return handle_response_data(get_user(request))
+
+        # try getting the user, else return the appropriate exception
+        try:
+            message = get_user(request)
+            return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
+        except Exception as e:
+            return custom_exception_handler(e)
     
 
 class RoomView(APIView):
@@ -87,23 +123,3 @@ class StreamView(APIView):
     
     def get(self, request):
         return handle_response_data(display_history(request))
-
-
-# ---------Support Functions--------- #
-
-def handle_response(msg):
-    if isinstance(msg, dict) and 'Error' in msg.keys():
-        return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        # If the obj is type set return list(obj)
-        if isinstance(msg, set):
-            return JsonResponse(data=list(msg), status=status.HTTP_200_OK, safe=False)
-        else:
-            return JsonResponse(data=msg, status=status.HTTP_200_OK, safe=False)
-
-
-def handle_response_data(msg):
-    if isinstance(msg, dict) and 'Error' in msg.keys():
-        return JsonResponse(data=msg, status=status.HTTP_400_BAD_REQUEST, safe=False)
-    else:
-        return JsonResponse(data=msg.data, status=status.HTTP_200_OK, safe=False)
