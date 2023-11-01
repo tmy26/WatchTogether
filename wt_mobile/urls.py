@@ -1,8 +1,8 @@
 from django.urls import path
-from wt_mobile.views import StreamView, RoomView, UserView, UserLogin, UserProfile, RoomExtendedView
 from knox import views as knox_views
 from wt_mobile.backend_logic import activate
-
+from wt_mobile.views import (RoomExtendedView, RoomView, StreamView, UserLogin,
+                             UserProfile, UserView)
 
 urlpatterns = [
     path('user/register', UserView.as_view()),

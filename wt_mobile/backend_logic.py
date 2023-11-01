@@ -1,24 +1,27 @@
-from django.core.mail import EmailMessage
-from django.core.exceptions import MultipleObjectsReturned
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth import get_user_model, login, authenticate
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.template.loader import render_to_string
-from watch_together.general_utils import get_loggers
-from email_validator import validate_email, EmailNotValidError
-from knox.models import AuthToken
-from .tokens import account_activation_token
-from .models import User
-from .serializers import UserSerializerSearchByUsername, UserSerializerCheckIfUserActive
-from .backend_utils import findUser
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.mail import EmailMessage
 from django.shortcuts import render
-from .exceptions import EmailAlreadyUsed, UsernameAlreadyUsed, EmailWasNotProvided,\
-      UsernameTooShort, UserPasswordIsTooShort, UserPasswordsDoNotMatch, UserEmailNotActivated,\
-      CommonException, MaxNumberAuth, FieldNotEditable
-from django.core.exceptions import ObjectDoesNotExist
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from email_validator import EmailNotValidError, validate_email
+from knox.models import AuthToken
 
+from watch_together.general_utils import get_loggers
+
+from .backend_utils import findUser
+from .exceptions import (CommonException, EmailAlreadyUsed,
+                         EmailWasNotProvided, FieldNotEditable, MaxNumberAuth,
+                         PasswordsDoNotMatch, UserEmailNotActivated,
+                         UsernameAlreadyUsed, UsernameTooShort,
+                         UserPasswordIsTooShort)
+from .models import User
+from .serializers import (UserSerializerCheckIfUserActive,
+                          UserSerializerSearchByUsername)
+from .tokens import account_activation_token
 
 dev_logger = get_loggers('dev_logger')
 client_logger = get_loggers('client_logger')
@@ -96,7 +99,7 @@ def create_user(request) -> dict:
         raise UserPasswordIsTooShort('The provided password is too short')
 
     if password != password_check:
-        raise UserPasswordsDoNotMatch('The passwords do not match!')
+        raise PasswordsDoNotMatch('The passwords do not match!')
 
     # validate email
     try:
@@ -208,7 +211,7 @@ def edit_profile(request) -> dict:
                         return {'Success': 'Email changed'}
                     else:
                         client_logger.info(f'Old passwords do not match')
-                        raise UserPasswordsDoNotMatch('The passwords do not match!')
+                        raise PasswordsDoNotMatch('The passwords do not match!')
                 except EmailNotValidError as e:
                     client_logger.info('Provided email is not valid, details: ', e)
                     raise EmailNotValidError
@@ -218,11 +221,11 @@ def edit_profile(request) -> dict:
                 new_password_check = request.data.get('new_password_check')
 
                 if user.password != make_password(old_password):
-                    raise UserPasswordsDoNotMatch('Old password do not match!')
+                    raise PasswordsDoNotMatch('Old password do not match!')
                 if len(new_password) < 8:
                     raise UserPasswordIsTooShort('The provided password is too short')
                 if new_password != new_password_check:
-                    raise UserPasswordsDoNotMatch('The passwords do not match!')
+                    raise PasswordsDoNotMatch('The passwords do not match!')
                 
                 user.password = make_password(new_password)
                 user.save()

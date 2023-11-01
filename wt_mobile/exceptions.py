@@ -1,6 +1,3 @@
-from rest_framework.exceptions import APIException
-
-
 class CommonException(Exception):
     pass
 
@@ -25,7 +22,7 @@ class UserPasswordIsTooShort(Exception):
     pass
 
 
-class UserPasswordsDoNotMatch(Exception):
+class PasswordsDoNotMatch(Exception):
     pass
 
 
@@ -38,4 +35,27 @@ class MaxNumberAuth(Exception):
 
 
 class FieldNotEditable(Exception):
+    pass
+
+class IllegalArgumentError(Exception):
+    pass
+
+
+class UserAlreadyInRoom(Exception):
+    pass
+
+
+class UserIsNotInTheRoom(Exception):
+    pass
+
+
+class StreamAssignedRoomRequired(Exception):
+    pass
+
+
+class StreamAlreadyAssigned(Exception):
+    pass
+
+
+class StreamInvalidLink(Exception):
     pass

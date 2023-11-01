@@ -1,10 +1,9 @@
-from knox.models import AuthToken
-from knox import crypto
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.http import JsonResponse
-from .exceptions import *
 from email_validator import EmailNotValidError
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import MultipleObjectsReturned
+from knox import crypto
+from knox.models import AuthToken
+from .exceptions import *
 
 
 def findUser(token:str) -> object:
@@ -18,8 +17,8 @@ def findUser(token:str) -> object:
     return user
 
 
-def custom_exception_handler(exc):
-    """ Handles custom exceptions, returning the proper status code and error message """
+def user_custom_exception_handler(exc):
+    """ Handles custom exceptions raise from user funcs, returning the proper status code and error message """
 
     match exc:
         case EmailAlreadyUsed():
@@ -32,7 +31,7 @@ def custom_exception_handler(exc):
             response = JsonResponse({'Error': str(exc)}, status=400)
         case UserPasswordIsTooShort():
             response = JsonResponse({'Error': str(exc)}, status=400)
-        case UserPasswordsDoNotMatch():
+        case PasswordsDoNotMatch():
             response = JsonResponse({'Error': str(exc)}, status=400)
         case EmailNotValidError():
             error = 'The provided email is in a bad format.'
@@ -40,7 +39,7 @@ def custom_exception_handler(exc):
         case ObjectDoesNotExist():
             response = JsonResponse({'Error': str(exc)}, status=404)
         case MultipleObjectsReturned():
-            response = JsonResponse({'Error': 'Multiple objects returned'}, status=400)
+            response = JsonResponse({'Error': 'Multiple objects returned'}, status=500)
         case UserEmailNotActivated():
             response = JsonResponse({'Error': str(exc)}, status=403)
         case MaxNumberAuth():
@@ -52,6 +51,47 @@ def custom_exception_handler(exc):
     
     return response
 
+
+def room_custom_exception_handler(exc):
+    """ Handles custom exceptions raise from room funcs, returning the proper status code and error message """
+
+    match exc:
+        case IllegalArgumentError():
+            response = JsonResponse({'Error': str(exc)}, status=400)
+        case ObjectDoesNotExist():
+            response = JsonResponse({'Error': str(exc)}, status=404)
+        case MultipleObjectsReturned():
+            response = JsonResponse({'Error': str(exc)}, status=500)
+        case UserAlreadyInRoom():
+            response = JsonResponse({'Error': str(exc)}, status=400)
+        case PasswordsDoNotMatch():
+            response = JsonResponse({'Error': str(exc)}, status=400)
+        case UserIsNotInTheRoom():
+            response = JsonResponse({'Error'}, status=400)
+        case _:
+            response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
+    return response
+
+
+def stream_custom_exception_handler(exc):
+    """ Handles exceptions raise from stream funcs, returns the proper code and error msg """
+
+    match exc:
+        case StreamAssignedRoomRequired():
+            response = JsonResponse({'Error': str(exc)}, status=424)
+        case StreamAlreadyAssigned():
+            response = JsonResponse({'Error': str(exc)}, status=400)
+        case StreamInvalidLink():
+            response = JsonResponse({'Error': str(exc)}, status=400)
+        case MultipleObjectsReturned():
+            response = JsonResponse({'Error': str(exc)}, status=500)
+        case ObjectDoesNotExist():
+            response = JsonResponse({'Error': str(exc)}, status=404)
+        case CommonException():
+            response = JsonResponse({'Error': str(exc)}, status=400)
+        case _:
+            response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
+    return response
 
 def handle_response(status_code, message):
     """ Returns proper response data """

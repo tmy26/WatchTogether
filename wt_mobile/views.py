@@ -1,13 +1,16 @@
-from rest_framework.views import APIView
+from django.http import JsonResponse
+from knox.auth import TokenAuthentication
+from knox.views import LoginView as KnoxLoginView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from .backend_logic import create_user, get_user, login_user, edit_profile, delete_profile, is_user_active
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+from .backend_logic import (create_user, delete_profile, edit_profile,
+                            get_user, is_user_active, login_user)
 from .backend_logic_rooms import *
 from .backend_logic_stream import *
-from django.http import JsonResponse
-from knox.views import LoginView as KnoxLoginView
-from knox.auth import TokenAuthentication
-from .backend_utils import custom_exception_handler, handle_response
+from .backend_utils import (handle_response, room_custom_exception_handler,
+                            stream_custom_exception_handler,
+                            user_custom_exception_handler)
 
 
 class UserView(APIView):
@@ -22,7 +25,7 @@ class UserView(APIView):
             status_code = status.HTTP_201_CREATED
             return handle_response(status_code, message)
         except Exception as e:
-            return custom_exception_handler(e)
+            return user_custom_exception_handler(e)
     
     def get(self, request):
         
@@ -30,7 +33,7 @@ class UserView(APIView):
             message = is_user_active(request)
             return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
         except Exception as e:
-            return custom_exception_handler(e)
+            return user_custom_exception_handler(e)
 
 
 class UserLogin(KnoxLoginView):
@@ -43,7 +46,7 @@ class UserLogin(KnoxLoginView):
             status_code = 202
             return handle_response(status_code, message)
         except Exception as e:
-            return custom_exception_handler(e)
+            return user_custom_exception_handler(e)
     
 
 class UserProfile(APIView):
@@ -58,7 +61,7 @@ class UserProfile(APIView):
             status_code = 200
             return handle_response(status_code, message)
         except Exception as e:
-            return custom_exception_handler(e)
+            return user_custom_exception_handler(e)
 
         
     def delete(self, request):
@@ -67,7 +70,7 @@ class UserProfile(APIView):
             status_code = 200
             return handle_response(status_code, message)
         except Exception as e:
-            return custom_exception_handler(e)
+            return user_custom_exception_handler(e)
 
         
     def get(self, request):
@@ -77,7 +80,7 @@ class UserProfile(APIView):
             message = get_user(request)
             return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
         except Exception as e:
-            return custom_exception_handler(e)
+            return user_custom_exception_handler(e)
     
 
 class RoomView(APIView):
@@ -86,16 +89,35 @@ class RoomView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def post(self, request):
-        return handle_response(create_room(request))
+        try:
+            message = create_room(request)
+            status_code = status.HTTP_201_CREATED
+            return handle_response(status_code, message)
+        except Exception as e:
+            return room_custom_exception_handler(e)
 
     def delete(self, request):
-        return handle_response(delete_room(request))
+        try:
+            message = delete_room(request)
+            status_code = status.HTTP_200_OK
+            return handle_response(status_code, message)
+        except Exception as e:
+            return room_custom_exception_handler(e)
 
     def put(self, request):
-        return handle_response(edit_room(request))
+        try:
+            message = edit_room(request)
+            status_code = status.HTTP_200_OK
+            return handle_response(status_code, message)
+        except Exception as e:
+            return room_custom_exception_handler(e)
 
     def get(self, request):
-        return handle_response_data(list_rooms_user_participates(request))
+        try:
+            message = list_rooms_user_participates(request)
+            return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
+        except Exception as e:
+            return room_custom_exception_handler(e)
     
 
 class RoomExtendedView(APIView):
@@ -104,11 +126,21 @@ class RoomExtendedView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def post(self, request):
-        return handle_response(join_room(request))
+        try:
+            message = join_room(request)
+            status_code = status.HTTP_200_OK
+            return handle_response(status_code, message)
+        except Exception as e:
+            return room_custom_exception_handler(e)
 
     def delete(self, request):
-        return handle_response(leave_room(request))
-
+        try:
+            message = leave_room(request)
+            status_code = status.HTTP_200_OK
+            return handle_response(status_code, message)
+        except Exception as e:
+            return room_custom_exception_handler(e)
+    
 
 class StreamView(APIView):
     """Stream Controller"""
@@ -116,10 +148,24 @@ class StreamView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def post(self, request):
-        return handle_response(create_stream(request))
+        try:
+            message = create_stream(request)
+            status_code = status.HTTP_201_CREATED
+            return handle_response(status_code, message)
+        except Exception as e:
+            stream_custom_exception_handler(e)
 
     def put(self, request):
-        return handle_response(edit_stream(request))
+        try:
+            message = edit_stream(request)
+            status_code = status.HTTP_200_OK
+            return handle_response(status_code, message)
+        except Exception as e:
+            stream_custom_exception_handler(e)
     
     def get(self, request):
-        return handle_response_data(display_history(request))
+        try:
+            message = display_history(request)
+            return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
+        except Exception as e:
+            return room_custom_exception_handler(e)

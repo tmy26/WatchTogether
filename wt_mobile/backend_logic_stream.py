@@ -1,10 +1,12 @@
-from .models import Room, Stream, StreamHistory
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
-import requests
-from watch_together.general_utils import get_loggers
 from datetime import datetime
+import requests
+from django.core.exceptions import (MultipleObjectsReturned,
+                                    ObjectDoesNotExist, ValidationError)
+from watch_together.general_utils import get_loggers
+from .exceptions import (CommonException, StreamAlreadyAssigned,
+                         StreamAssignedRoomRequired, StreamInvalidLink)
+from .models import Room, Stream, StreamHistory
 from .serializers import StreamHistorySerializer
-
 
 ERROR = 'Error'
 SUCCESS = 'Success'
@@ -24,14 +26,14 @@ def create_stream(request):
 
         # Check if assigned_room is provided
         if not assigned_room:
-            return {ERROR: 'Assigned room is required.'}
+            raise StreamAssignedRoomRequired('There is no room provided')
 
         # Check if the room exists
         room = Room.objects.get(unique_id=assigned_room)
 
         # Check if the room already has a stream assigned
         if Stream.objects.filter(assigned_room=room).exists():
-            return {ERROR: 'The room already has a stream assigned.'}
+            raise StreamAlreadyAssigned('There is an already assigned stream for that room')
 
         # Create and save a new Stream instance
         created_stream = Stream(assigned_room=room)
@@ -39,10 +41,13 @@ def create_stream(request):
 
     except (ValidationError, requests.exceptions.InvalidURL):
         client_logger.error(msg=ERROR_LINK_NOT_VALID)
-        return {ERROR: ERROR_LINK_NOT_VALID} 
-    except (MultipleObjectsReturned,Stream.DoesNotExist) as err:
+        raise StreamInvalidLink('The provided link is invalid')
+    except (MultipleObjectsReturned, Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
-        return ERROR_MESSAGE
+        if err is MultipleObjectsReturned():
+            raise MultipleObjectsReturned(ERROR_MESSAGE)
+        else:
+            raise ObjectDoesNotExist(ERROR_MESSAGE)
 
     # Return a success message
     info = 'Stream created'
@@ -59,7 +64,7 @@ def edit_stream(request) -> dict:
 
     # Check if requested data is null
     if not link or not assigned_room:
-        return ERROR_MESSAGE
+        raise CommonException('No data provided')
     try:
         # Retrieve the stream to edit
         stream_to_edit = Stream.objects.get(assigned_room=assigned_room)
@@ -76,10 +81,13 @@ def edit_stream(request) -> dict:
         add_to_history(stream_to_edit)
 
     except (ValidationError, requests.exceptions.InvalidURL):
-        return {ERROR: 'Invalid link!'} 
+        raise StreamInvalidLink('Provided link is not valid.')
     except (MultipleObjectsReturned, Stream.DoesNotExist) as err:
         dev_logger.error(msg=err, exc_info=True)
-        return ERROR_MESSAGE
+        if err is MultipleObjectsReturned():
+            raise MultipleObjectsReturned(ERROR_MESSAGE)
+        else:
+            raise ObjectDoesNotExist(ERROR_MESSAGE)
     info = 'The stream link was successfully edited!'
     client_logger.info(msg=info)
     return {SUCCESS: info}
@@ -97,10 +105,10 @@ def display_history(request):
         all_links = StreamHistory.objects.filter(stream_id=stream.pk)
         serialized = StreamHistorySerializer(all_links, many=True)
     except (Stream.DoesNotExist, ValueError):
-        return {ERROR: 'Stream does not exist'}
+        raise ObjectDoesNotExist('Stream does not exist!')
     except MultipleObjectsReturned:
         dev_logger.error('Multiple objects returned in display_history() in backend_logic_stream')
-        return ERROR_MESSAGE
+        raise MultipleObjectsReturned('Multiple objects returned!')
     return serialized
 
 
@@ -136,8 +144,11 @@ def add_to_history(stream):
         info = 'Stream link added to history'
         client_logger.info(msg=info)
         return {SUCCESS: info}
-    except (Room.DoesNotExist, Stream.DoesNotExist):
-        return ERROR_MESSAGE
+    except (Room.DoesNotExist, Stream.DoesNotExist) as e:
+        if e is Room.DoesNotExist():
+            raise ObjectDoesNotExist('Room does not exist!')
+        else:
+            raise ObjectDoesNotExist('Stream does not exist!')
     except MultipleObjectsReturned:
         dev_logger.error('Multiple objects have returned by add_to_history() in backed_logic_stream')
-        return ERROR_MESSAGE
+        raise MultipleObjectsReturned(ERROR_MESSAGE)
