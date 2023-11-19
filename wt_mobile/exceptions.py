@@ -59,3 +59,7 @@ class StreamAlreadyAssigned(Exception):
 
 class StreamInvalidLink(Exception):
     pass
+
+
+class UserAlreadyActivated(Exception):
+    pass

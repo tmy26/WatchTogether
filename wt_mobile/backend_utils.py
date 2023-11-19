@@ -46,6 +46,8 @@ def user_custom_exception_handler(exc):
             response = JsonResponse({'Error': str(exc)}, status=431)
         case FieldNotEditable():
             response = JsonResponse({'Error': str(exc)}, status=400)
+        case UserAlreadyActivated():
+            response = JsonResponse({'Error': str(exc)}, status=400)
         case _:
             response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
     

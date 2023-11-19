@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, get_user_model, login
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.core.mail import EmailMessage
@@ -17,7 +17,7 @@ from .exceptions import (CommonException, EmailAlreadyUsed,
                          EmailWasNotProvided, FieldNotEditable, MaxNumberAuth,
                          PasswordsDoNotMatch, UserEmailNotActivated,
                          UsernameAlreadyUsed, UsernameTooShort,
-                         UserPasswordIsTooShort)
+                         UserPasswordIsTooShort, UserAlreadyActivated)
 from .models import User
 from .serializers import (UserSerializerCheckIfUserActive,
                           UserSerializerSearchByUsername)
@@ -67,6 +67,32 @@ def activateEmail(request, user, to_email) -> None:
         client_logger.info(msg=f'An activataion email was sent to {to_email} ')
     else:
         dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: activateEmail in file: backend_logic in app: wt_mobile')
+
+
+def resend_activation_email(request):
+    """ Sends an activation email again """
+
+    username = request.data.get('username')
+
+    try:
+        # get user, its 'is_active' field should be 0, raise error if NOT
+        user = User.objects.get(username=username)
+
+        if user.is_active:
+            raise UserAlreadyActivated('The user is already activated!')
+        
+        email = user.email
+
+        # resend email
+        activateEmail(request, user, to_email=email)
+
+    except User.DoesNotExist:
+        raise ObjectDoesNotExist('User is not found')
+    except MultipleObjectsReturned:
+        dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
+        raise MultipleObjectsReturned
+    
+    return {'Activation': f'A new verification email was sent to {email}'}
 
 
 def create_user(request) -> dict:
@@ -162,23 +188,26 @@ def login_user(request) -> dict:
 
     if not user_obj.is_active:
         raise UserEmailNotActivated('User email is not activated!')
+    
+    if check_password(password, user_obj.password):
+        flag = authenticate(request, username=username, password=password)
+        if flag:
+            logged_devices = AuthToken.objects.filter(user=user_obj).count()
+            if logged_devices >= 4:
+                raise MaxNumberAuth('Maximum limit of logged devices is reached!')
 
-    flag = authenticate(request, username=username, password=password)
-    if flag:
-        logged_devices = AuthToken.objects.filter(user=user_obj).count()
-        if logged_devices >= 4:
-            raise MaxNumberAuth('Maximum limit of logged devices is reached!')
+            token = AuthToken.objects.create(user_obj)
+            login(request, flag)
 
-        token = AuthToken.objects.create(user_obj)
-        login(request, flag)
+            # returning username and token, so they can be stored as encrypted preferences in android
+            user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
 
-        # returning username and token, so they can be stored as encrypted preferences in android
-        user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
-
-        return user_info
+            return user_info
+        else:
+            dev_logger.error('Something went wrong, trace login_user()')
+            raise CommonException()
     else:
-        dev_logger.error('Something went wrong, trace login_user()')
-        raise CommonException()
+        raise PasswordsDoNotMatch('Invalid user password!')
     
 
 def edit_profile(request) -> dict:
@@ -203,7 +232,7 @@ def edit_profile(request) -> dict:
 
                 # validate data
                 try:
-                    if make_password(old_password) == user.password:
+                    if check_password(old_password, user.password):
                         validate_email(new_email)
                         user.email = new_email
                         client_logger.info(f'Email of {user.username} was changed')
@@ -253,10 +282,12 @@ def delete_profile(request) -> dict:
 def is_user_active(request):
     """Checks if user is active"""
 
-    username = request.data.get('username')
+    #username = request.data.get('username')
+    username = request.GET.get('username')
 
     try:
         user = User.objects.get(username=username)
+        print("printInFunc")
         serialized = UserSerializerCheckIfUserActive(user)
     except User.DoesNotExist:
         raise ObjectDoesNotExist('User not found!')

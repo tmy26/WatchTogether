@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from .backend_logic import (create_user, delete_profile, edit_profile,
-                            get_user, is_user_active, login_user)
+                            get_user, is_user_active, login_user, resend_activation_email)
 from .backend_logic_rooms import *
 from .backend_logic_stream import *
 from .backend_utils import (handle_response, room_custom_exception_handler,
@@ -32,6 +32,21 @@ class UserView(APIView):
         try:
             message = is_user_active(request)
             return JsonResponse(data=message.data, status=status.HTTP_200_OK, safe=False)
+        except Exception as e:
+            return user_custom_exception_handler(e)
+
+
+class ResendActivationEmailView(APIView):
+    """ Currently only the resend activation email functionality """
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+
+        # try resending email, else return appropriate exception
+        try:
+            message = resend_activation_email(request)
+            status_code = status.HTTP_200_OK
+            return handle_response(status_code, message)
         except Exception as e:
             return user_custom_exception_handler(e)
 
