@@ -39,4 +39,3 @@ class StreamHistorySerializer(serializers.ModelSerializer):
     class Meta():
         model = StreamHistory
         fields = ('link', 'time_when_played')
-

@@ -4,6 +4,7 @@ from wt_mobile.backend_logic import activate
 from wt_mobile.views import (RoomExtendedView, RoomView, StreamView, UserLogin,
                              UserProfile, UserView, ResendActivationEmailView)
 
+
 urlpatterns = [
     path('user/register', UserView.as_view()),
     path('user/resend_email', ResendActivationEmailView.as_view()),

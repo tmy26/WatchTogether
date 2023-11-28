@@ -9,9 +9,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from email_validator import EmailNotValidError, validate_email
 from knox.models import AuthToken
-
 from watch_together.general_utils import get_loggers
-
 from .backend_utils import findUser
 from .exceptions import (CommonException, EmailAlreadyUsed,
                          EmailWasNotProvided, FieldNotEditable, MaxNumberAuth,
@@ -22,6 +20,7 @@ from .models import User
 from .serializers import (UserSerializerCheckIfUserActive,
                           UserSerializerSearchByUsername)
 from .tokens import account_activation_token
+
 
 dev_logger = get_loggers('dev_logger')
 client_logger = get_loggers('client_logger')
@@ -249,7 +248,7 @@ def edit_profile(request) -> dict:
                 new_password = request.data.get('new_password')
                 new_password_check = request.data.get('new_password_check')
 
-                if user.password != make_password(old_password):
+                if not check_password(old_password, user.password):
                     raise PasswordsDoNotMatch('Old password do not match!')
                 if len(new_password) < 8:
                     raise UserPasswordIsTooShort('The provided password is too short')
@@ -282,12 +281,11 @@ def delete_profile(request) -> dict:
 def is_user_active(request):
     """Checks if user is active"""
 
-    #username = request.data.get('username')
+    # get username from parameters
     username = request.GET.get('username')
 
     try:
         user = User.objects.get(username=username)
-        print("printInFunc")
         serialized = UserSerializerCheckIfUserActive(user)
     except User.DoesNotExist:
         raise ObjectDoesNotExist('User not found!')

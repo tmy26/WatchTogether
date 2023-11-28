@@ -8,6 +8,7 @@ from .exceptions import (CommonException, StreamAlreadyAssigned,
 from .models import Room, Stream, StreamHistory
 from .serializers import StreamHistorySerializer
 
+
 ERROR = 'Error'
 SUCCESS = 'Success'
 ERROR_MESSAGE = {'Error': 'Something went wrong with the data you provided. Please check if the data is correct and try again.'}
