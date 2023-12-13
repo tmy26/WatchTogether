@@ -1,5 +1,5 @@
-from rest_framework import  serializers
-from .models import User, Stream, UserRoom, StreamHistory
+from rest_framework import serializers
+from .models import Stream, StreamHistory, User, UserRoom
 
 
 class UserSerializerSearchByUsername(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class JoinedRoomSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = UserRoom
-        fields = ['room_id', 'room_name', 'date_joined', 'user_id']
+        fields = ['room_id', 'date_joined', 'user_id']
 
 
 class StreamSerializer(serializers.ModelSerializer):
@@ -39,4 +39,3 @@ class StreamHistorySerializer(serializers.ModelSerializer):
     class Meta():
         model = StreamHistory
         fields = ('link', 'time_when_played')
-

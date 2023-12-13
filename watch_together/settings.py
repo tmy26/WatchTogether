@@ -1,7 +1,7 @@
-from pathlib import Path
-from .loggers import LOGGING as LOGGING
 from datetime import timedelta
+from pathlib import Path
 from rest_framework.settings import api_settings
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-0wu5y4nf5_g3e$r#o%tl)7@=d#$%&=5@db!gx-nhi*jh_k&n4*
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['10.98.152.122']
+ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', '192.168.0.44']
 AUTH_USER_MODEL = 'wt_mobile.User'
 
 

@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.utils.timezone import now
 
 
@@ -46,7 +46,6 @@ class UserRoom(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, null=False, blank=False)
-    room_name = models.CharField(max_length=101)
     date_joined = models.DateField(blank=True, default=now)
 
 

@@ -1,19 +1,25 @@
-from django.core.mail import EmailMessage
-from django.core.exceptions import MultipleObjectsReturned
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth import get_user_model, login, authenticate
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.template.loader import render_to_string
-from watch_together.general_utils import get_loggers
-from email_validator import validate_email, EmailNotValidError
-from knox.models import AuthToken
-from .tokens import account_activation_token
-from .models import User
-from .serializers import UserSerializerSearchByUsername, UserSerializerCheckIfUserActive
-from .backend_utils import findUser
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.mail import EmailMessage
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from email_validator import EmailNotValidError, validate_email
+from knox.models import AuthToken
+from watch_together.general_utils import get_loggers
+from .backend_utils import findUser
+from .exceptions import (CommonException, EmailAlreadyUsed,
+                         EmailWasNotProvided, FieldNotEditable, MaxNumberAuth,
+                         PasswordsDoNotMatch, UserEmailNotActivated,
+                         UsernameAlreadyUsed, UsernameTooShort,
+                         UserPasswordIsTooShort, UserAlreadyActivated)
+from .models import User
+from .serializers import (UserSerializerCheckIfUserActive,
+                          UserSerializerSearchByUsername)
+from .tokens import account_activation_token
 
 
 dev_logger = get_loggers('dev_logger')
@@ -62,6 +68,32 @@ def activateEmail(request, user, to_email) -> None:
         dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: activateEmail in file: backend_logic in app: wt_mobile')
 
 
+def resend_activation_email(request):
+    """ Sends an activation email again """
+
+    username = request.data.get('username')
+
+    try:
+        # get user, its 'is_active' field should be 0, raise error if NOT
+        user = User.objects.get(username=username)
+
+        if user.is_active:
+            raise UserAlreadyActivated('The user is already activated!')
+        
+        email = user.email
+
+        # resend email
+        activateEmail(request, user, to_email=email)
+
+    except User.DoesNotExist:
+        raise ObjectDoesNotExist('User is not found')
+    except MultipleObjectsReturned:
+        dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
+        raise MultipleObjectsReturned
+    
+    return {'Activation': f'A new verification email was sent to {email}'}
+
+
 def create_user(request) -> dict:
     """User register method"""
 
@@ -73,30 +105,35 @@ def create_user(request) -> dict:
     
     # validate email uniqness
     if User.objects.filter(email=email).exists():
-        return {'Error': 'This email is already in use!'}
+        raise EmailAlreadyUsed('This email is already in use!')
+
     # validate username uniqueness
     if User.objects.filter(username=username).exists():
-        return {'Error': 'the username is already in use!'}
+        raise UsernameAlreadyUsed('The username is already in use!')
+
     # validate email len
     if len(str(email))==0:
-        return {'Error': 'Email was not provided!'}
+        raise EmailWasNotProvided('Email was not provided')
+
     # validate username len
     if len(username) <= 2:
-        return {'Error', f'the username: {username} is too short'}
+        raise UsernameTooShort('Username is too short')
+
     # validate password
     if len(password) < 8:
-        return {'Error': 'the password is too short!'}
+        raise UserPasswordIsTooShort('The provided password is too short')
+
     if password != password_check:
-        return {'Error': 'the passwords do not match!'}
+        raise PasswordsDoNotMatch('The passwords do not match!')
 
     # validate email
     try:
         check_email = validate_email(email, allow_smtputf8=False)
         if check_email:
             email = check_email.ascii_email
-    except EmailNotValidError as error:
+    except EmailNotValidError:
         client_logger.error(f'The provided email was invalid {email} !')
-        return str(error)
+        raise EmailNotValidError
     
     # convert the pass to hash
     hashed_password = make_password(password)
@@ -117,49 +154,59 @@ def create_user(request) -> dict:
 
 def get_user(request):
     """Get user's username"""
+
     username = request.data.get('username')
 
     try:
         user = User.objects.get(username=username)
         serialized = UserSerializerSearchByUsername(user)
     except User.DoesNotExist:
-        return {'Error': 'The user does not exist!'}
+        dev_logger.error('User is not found, traceback get_user in backend_logic')
+        raise ObjectDoesNotExist('User not found!')
+
     except MultipleObjectsReturned:
         dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
-        return {'Error': 'The user does not exist!'}
+        raise MultipleObjectsReturned
     return serialized
 
 
 def login_user(request) -> dict:
+
     """Login method, returns the header token"""
     username = request.data.get('username')
     password = request.data.get('password')
-    ERROR = {'Error': 'Invalid credintials!'}
 
     try:
         user_obj = User.objects.get(username=username)
     except MultipleObjectsReturned:
         dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
-        return ERROR
+        raise MultipleObjectsReturned
     except User.DoesNotExist:
-        return ERROR
+        dev_logger.error('User is not found, traceback login_user in backend_logic')
+        raise ObjectDoesNotExist('User not found!')
 
     if not user_obj.is_active:
-        return {'Error': 'You must activate your email first and then login'}
-    flag = authenticate(request, username=username, password=password)
-    if flag:
-        logged_devices = AuthToken.objects.filter(user=user_obj).count()
-        if logged_devices >= 4:
-            return {'Error': 'Maximum limit of logged devices is reached!'}
-        token = AuthToken.objects.create(user_obj)
-        login(request, flag)
+        raise UserEmailNotActivated('User email is not activated!')
+    
+    if check_password(password, user_obj.password):
+        flag = authenticate(request, username=username, password=password)
+        if flag:
+            logged_devices = AuthToken.objects.filter(user=user_obj).count()
+            if logged_devices >= 4:
+                raise MaxNumberAuth('Maximum limit of logged devices is reached!')
 
-        # returning username and token, so they can be stored as encrypted preferences in android
-        user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
+            token = AuthToken.objects.create(user_obj)
+            login(request, flag)
 
-        return user_info
+            # returning username and token, so they can be stored as encrypted preferences in android
+            user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
+
+            return user_info
+        else:
+            dev_logger.error('Something went wrong, trace login_user()')
+            raise CommonException()
     else:
-        return ERROR
+        raise PasswordsDoNotMatch('Invalid user password!')
     
 
 def edit_profile(request) -> dict:
@@ -168,7 +215,7 @@ def edit_profile(request) -> dict:
     user = findUser(token)
 
     if user is None:
-        return {'Error': 'User not found!'}
+        raise ObjectDoesNotExist('User not found!')
     else:
         # which field should be edited
         field = edit_method(request)
@@ -180,11 +227,11 @@ def edit_profile(request) -> dict:
                 new_email = request.data.get('new_email')
 
                 if User.objects.filter(email=new_email).exists():
-                    return {'This email is already in use!'}
+                    raise EmailAlreadyUsed('This email is already in use!')
 
                 # validate data
                 try:
-                    if make_password(old_password) == user.password:
+                    if check_password(old_password, user.password):
                         validate_email(new_email)
                         user.email = new_email
                         client_logger.info(f'Email of {user.username} was changed')
@@ -192,37 +239,38 @@ def edit_profile(request) -> dict:
                         return {'Success': 'Email changed'}
                     else:
                         client_logger.info(f'Old passwords do not match')
-                        return {'Error': 'Password of user does not match'}
+                        raise PasswordsDoNotMatch('The passwords do not match!')
                 except EmailNotValidError as e:
                     client_logger.info('Provided email is not valid, details: ', e)
-                    return {'Error': 'Provided email is not valid'}
+                    raise EmailNotValidError
 
             case "password":
                 new_password = request.data.get('new_password')
                 new_password_check = request.data.get('new_password_check')
 
-                if user.password != make_password(old_password):
-                    return {'Error': 'Old password do not match'}
+                if not check_password(old_password, user.password):
+                    raise PasswordsDoNotMatch('Old password do not match!')
                 if len(new_password) < 8:
-                    return {'Error': 'New password is too short'}
+                    raise UserPasswordIsTooShort('The provided password is too short')
                 if new_password != new_password_check:
-                    return {'Error': 'Passwords do not match'}
+                    raise PasswordsDoNotMatch('The passwords do not match!')
                 
                 user.password = make_password(new_password)
                 user.save()
                 client_logger.info(f'{user.username} has changed its password')
                 return {'Success': 'Password changed'}
             case _:
-                return {'Error': 'Something went wrong'}
+                raise CommonException()
 
 
 def delete_profile(request) -> dict:
     """Delete profile method"""
+
     token = request.META.get('HTTP_AUTHORIZATION')
     user = findUser(token)
     
     if user is None:
-        return {'Error': 'User not found!'}
+        raise ObjectDoesNotExist('User not found!')
     else:
         username = user.username
         User.objects.filter(username=username).delete()
@@ -233,17 +281,18 @@ def delete_profile(request) -> dict:
 def is_user_active(request):
     """Checks if user is active"""
 
-    username = request.data.get('username')
+    # get username from parameters
+    username = request.GET.get('username')
 
     try:
         user = User.objects.get(username=username)
         serialized = UserSerializerCheckIfUserActive(user)
     except User.DoesNotExist:
-        return {'Error': 'User does not exist!'}
+        raise ObjectDoesNotExist('User not found!')
 
     except MultipleObjectsReturned:
         dev_logger.error('Something is wrong with the db, function is_user_active in backend logic has returned more than one object')
-        return {'Error': 'The user does not exist!'}
+        raise MultipleObjectsReturned
 
     return serialized
 
@@ -254,5 +303,5 @@ def edit_method(request):
     field = request.data.get("field")
 
     if field != "password" and field != "email":
-        return {'Error': 'Not editable field'}
+        raise FieldNotEditable('Not editable field!')
     return field
