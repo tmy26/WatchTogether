@@ -1,8 +1,8 @@
 from django.urls import path
 from knox import views as knox_views
-from wt_mobile.backend_logic import activate
+from wt_mobile.user_manager import activate
 from wt_mobile.views import (RoomExtendedView, RoomView, StreamView, UserLogin,
-                             UserProfile, UserView, ResendActivationEmailView)
+                             UserProfile, UserView, ResendActivationEmailView, PasswordView)
 
 
 urlpatterns = [
@@ -16,4 +16,7 @@ urlpatterns = [
     path('activate/<uidb64>/<token>', activate, name='activate'),
     path('logout',knox_views.LogoutView.as_view(), name='knox-logout'),
     path('logoutall',knox_views.LogoutAllView.as_view(), name='knox-logout-all'),
+    path('password_reset', PasswordView.as_view()),
+
 ]
+    # path('password/<uidb64>/<token>', resend_password, name='password'),

@@ -4,7 +4,7 @@ import shortuuid
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from watch_together.general_utils import get_loggers
-from .backend_utils import findUser
+from .utils import UserUtils
 from .exceptions import (IllegalArgumentError, PasswordsDoNotMatch,
                          UserAlreadyInRoom, UserIsNotInTheRoom)
 from .models import Room, User, UserRoom
@@ -14,7 +14,6 @@ from .serializers import JoinedRoomSerializer
 
 
 SUCCESS = 'Success'
-
 DO_NOT_EXIST = 'Either the user or the room does not exist!'
 
 dev_logger = get_loggers('dev_logger')
@@ -31,7 +30,7 @@ def create_room(request) -> dict:
     password = request.data.get('password')
     token = request.META.get('HTTP_AUTHORIZATION')
 
-    user = findUser(token)
+    user = UserUtils.findUser(token)
     owner = user.id
 
     # Check request data validity
@@ -158,7 +157,7 @@ def join_room(request) -> dict:
 
     # Get request data
     token = request.META.get('HTTP_AUTHORIZATION')
-    user_to_join = findUser(token)
+    user_to_join = UserUtils.findUser(token)
     room_to_join = request.data.get('room')
 
     # Check if request 'user' is ID
@@ -215,7 +214,7 @@ def leave_room(request) -> dict:
     """ User option to leave the room """
 
     token = request.META.get('HTTP_AUTHORIZATION')
-    user_to_leave = findUser(token)
+    user_to_leave = UserUtils.findUser(token)
     room_to_leave = request.data.get('room')
 
     # Get room and user from db
@@ -332,7 +331,7 @@ def get_owner_id_from_token(request):
     """ Gets the owner id from token """
 
     token = request.META.get('HTTP_AUTHORIZATION')
-    user = findUser(token)
+    user = UserUtils.findUser(token)
 
     if user is None:
         raise ObjectDoesNotExist('User not found!')
