@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from .user_manager import UserManager
-from .backend_logic_rooms import *
+from .room_manager import RoomManager
 from .stream_manager import StreamManager
 from .utils import HandleResponseUtils, CustomExceptionUtils
 
@@ -21,6 +21,7 @@ class UserView(APIView):
             status_code = status.HTTP_201_CREATED
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
+            print(f'{error} sdadasdasddsa')
             return CustomExceptionUtils.user_custom_exception_handler(error)
     
     def get(self, request):
@@ -75,8 +76,8 @@ class UserLogin(KnoxLoginView):
 class UserProfile(APIView):
     """User S.E.D(search, edit, delete)"""
 
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
 
     # def put(self, request):
     #     try:
@@ -106,6 +107,7 @@ class UserProfile(APIView):
         except Exception as error:
             return CustomExceptionUtils.user_custom_exception_handler(error)
     
+# ________ RoomVIEWS ________ #
 
 class RoomView(APIView):
     """Room Controller"""
@@ -114,7 +116,7 @@ class RoomView(APIView):
 
     def post(self, request):
         try:
-            message = create_room(request)
+            message = RoomManager.create_room(request)
             status_code = status.HTTP_201_CREATED
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
@@ -122,7 +124,7 @@ class RoomView(APIView):
 
     def delete(self, request):
         try:
-            message = delete_room(request)
+            message = RoomManager.delete_room(request)
             status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
@@ -130,7 +132,7 @@ class RoomView(APIView):
 
     def put(self, request):
         try:
-            message = edit_room(request)
+            message = RoomManager.edit_room(request)
             status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
@@ -138,7 +140,7 @@ class RoomView(APIView):
 
     def get(self, request):
         try:
-            message = list_rooms_user_participates(request)
+            message = RoomManager.get_user_participating_rooms(request)
             status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response_data(status_code, message)
         except Exception as error:
@@ -152,7 +154,7 @@ class RoomExtendedView(APIView):
 
     def post(self, request):
         try:
-            message = join_room(request)
+            message = RoomManager.join_room(request)
             status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
@@ -160,12 +162,13 @@ class RoomExtendedView(APIView):
 
     def delete(self, request):
         try:
-            message = leave_room(request)
+            message = RoomManager.leave_room(request)
             status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
             return CustomExceptionUtils.room_custom_exception_handler(error)
-    
+
+# ________ StreamVIEWS ________ #
 
 class StreamView(APIView):
     """Stream Controller"""

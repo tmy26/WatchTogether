@@ -10,8 +10,7 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
 
 
 class UserSerializerCheckIfUserActive(serializers.ModelSerializer):
-    """ Returns the is_active field """
-    
+    """Returns the is_active field"""
     class Meta():
         model = User
         fields = ['is_active']
@@ -19,7 +18,6 @@ class UserSerializerCheckIfUserActive(serializers.ModelSerializer):
 
 class JoinedRoomSerializer(serializers.ModelSerializer):
     """Serializer for displaying the following fields of the joined UserRoom table"""
-
     class Meta():
         model = UserRoom
         fields = ['room_id', 'date_joined', 'user_id']
@@ -27,15 +25,13 @@ class JoinedRoomSerializer(serializers.ModelSerializer):
 
 class StreamSerializer(serializers.ModelSerializer):
     """Stream serializer used to return all created streams"""
-
     class Meta():
         model = Stream
         fields = '__all__'
 
 
 class StreamHistorySerializer(serializers.ModelSerializer):
-    """ Display the history for the current stream """
-
+    """Display the history for the current stream"""
     class Meta():
         model = StreamHistory
         fields = ('link', 'time_when_played')

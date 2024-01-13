@@ -1,12 +1,6 @@
-from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
-from django.core.mail import EmailMessage
-from django.shortcuts import render,redirect
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from email_validator import EmailNotValidError, validate_email
 from knox.models import AuthToken
 from watch_together.general_utils import get_loggers
@@ -14,71 +8,8 @@ from .utils import UserUtils
 from .exceptions import *
 from .models import User
 from .serializers import UserSerializerCheckIfUserActive, UserSerializerSearchByUsername
-from .tokens import account_activation_token
-
 
 dev_logger = get_loggers('dev_logger')
-client_logger = get_loggers('client_logger')
-
-
-def activate(request, uidb64, token) -> None:
-    """
-    Activates account, sets field is_active to a specific account to True.
-    :param uid64: check what is this
-    :type uid64: check what is this
-    :param token: check
-    :type token: check
-    :rType: html page
-    :returns: renders a successful or unsuccessful activation page.
-    """
-    User = get_user_model()
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        # get the username object
-        user = User.objects.get(pk=uid)
-    except Exception:
-        user = None
-        dev_logger.error('There is problem with token - activate function in backend_logic!', exc_info=True)
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        dev_logger.info(msg=f"A new account was activated!")
-        return redirect("http://127.0.0.1:8000/activated_account_page.html")
-    else:
-        dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback users, backend_logic, activate") 
-        return redirect("https://github.com/tmy26/WatchTogether")
-
-
-def update_password(request, uidb64, token) -> None:
-    """
-    Activates account, sets field is_active to a specific account to True.
-    :param uid64: check what is this
-    :type uid64: check what is this
-    :param token: check
-    :type token: check
-    :rType: html page
-    :returns: renders a successful or unsuccessful activation page.
-    """
-    User = get_user_model()
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        # get the username object
-        user = User.objects.get(pk=uid)
-    except:
-        user = None
-        dev_logger.error('There is problem with token - activate function in backend_logic!')
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = False
-        user.save()
-        dev_logger.info(msg=f"A new account was activated!")
-        return redirect("https://github.com/tmy26/WatchTogether")
-    else:
-        dev_logger.error(msg="Error. A error occured while trying to activate the account.\n The possible reason is that the user's token has expired!\n For debugging: Traceback users, backend_logic, activate") 
-        return redirect("https://github.com/tmy26/WatchTogether")
-
-
 
 
 class UserManager(object):
@@ -92,7 +23,7 @@ class UserManager(object):
     7. Check if the user account status is_active = True
     8. Resend activation email
     """
-    @classmethod
+    @staticmethod
     def create_user_account(request) -> dict:
         """
         Creates user account.
@@ -111,7 +42,7 @@ class UserManager(object):
         username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
-        password_check = request.data.get('password_check')
+        password_check = request.data.get('password check')
         
         # validate email uniqness
         if User.objects.filter(email=email).exists():
@@ -121,13 +52,13 @@ class UserManager(object):
             raise UsernameAlreadyUsed('The username is already in use!')
         # validate email len
         if len(str(email))==0:
-            raise EmailWasNotProvided('Email was not provided')
+            raise EmailWasNotProvided('Email was not provided!')
         # validate username len
         if len(username) <= 2:
-            raise UsernameTooShort('Username is too short')
+            raise UsernameTooShort('Username is too short!')
         # validate password
         if len(password) < 8:
-            raise UserPasswordIsTooShort('The provided password is too short')
+            raise UserPasswordIsTooShort('The provided password is too short!')
         if password != password_check:
             raise PasswordsDoNotMatch('The passwords do not match!')
         # validate email
@@ -136,8 +67,7 @@ class UserManager(object):
             if check_email:
                 email = check_email.ascii_email
         except EmailNotValidError:
-            client_logger.error(f'The provided email was invalid {email} !')
-            raise EmailNotValidError
+            raise EmailNotValidError('The provided email is invalid!')
         # convert the pass to hash
         hashed_password = make_password(password)
 
@@ -149,10 +79,8 @@ class UserManager(object):
             is_active=False
         )
         user.save()
-        info = f'Account with username: {username} was created. The account is not yet activated!'
-        client_logger.info(msg=info)
         UserUtils.send_email(request, mail_subject='Activate your account', template_path='account_activation_template.html', user=user, receiver=email)
-        return {'Activation': f'a verification email was sent to {email}'}
+        return {'Success': f'A verification email was sent to {email} !'}
     
     @staticmethod
     def get_user_account(request):
@@ -168,15 +96,13 @@ class UserManager(object):
         try:
             user = User.objects.get(username=username)
             serialized = UserSerializerSearchByUsername(user)
+            return serialized
         except User.DoesNotExist:
-            dev_logger.error('User is not found, traceback get_user in backend_logic')
-            raise ObjectDoesNotExist('User not found!')
-
+            raise ObjectDoesNotExist('Sorry, we could not find the user you are looking for!')
         except MultipleObjectsReturned:
-            dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
-            raise MultipleObjectsReturned
-        return serialized
-
+            error_msg = 'An issue with the database: Multiple objects were returned during the get_user_account process in user_manager.py!'
+            raise MultipleObjectsReturned(error_msg)
+        
     @staticmethod
     def login_user(request) -> dict:
         """
@@ -192,37 +118,30 @@ class UserManager(object):
         try:
             user_obj = User.objects.get(username=username)
         except MultipleObjectsReturned:
-            dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
-            raise MultipleObjectsReturned
+            error_msg = 'An issue with the database: Multiple objects were returned during the login_user process in user_manager.py!'
+            dev_logger.error(error_msg, exc_info=True)
+            raise MultipleObjectsReturned(error_msg)
         except User.DoesNotExist:
-            dev_logger.error('User is not found, traceback login_user in backend_logic')
-            raise ObjectDoesNotExist('User not found!')
+            raise ObjectDoesNotExist('Sorry, we could not find an account matching these credentials!')
 
         if not user_obj.is_active:
-            raise UserEmailNotActivated('User email is not activated!')
+            raise UserEmailNotActivated('Please activate your email. The verification is still pending.')
         
-        if check_password(password, user_obj.password):
-            flag = authenticate(request, username=username, password=password)
-            if flag:
-                logged_devices = AuthToken.objects.filter(user=user_obj).count()
-                if logged_devices >= 4:
-                    raise MaxNumberAuth('Maximum limit of logged devices is reached!')
+        flag = authenticate(request, username=username, password=password)
 
-                token = AuthToken.objects.create(user_obj)
-                login(request, flag)
-
-                # returning username and token, so they can be stored as encrypted preferences in android
-                user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
-
-                return user_info
-            else:
-                dev_logger.error('Something went wrong, trace login_user()')
-                raise CommonException()
+        if flag:
+            logged_devices = AuthToken.objects.filter(user=user_obj).count()
+            if logged_devices >= 4:
+                raise MaxNumberAuth('Maximum limit of logged devices is reached!')
+            token = AuthToken.objects.create(user_obj)
+            login(request, flag)
+            user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
+            return user_info
         else:
             raise PasswordsDoNotMatch('Invalid user password!')
 
     @staticmethod
-    def edit_user_password(request):
+    def edit_user_password(request) -> dict:
         """
         Edits account password.
         :param token: the needed token to filter the user
@@ -237,31 +156,27 @@ class UserManager(object):
         :returns: Message which indicates a successful password change.
         """
         token = request.META.get('HTTP_AUTHORIZATION')
-        new_password = request.data.get('new_password')
-        new_password_check = request.data.get('new_password_check')
-        current_password = request.data.get('password')
+        new_password = request.data.get('new password')
+        new_password_check = request.data.get('new password check')
+        current_password = request.data.get('current password')
         user = UserUtils.findUser(token)
 
         if user is None:
-            raise ObjectDoesNotExist('User not found!')
+            raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
         else:
             if check_password(current_password, user.password):
                 if len(new_password) < 8:
-                    raise UserPasswordIsTooShort('The provided password is too short')
+                    raise UserPasswordIsTooShort('The provided password is too short!')
                 if new_password != new_password_check:
                     raise PasswordsDoNotMatch('The passwords do not match!')
-                            
                 user.password = make_password(new_password)
                 user.save()
-                client_logger.info(f'An account with {user.username} has changed his password')
-                return {'Success': 'Password changed'}
+                return {'Success': 'Password successfully changed!'}
             else:
-                msg = 'Old passwords do not match!'
-                client_logger.info(msg=msg)
-                raise PasswordsDoNotMatch(msg)
+                raise PasswordsDoNotMatch('Old passwords do not match!')
 
     @staticmethod
-    def edit_user_email(request):
+    def edit_user_email(request) -> dict:
         """
         Changes account email.
         :param token: the needed token to filter the user
@@ -279,7 +194,7 @@ class UserManager(object):
         user = UserUtils.findUser(token)
         
         if user is None:
-            raise ObjectDoesNotExist('User not found!')
+            raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
         else:
             if User.objects.filter(email=new_email).exists():
                 raise EmailAlreadyUsed('This email is already in use!')
@@ -289,15 +204,11 @@ class UserManager(object):
                     validate_email(new_email)
                     user.email = new_email
                     user.save()
-                    client_logger.info(f'Email of {user.username} was changed')
-                    return {'Success': 'Email changed'}
+                    return {'Success': f'The email associated with {user.username} has been changed!'}
                 else:
-                    msg = 'Old passwords do not match!'
-                    client_logger.info(msg=msg)
-                    raise PasswordsDoNotMatch(msg)
+                    raise PasswordsDoNotMatch('The current password of the account does not match the provided one!')
             except EmailNotValidError:
-                client_logger.info('Provided email is invalid!')
-                raise EmailNotValidError
+                raise EmailNotValidError('The provided email is invalid!')
     
     @staticmethod
     def delete_user_account(request) -> dict:
@@ -315,12 +226,11 @@ class UserManager(object):
         user = UserUtils.findUser(token)
         
         if user is None:
-            raise ObjectDoesNotExist('User not found!')
+            raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
         else:
             if check_password(password, user.password):
                 username = user.username
                 User.objects.filter(username=username).delete()
-                client_logger.info(f'{user.username} has deleted his account!')
                 return {'Success': 'You have successfully deleted your account!'}
 
     @staticmethod
@@ -332,31 +242,30 @@ class UserManager(object):
         :rType: JSON serialized object
         :returns: Information about whether the user is active or not.
         """
-        # get username from parameters
         username = request.GET.get('username')
 
         try:
             user = User.objects.get(username=username)
             serialized = UserSerializerCheckIfUserActive(user)
+            return serialized
         except User.DoesNotExist:
-            raise ObjectDoesNotExist('User not found!')
-
+            raise ObjectDoesNotExist('Sorry, we could not find the user you are looking for!')
         except MultipleObjectsReturned:
-            dev_logger.error('Something is wrong with the db, function is_user_active in backend logic has returned more than one object', exc_info=True)
-            raise MultipleObjectsReturned
-
-        return serialized
+            error_msg='There is an issue with the database; the is_user_active method in user_manager.py has returned multiple objects!'
+            dev_logger.error(msg=error_msg, exc_info=True)
+            raise MultipleObjectsReturned(error_msg)
+        
     #not finished yet
     @classmethod
     def reset_password(request):
         email = request.data.get('email')
+
         try:
             check_email = validate_email(email, allow_smtputf8=False)
             if check_email:
                 email = check_email.ascii_email
         except EmailNotValidError:
-            client_logger.error(f'The provided email was invalid {email} !')
-            raise EmailNotValidError
+            raise EmailNotValidError(f'The provided email {email} is invalid!')
         
         try:
             user = User.objects.get(email=email)
@@ -365,9 +274,13 @@ class UserManager(object):
         except User.DoesNotExist:
             raise ObjectDoesNotExist('User not found!')
         except MultipleObjectsReturned:
-            raise MultipleObjectsReturned('Something is wrong with the db, function password1 in backend logic has returned more than one object', exc_info=True)
+            error_msg = 'An issue with the database: Multiple objects were returned during the reset_password process in user_manager.py!'
+            dev_logger.error(error_msg, exc_info=True)
+            raise MultipleObjectsReturned(error_msg)
         except Exception:
-            raise CommonException(f'Something went wrong while trying to reset the password for user with username {user.username}', exc_info=True)
+            error_msg = f'Something went wrong while trying to reset the password for user with username {user.username}!'
+            dev_logger.error(error_msg, exc_info=True)
+            raise CommonException(error_msg)
 
     @classmethod
     def resend_activation_email(cls, request) -> dict:
@@ -383,16 +296,15 @@ class UserManager(object):
         try:
             # get user, its 'is_active' field should be 0, raise error if NOT
             user = User.objects.get(username=username)
-
             if user.is_active:
-                raise UserAlreadyActivated('The user is already activated!')
+                raise UserAlreadyActivated(f'The account {user.username} is already activated!')
             
             email = user.email
-            # resend email
             UserUtils.send_email(request, mail_subject='Activate your account', template_path='account_activation_template.html', user=user, receiver=email)
-            return {'Activation': f'A new verification email was sent to {email}'}
+            return {'Activation': f'A new verification email has been sent to {email}'}
         except User.DoesNotExist:
-            raise ObjectDoesNotExist('User is not found')
+            raise ObjectDoesNotExist(f'Sorry, the acccount with {username} does not exist!')
         except MultipleObjectsReturned:
-            dev_logger.error('Something is wrong with the db, function get_user in backend_logic has retuned two or more users with same username!')
-            raise MultipleObjectsReturned
+            error_msg='An issue with the database: Multiple objects were returned during the resend_activation_email process in user_manager.py!'
+            dev_logger.error(msg=error_msg, exc_info=True)
+            raise MultipleObjectsReturned(error_msg)

@@ -106,12 +106,11 @@ class CustomExceptionUtils(object):
             case PasswordsDoNotMatch():
                 response = JsonResponse({'Error': str(exception_message)}, status=400)
             case EmailNotValidError():
-                error = 'The provided email is in a bad format.'
-                response = JsonResponse({'Error': error}, status=400)
+                response = JsonResponse({'Error': str(exception_message)}, status=400)
             case ObjectDoesNotExist():
                 response = JsonResponse({'Error': str(exception_message)}, status=404)
             case MultipleObjectsReturned():
-                response = JsonResponse({'Error': 'Multiple objects returned'}, status=500)
+                response = JsonResponse({'Error': str(exception_message)}, status=500)
             case UserEmailNotActivated():
                 response = JsonResponse({'Error': str(exception_message)}, status=403)
             case MaxNumberAuth():
@@ -146,6 +145,8 @@ class CustomExceptionUtils(object):
                 response = JsonResponse({'Error': str(exception_message)}, status=400)
             case UserIsNotInTheRoom():
                 response = JsonResponse({'Error'}, status=400)
+            case RoomNameNotProvided():
+                response = JsonResponse({'Error': str(exception_message)}, status=406)
             case _:
                 response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
         return response
@@ -170,6 +171,10 @@ class CustomExceptionUtils(object):
                 response = JsonResponse({'Error': str(exception_message)}, status=500)
             case ObjectDoesNotExist():
                 response = JsonResponse({'Error': str(exception_message)}, status=404)
+            case LinkNotProvided():
+                response = JsonResponse({'Error': str(exception_message)}, status=406)
+            case RoomNotProvided():
+                response = JsonResponse({'Error': str(exception_message)}, status=406)
             case CommonException():
                 response = JsonResponse({'Error': str(exception_message)}, status=400)
             case _:

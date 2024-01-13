@@ -1,6 +1,6 @@
 from django.urls import path
 from knox import views as knox_views
-from wt_mobile.user_manager import activate
+from wt_mobile.special_functions import activate
 from wt_mobile.views import (RoomExtendedView, RoomView, StreamView, UserLogin,
                              UserProfile, UserView, ResendActivationEmailView, PasswordView)
 

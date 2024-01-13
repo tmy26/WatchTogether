@@ -42,12 +42,6 @@ LOGGING = {
             'formatter': 'developer_format',
             'filename': os.path.join(LOG_DIR, 'dev_logger.log')
         },
-        'client_logger': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'developer_format',
-            'filename': os.path.join(LOG_DIR, 'client_logger.log')
-        }
     },
     'loggers': {
         '': {
@@ -59,11 +53,6 @@ LOGGING = {
             'handlers': ['console', 'dev_logger'],
             'propagate': False
         },
-        'client_logger': {
-            'level': 'DEBUG',
-            'handlers': ['console', 'client_logger'],
-            'propagate': False
-        }
     }
 }
 
