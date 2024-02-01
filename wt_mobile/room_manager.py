@@ -5,7 +5,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.http import JsonResponse
 from watch_together.general_utils import get_loggers
 from .exceptions import (IllegalArgumentError, PasswordsDoNotMatch,
-                         UserAlreadyInRoom, UserIsNotInTheRoom, RoomNameNotProvided)
+                         UserAlreadyInRoom, UserIsNotInTheRoom, RoomNameNotProvided, UserPasswordIsTooShort)
 from .models import Room, User, UserRoom
 from .serializers import JoinedRoomSerializer
 from .utils import UserUtils
@@ -74,6 +74,65 @@ class RoomManager(object):
                 break
         return unique_id
 
+    def _edit_room_password(request, unique_id: int):
+        """
+        Edit room password used in edit_room functionality
+        """
+        new_password = request.data.get('new password')
+        
+        try:
+            if new_password is not None:
+                new_password = new_password.strip()
+            else:
+                raise IllegalArgumentError("Illegal input for password")
+            if new_password:
+                if len(new_password) < 5:
+                    raise UserPasswordIsTooShort("New password is too short. It must be at least 5 characters long.")
+            
+                if new_password != None:
+                    Room.objects.filter(unique_id=unique_id).exists()
+                    room_to_edit = Room.objects.get(unique_id=unique_id)
+                    room_to_edit.password = make_password(new_password)
+                    room_to_edit.save()
+                    return {'Success': 'The password of the room was successfuly changed!'}
+            else:
+                raise UserPasswordIsTooShort("New password is too short. It must be at least 5 characters long.")
+        except Room.DoesNotExist:
+            raise ObjectDoesNotExist('Room does not exist!')
+        except MultipleObjectsReturned:
+            error_msg = 'An issue with the database: Multiple objects were returned during the edit_room process in room_manager.py!'
+            dev_logger.error(msg=error_msg, exc_info=True)
+            raise MultipleObjectsReturned(error_msg)
+
+    def _edit_room_name(request, unique_id: int) -> dict:
+        """
+        Edit room's name. Used in edit_room functionality
+        """
+        new_name = request.data.get('new name')
+
+        try:
+            if new_name:
+                if len(new_name) < 1 or not new_name.isascii():
+                    new_name = None
+                else:
+                    new_name = re.sub("\'s{2,}", ' ', new_name)
+
+            Room.objects.filter(unique_id=unique_id).exists()
+            room_to_edit = Room.objects.get(unique_id=unique_id)
+            if new_name != None:
+                room_to_edit.name = new_name
+                room_to_edit.save()
+                return {'Success': 'The name of the room was successfully changed!'}
+            else:
+                raise RoomNameNotProvided('Invalid room name, please try again with another!')
+        except Room.DoesNotExist:
+            raise ObjectDoesNotExist('Room does not exist!')
+        except MultipleObjectsReturned:
+            error_msg = 'An issue with the database: Multiple objects were returned during the edit_room process in room_manager.py!'
+            dev_logger.error(msg=error_msg, exc_info=True)
+            raise MultipleObjectsReturned(error_msg)
+       
+
     @classmethod
     def create_room(cls, request) -> dict:
         """
@@ -94,7 +153,7 @@ class RoomManager(object):
         user = UserUtils.findUser(token)
         owner = user.id
 
-        if not cls._is_int(owner):
+        if not cls._is_int(self=cls, id=owner):
             raise IllegalArgumentError('Illegal input!')
 
         if not User.objects.filter(id=owner).exists():
@@ -104,11 +163,22 @@ class RoomManager(object):
         if name is None or name.isspace() or name == '':
             name = f"{user.username}'s room"
         else:
-            name = re.sub('\s{2,}', ' ', name)
+            name = re.sub("\'s{2,}", ' ', name)
+
+        # password validator
+        if password is not None:
+            password = password.strip()
+
+        # python consideres empty strings as false
+        if not password:
+            password = None
+        elif len(password) < 5:
+            raise UserPasswordIsTooShort("Password is too short. Must have at least 5 characters")
+
         password = None if password is None else make_password(password)
 
 
-        unique_id = cls._get_unique_id()
+        unique_id = cls._get_unique_id(self=cls)
         room = Room(
             name=name,
             password=password,
@@ -141,71 +211,30 @@ class RoomManager(object):
             raise MultipleObjectsReturned(error_msg)
         return {'Success': 'Room deleted!'}
 
-    @staticmethod
-    def edit_room_password(request) -> dict:
+    @classmethod
+    def edit_room(cls, request) -> dict:
         """
-        Edit room password
+        Edit room properties
         :param unique_id: room's unique identifier
         :type unique_id: int
-        :param new_password: new password for the room
-        :param new_password: string
-        :rType: dictionary
-        :returns: A message which indicates successful change of the password.
+        :param field to edit: choose which field of room will be edited
+        :rType: dict
+        :returns: a message which indicates success
+        :exceptions: UserPasswordIsTooShort, ObjectDoesNotExist, Room.DoesNotExist, MultipleObjectsReturned
         """
+
         unique_id = request.data.get('unique_id')
-        new_password = request.data.get('new passoword')
-        
-        try:
-            if new_password:
-                if len(new_password) < 1:
-                    new_password = None
-            Room.objects.filter(unique_id=unique_id).exists()
-            room_to_edit = Room.objects.get(unique_id=unique_id)
-            if new_password != None:
-                room_to_edit.password = make_password(new_password)
-            room_to_edit.save()
-            return {'Success': 'The password of the room was successfuly changed!'}
-        except Room.DoesNotExist:
-            raise ObjectDoesNotExist('Room does not exist!')
-        except MultipleObjectsReturned:
-            error_msg = 'An issue with the database: Multiple objects were returned during the edit_room process in room_manager.py!'
-            dev_logger.error(msg=error_msg, exc_info=True)
-            raise MultipleObjectsReturned(error_msg)
+        field_to_edit = request.data.get('field to edit')
 
-    @staticmethod
-    def edit_room_name(request) -> dict:
-        """
-        Edit room's name.
-        :param new_name: new name for the room
-        :type new_name: string
-        :rType: dictionary
-        :return: A message which indicates that the edit of the room name is successful.
-        """
-        unique_id = request.data.get('unique_id')
-        new_name = request.data.get('new_name')
+        match field_to_edit:
+            case "name":
+                # requests new name -> "new name"
+                return cls._edit_room_name(request, unique_id)
 
-        try:
-            if new_name:
-                if len(new_name) < 1 or not new_name.isascii():
-                    new_name = None
-                else:
-                    new_name = re.sub('\s{2,}', ' ', new_name)
+            case "password":
+                # requests new password -> "new password"
+                return cls._edit_room_password(request, unique_id)
 
-            Room.objects.filter(unique_id=unique_id).exists()
-            room_to_edit = Room.objects.get(unique_id=unique_id)
-            if new_name != None:
-                room_to_edit.name = new_name
-                room_to_edit.save()
-                return {'Success': 'The name of the room was successfully changed!'}
-            else:
-                raise RoomNameNotProvided('Invalid room name, please try again with another!')
-        except Room.DoesNotExist:
-            raise ObjectDoesNotExist('Room does not exist!')
-        except MultipleObjectsReturned:
-            error_msg = 'An issue with the database: Multiple objects were returned during the edit_room process in room_manager.py!'
-            dev_logger.error(msg=error_msg, exc_info=True)
-            raise MultipleObjectsReturned(error_msg)
-       
     @staticmethod
     def join_room(request) -> dict:
         """
@@ -243,6 +272,9 @@ class RoomManager(object):
             raise UserAlreadyInRoom(info_err)
 
         is_password_matching = False
+
+        if password_input is not None:
+            password_input = password_input.strip()
 
         if room.password is not None:
             if check_password(password_input, room.password):
@@ -286,7 +318,7 @@ class RoomManager(object):
                 room.delete()
             elif user == room.owner:
                 id_of_next_owner = UserRoom.objects.filter(room_id=room_to_leave).first()
-                cls._reassign_owner(room, id_of_next_owner)
+                cls._reassign_owner(self=cls, room=room, id_next_owner=id_of_next_owner)
             return {'Success': 'User left the room'}
         except (User.DoesNotExist, Room.DoesNotExist) as error:
             if error is User.DoesNotExist():
@@ -314,13 +346,19 @@ class RoomManager(object):
             raise ObjectDoesNotExist('User not found!')
         user_id = user.id
 
-        if not cls._is_int(user_id):
+        if not cls._is_int(self=cls, id=user_id):
             raise IllegalArgumentError('Illegal input.')
 
         # Return all rooms, that user participates in, if the user exists
         try:
             user = User.objects.get(id=user_id)
-            all_rooms_for_user = UserRoom.objects.filter(user_id=user.pk)
+            all_user_rooms = UserRoom.objects.filter(user_id=user.pk)
+
+            all_rooms_for_user = []
+
+            for room in all_user_rooms:
+                all_rooms_for_user.append(Room.objects.get(unique_id=room.room_id))
+
             serialized = JoinedRoomSerializer(all_rooms_for_user, many=True)
             return serialized
         except (User.DoesNotExist, Room.DoesNotExist) as error: 

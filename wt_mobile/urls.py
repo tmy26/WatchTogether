@@ -10,7 +10,7 @@ urlpatterns = [
     path('user/resend_email', ResendActivationEmailView.as_view()),
     path('login', UserLogin.as_view()),
     path('account', UserProfile.as_view()),
-    path('room', RoomView.as_view()),
+    path('room', RoomView.as_view(), name='room'),
     path('room/extended_view', RoomExtendedView.as_view()),
     path('stream', StreamView.as_view()),
     path('activate/<uidb64>/<token>', activate, name='activate'),
