@@ -91,10 +91,12 @@ class UserManager(object):
         :rType: JSON serialized object
         :returns: Account username.
         """
-        username = request.data.get('username')
+
+        token = request.META.get('HTTP_AUTHORIZATION')
+        user = UserUtils.findUser(token)
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(username=user.username)
             serialized = UserSerializerSearchByUsername(user)
             return serialized
         except User.DoesNotExist:

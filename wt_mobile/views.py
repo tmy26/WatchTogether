@@ -76,8 +76,8 @@ class UserLogin(KnoxLoginView):
 class UserProfile(APIView):
     """User S.E.D(search, edit, delete)"""
 
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     # def put(self, request):
     #     try:
@@ -88,13 +88,13 @@ class UserProfile(APIView):
     #         return user_custom_exception_handler(e)
 
         
-    def delete(self, request):
-        try:
-            message = UserManager.delete_user_account(request)
-            status_code = status.HTTP_200_OK
-            return HandleResponseUtils.handle_response(status_code, message)
-        except Exception as error:
-            return CustomExceptionUtils.user_custom_exception_handler(error)
+    # def delete(self, request):
+    #     try:
+    #         message = UserManager.delete_user_account(request)
+    #         status_code = status.HTTP_200_OK
+    #         return HandleResponseUtils.handle_response(status_code, message)
+    #     except Exception as error:
+    #         return CustomExceptionUtils.user_custom_exception_handler(error)
 
         
     def get(self, request):
