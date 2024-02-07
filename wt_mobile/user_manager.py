@@ -257,7 +257,7 @@ class UserManager(object):
         :returns: Message which indicates a successful account deletion.
         """
         token = request.META.get('HTTP_AUTHORIZATION')
-        password = request.data.get('password')
+        password = request.GET.get('password')
         user = UserUtils.findUser(token)
         
         if user is None:
