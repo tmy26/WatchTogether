@@ -21,7 +21,6 @@ class UserView(APIView):
             status_code = status.HTTP_201_CREATED
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
-            print(f'{error} sdadasdasddsa')
             return CustomExceptionUtils.user_custom_exception_handler(error)
     
     def get(self, request):
@@ -79,13 +78,13 @@ class UserProfile(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    # def put(self, request):
-    #     try:
-    #         message = User.edit_profile(request)
-    #         status_code = 200
-    #         return handle_response(status_code, message)
-    #     except Exception as e:
-    #         return user_custom_exception_handler(e)
+    def put(self, request):
+        try:
+            message = UserManager.edit_profile(request)
+            status_code = status.HTTP_200_OK
+            return HandleResponseUtils.handle_response(status_code, message)
+        except Exception as e:
+            return CustomExceptionUtils.user_custom_exception_handler(e)
 
         
     # def delete(self, request):

@@ -178,39 +178,72 @@ class UserManager(object):
                 raise PasswordsDoNotMatch('Old passwords do not match!')
 
     @staticmethod
-    def edit_user_email(request) -> dict:
+    def edit_profile(request) -> dict:
         """
-        Changes account email.
+        Changes account email or password.
         :param token: the needed token to filter the user
         :type token: string
+        :param field_to_change: Which field to change - "email" or "password"
+        :type field_to_change: String
         :param new_email: the new email that is going to used
-        :type new_email: strin
-        :param current_password: the current password
-        :type current_password: string
+        :type new_email: String
+        :param user_password: the current user password
+        :type user_password: string
+        :param new_password
+        :type new_password: String
         :rType: dictionary
-        :returns: Message which indicates a successful email change.
+        :returns: Message which indicates a field has been changed.
         """
         token = request.META.get('HTTP_AUTHORIZATION')
-        new_email = request.data.get('email')
-        current_password = request.data.get('password')
+        # field_to_change = request.data.get('field_to_change')
+        # currently is hardcoded bcs we all lazy and being able to change password only is enought for now
+        field_to_change = "password"
+        user_password = request.data.get('user_password')
+
         user = UserUtils.findUser(token)
         
         if user is None:
             raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
         else:
-            if User.objects.filter(email=new_email).exists():
-                raise EmailAlreadyUsed('This email is already in use!')
-            # validate data
-            try:
-                if check_password(current_password, user.password):
-                    validate_email(new_email)
-                    user.email = new_email
-                    user.save()
-                    return {'Success': f'The email associated with {user.username} has been changed!'}
-                else:
-                    raise PasswordsDoNotMatch('The current password of the account does not match the provided one!')
-            except EmailNotValidError:
-                raise EmailNotValidError('The provided email is invalid!')
+            match field_to_change:
+                case "email":
+                    # check if current passwords match
+                    if check_password(user_password, user.password):
+                        new_email = request.data.get('new_email')
+
+                        if User.objects.filter(email=new_email).exists():
+                            raise EmailAlreadyUsed('This email is already in use!')
+                        # validate email
+                        try:
+                            check_email = validate_email(new_email, allow_smtputf8=False)
+                            if check_email:
+                                new_email = check_email.ascii_email
+                        except EmailNotValidError:
+                            raise EmailNotValidError('The provided email is invalid!')
+                        
+                        user.email = new_email
+                        user.save()
+                        return {'Success': f'The email associated with {user.username} has been changed!'}
+                    else:
+                        raise PasswordsDoNotMatch('The current password of the account does not match the provided one!')
+                                 
+                case "password":
+                    if check_password(user_password, user.password):
+                        new_password = request.data.get('new_password')
+
+                        # validate password same validation as when creating the user
+                        if len(new_password) < 8:
+                            raise UserPasswordIsTooShort('The provided password is too short!')
+                        if check_password(new_password, user.password):
+                            raise PasswordsDoNotMatch('Newly provided password is the same as the current password.')
+                        
+                        hashed_password = make_password(new_password)
+
+                        user.password = hashed_password
+                        user.save()
+                        return {'Success': f'The password of {user.username} has been changed!'}
+                    else:
+                        raise PasswordsDoNotMatch('The current password of the account does not match the provided one!')
     
     @staticmethod
     def delete_user_account(request) -> dict:
