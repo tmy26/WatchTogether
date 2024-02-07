@@ -267,6 +267,8 @@ class UserManager(object):
                 username = user.username
                 User.objects.filter(username=username).delete()
                 return {'Success': 'You have successfully deleted your account!'}
+            else:
+                raise PasswordsDoNotMatch("Provided password does not match")
 
     @staticmethod
     def is_user_active(request):
