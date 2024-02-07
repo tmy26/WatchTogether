@@ -248,7 +248,7 @@ class UserManager(object):
     @staticmethod
     def delete_user_account(request) -> dict:
         """
-        Account deletion.
+        Account deletion, removes the related auth tokens also.
         :param token: the needed token to filter the user
         :type token: string
         :param password: the current password

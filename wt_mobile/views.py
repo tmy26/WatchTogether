@@ -87,13 +87,13 @@ class UserProfile(APIView):
             return CustomExceptionUtils.user_custom_exception_handler(e)
 
         
-    # def delete(self, request):
-    #     try:
-    #         message = UserManager.delete_user_account(request)
-    #         status_code = status.HTTP_200_OK
-    #         return HandleResponseUtils.handle_response(status_code, message)
-    #     except Exception as error:
-    #         return CustomExceptionUtils.user_custom_exception_handler(error)
+    def delete(self, request):
+        try:
+            message = UserManager.delete_user_account(request)
+            status_code = status.HTTP_200_OK
+            return HandleResponseUtils.handle_response(status_code, message)
+        except Exception as error:
+            return CustomExceptionUtils.user_custom_exception_handler(error)
 
         
     def get(self, request):
