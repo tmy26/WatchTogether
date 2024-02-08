@@ -257,11 +257,10 @@ class RoomManager(object):
         try:
             user = User.objects.get(id=user_to_join.id)
             room = Room.objects.get(unique_id=room_to_join)
-        except (User.DoesNotExist, Room.DoesNotExist) as error: 
-            if error is User.DoesNotExist():
-                raise ObjectDoesNotExist('User does not exist!')
-            elif error is Room.DoesNotExist():
-                raise ObjectDoesNotExist('Room does not exist!')
+        except (Room.DoesNotExist): 
+            raise ObjectDoesNotExist('Room does not exist!')
+        except (User.DoesNotExist):
+            raise ObjectDoesNotExist('User does not exist!')
         except MultipleObjectsReturned:
             error_msg = 'An issue with the database: Multiple objects were returned during the join_room function in room_manager.py!'
             dev_logger.error(msg=error_msg, exc_info=True)
