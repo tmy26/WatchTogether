@@ -12,9 +12,7 @@ from watch_together.general_utils import get_loggers
 from .exceptions import *
 from .tokens import account_activation_token
 
-
 dev_logger = get_loggers('dev_logger')
-client_logger = get_loggers('client_logger')
 
 
 class UserUtils(object):
@@ -66,16 +64,17 @@ class UserUtils(object):
                 'domain': get_current_site(request).domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
-                'protocol': 'https' if request.is_secure() else 'http'
+                'protocol': 'https' if request.is_secure() else 'http',
+                'new_email': receiver
             })
 
             email = EmailMessage(subject=mail_subject, body=message, to=[receiver])
             send_email = email.send()
             if send_email:
-                client_logger.info(msg=f'An activataion email was sent to {email} ')
+                return True
             else:
                 dev_logger.error(msg='Error. An error occured while trying to send email. Traceback file: function: send_email in file: backend_utils, line 36, in app: wt_mobile', exc_info=True)
-
+                return False
 
 class CustomExceptionUtils(object):
     """This class holds methods for custom exceptions which are related to:
@@ -119,6 +118,10 @@ class CustomExceptionUtils(object):
                 response = JsonResponse({'Error': str(exception_message)}, status=400)
             case UserAlreadyActivated():
                 response = JsonResponse({'Error': str(exception_message)}, status=400)
+            case UsernameNotProvided():
+                response = JsonResponse({'Error': str(exception_message)}, status=401)
+            case PasswordNotProvided():
+                response = JsonResponse({'Error': str(exception_message)}, status=401)
             case _:
                 response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
         return response

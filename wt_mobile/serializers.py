@@ -6,7 +6,7 @@ class UserSerializerSearchByUsername(serializers.ModelSerializer):
     """User serializer used to return username only"""
     class Meta:
         model = User
-        fields = ['last_login', 'date_joined', 'username', 'email']
+        fields = ['id', 'last_login', 'date_joined', 'username', 'email']
 
 
 class UserSerializerCheckIfUserActive(serializers.ModelSerializer):

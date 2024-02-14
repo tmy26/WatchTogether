@@ -32,7 +32,7 @@ class UserView(APIView):
             return CustomExceptionUtils.user_custom_exception_handler(error)
 
 
-class ResendActivationEmailView(APIView):
+class UserUtilsView(APIView):
     """ Currently only the resend activation email functionality """
     permission_classes = (AllowAny,)
 
@@ -56,7 +56,6 @@ class PasswordView(APIView):
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
             return CustomExceptionUtils.user_custom_exception_handler(error)
-
 
 
 class UserLogin(KnoxLoginView):
