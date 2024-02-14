@@ -1,8 +1,12 @@
 import logging
 
 
-def get_loggers(dev_log_name: str):
+def get_loggers(logger_name: str) -> object:
     """
-    This function returns the dev logger
+    Retrieve the development logger with the specified name.
+    :param logger_name: The name of the development logger.
+    :type logger_name: string
+    :rType: object
+    :returns: The logger associated with the provided name.
     """
-    return logging.getLogger(dev_log_name)
+    return logging.getLogger(logger_name)

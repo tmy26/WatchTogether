@@ -63,3 +63,22 @@ class StreamInvalidLink(Exception):
 
 class UserAlreadyActivated(Exception):
     pass
+
+
+class RoomNameNotProvided(Exception):
+    pass
+
+
+class LinkNotProvided(Exception):
+    pass
+
+
+class RoomNotProvided(Exception):
+    pass
+
+
+class UsernameNotProvided(Exception):
+    pass
+
+class PasswordNotProvided(Exception):
+    pass
