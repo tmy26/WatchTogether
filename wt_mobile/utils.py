@@ -150,6 +150,8 @@ class CustomExceptionUtils(object):
                 response = JsonResponse({'Error'}, status=400)
             case RoomNameNotProvided():
                 response = JsonResponse({'Error': str(exception_message)}, status=406)
+            case UserPasswordIsTooShort():
+                response = JsonResponse({'Error': str(exception_message)}, status=400)
             case _:
                 response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
         return response

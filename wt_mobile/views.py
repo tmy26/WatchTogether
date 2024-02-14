@@ -21,13 +21,12 @@ class UserView(APIView):
             status_code = status.HTTP_201_CREATED
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
-            print(f'{error} sdadasdasddsa')
             return CustomExceptionUtils.user_custom_exception_handler(error)
     
     def get(self, request):
         try:
             message = UserManager.is_user_active(request)
-            status_code = status.HTTP_200_OK,
+            status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response_data(status_code, message)
         except Exception as error:
             return CustomExceptionUtils.user_custom_exception_handler(error)
@@ -59,7 +58,6 @@ class PasswordView(APIView):
             return CustomExceptionUtils.user_custom_exception_handler(error)
 
 
-
 class UserLogin(KnoxLoginView):
     """User login"""
     permission_classes = (AllowAny,)
@@ -81,11 +79,11 @@ class UserProfile(APIView):
 
     def put(self, request):
         try:
-            message = UserManager.edit_user_email(request)
-            status_code = 200
+            message = UserManager.edit_profile(request)
+            status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response(status_code, message)
-        except Exception as error:
-            return CustomExceptionUtils.user_custom_exception_handler(error)
+        except Exception as e:
+            return CustomExceptionUtils.user_custom_exception_handler(e)
 
         
     def delete(self, request):
@@ -137,14 +135,6 @@ class RoomView(APIView):
             return HandleResponseUtils.handle_response(status_code, message)
         except Exception as error:
             return CustomExceptionUtils.room_custom_exception_handler(error)
-
-    def get(self, request):
-        try:
-            message = RoomManager.get_user_participating_rooms(request)
-            status_code = status.HTTP_200_OK
-            return HandleResponseUtils.handle_response_data(status_code, message)
-        except Exception as error:
-            return CustomExceptionUtils.room_custom_exception_handler(error)
     
 
 class RoomExtendedView(APIView):
@@ -165,6 +155,14 @@ class RoomExtendedView(APIView):
             message = RoomManager.leave_room(request)
             status_code = status.HTTP_200_OK
             return HandleResponseUtils.handle_response(status_code, message)
+        except Exception as error:
+            return CustomExceptionUtils.room_custom_exception_handler(error)
+        
+    def get(self, request):
+        try:
+            message = RoomManager.get_user_participating_rooms(request)
+            status_code = status.HTTP_200_OK
+            return HandleResponseUtils.handle_response_data(status_code, message)
         except Exception as error:
             return CustomExceptionUtils.room_custom_exception_handler(error)
 

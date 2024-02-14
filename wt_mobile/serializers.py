@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Stream, StreamHistory, User, UserRoom
+from .models import Stream, StreamHistory, User, Room
 
 
 class UserSerializerSearchByUsername(serializers.ModelSerializer):
     """User serializer used to return username only"""
     class Meta:
         model = User
-        fields = ['username']
+        fields = ['id', 'last_login', 'date_joined', 'username', 'email']
 
 
 class UserSerializerCheckIfUserActive(serializers.ModelSerializer):
@@ -19,8 +19,8 @@ class UserSerializerCheckIfUserActive(serializers.ModelSerializer):
 class JoinedRoomSerializer(serializers.ModelSerializer):
     """Serializer for displaying the following fields of the joined UserRoom table"""
     class Meta():
-        model = UserRoom
-        fields = ['room_id', 'date_joined', 'user_id']
+        model = Room
+        fields = ['unique_id', 'name', 'owner_id']
 
 
 class StreamSerializer(serializers.ModelSerializer):
