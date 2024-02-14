@@ -42,7 +42,7 @@ class UserManager(object):
         username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
-        password_check = request.data.get('password check')
+        password_check = request.data.get('password_check')
         
         # validate email uniqness
         if User.objects.filter(email=email).exists():
@@ -116,16 +116,21 @@ class UserManager(object):
         password = request.data.get('password')
 
         try:
+            if not username:
+                raise UsernameNotProvided('Please enter a username!')
+            if not password:
+                raise PasswordNotProvided('Please enter your password!')
+            
             user_obj = User.objects.get(username=username)
         except MultipleObjectsReturned:
             error_msg = 'An issue with the database: Multiple objects were returned during the login_user process in user_manager.py!'
             dev_logger.error(error_msg, exc_info=True)
             raise MultipleObjectsReturned(error_msg)
         except User.DoesNotExist:
-            raise ObjectDoesNotExist('Sorry, we could not find an account matching these credentials!')
+            raise ObjectDoesNotExist('The provided credentials are invalid!')
 
         if not user_obj.is_active:
-            raise UserEmailNotActivated('Please activate your email. The verification is still pending.')
+            raise UserEmailNotActivated('Please activate your account. You must verify your email to continue!')
         
         flag = authenticate(request, username=username, password=password)
 
@@ -138,7 +143,7 @@ class UserManager(object):
             user_info = {'username': f'{user_obj.username}', 'token': f'{token[1]}'}
             return user_info
         else:
-            raise PasswordsDoNotMatch('Invalid user password!')
+            raise PasswordsDoNotMatch('The provided credentials are invalid!')
 
     @staticmethod
     def edit_user_password(request) -> dict:
@@ -160,7 +165,9 @@ class UserManager(object):
         new_password_check = request.data.get('new password check')
         current_password = request.data.get('current password')
         user = UserUtils.findUser(token)
-
+        
+        if not new_password or not new_password_check:
+            raise PasswordNotProvided('Please enter your new password and retype it!')
         if user is None:
             raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
         else:
@@ -173,7 +180,7 @@ class UserManager(object):
                 user.save()
                 return {'Success': 'Password successfully changed!'}
             else:
-                raise PasswordsDoNotMatch('Old passwords do not match!')
+                raise PasswordsDoNotMatch('The provided credentials are invalid!')
 
     @staticmethod
     def edit_user_email(request) -> dict:
@@ -193,6 +200,10 @@ class UserManager(object):
         current_password = request.data.get('password')
         user = UserUtils.findUser(token)
         
+        if not new_email:
+            raise EmailWasNotProvided('Please provide a new email!')
+        if not current_password:
+            raise PasswordNotProvided('Please enter your password!')
         if user is None:
             raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
         else:
@@ -202,9 +213,8 @@ class UserManager(object):
             try:
                 if check_password(current_password, user.password):
                     validate_email(new_email)
-                    user.email = new_email
-                    user.save()
-                    return {'Success': f'The email associated with {user.username} has been changed!'}
+                    UserUtils.send_email(request, mail_subject='Confirm your new email!', template_path='account_email_change_template.html', user=user, receiver=new_email)
+                    return {'Success': f'An email was sent to {new_email}. You have to open the activation link to verify the new email!'}
                 else:
                     raise PasswordsDoNotMatch('The current password of the account does not match the provided one!')
             except EmailNotValidError:
@@ -225,13 +235,20 @@ class UserManager(object):
         password = request.data.get('password')
         user = UserUtils.findUser(token)
         
-        if user is None:
-            raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
-        else:
-            if check_password(password, user.password):
-                username = user.username
-                User.objects.filter(username=username).delete()
-                return {'Success': 'You have successfully deleted your account!'}
+        try:
+            if not password:
+                raise PasswordNotProvided('Please, enter your password!')
+            if user is None:
+                raise ObjectDoesNotExist('Sorry, something went wrong. Please try to logut and login again!')
+            else:
+                if check_password(password, user.password):
+                    username = user.username
+                    User.objects.filter(username=username).delete()
+                    return {'Success': 'You have successfully deleted your account!'}
+                else:
+                    raise PasswordNotProvided('The provided password is invalid!')
+        except Exception as error:
+            raise CommonException(error)
 
     @staticmethod
     def is_user_active(request):
@@ -245,13 +262,15 @@ class UserManager(object):
         username = request.GET.get('username')
 
         try:
+            if not username:
+                raise UsernameNotProvided('Please enter a username!')
             user = User.objects.get(username=username)
             serialized = UserSerializerCheckIfUserActive(user)
             return serialized
         except User.DoesNotExist:
             raise ObjectDoesNotExist('Sorry, we could not find the user you are looking for!')
         except MultipleObjectsReturned:
-            error_msg='There is an issue with the database; the is_user_active method in user_manager.py has returned multiple objects!'
+            error_msg = 'An issue with the database: Multiple objects were returned during is_active process in user_manager.py!'
             dev_logger.error(msg=error_msg, exc_info=True)
             raise MultipleObjectsReturned(error_msg)
         
@@ -294,6 +313,8 @@ class UserManager(object):
         username = request.data.get('username')
 
         try:
+            if not username:
+                raise UsernameNotProvided('Please enter a username!')
             # get user, its 'is_active' field should be 0, raise error if NOT
             user = User.objects.get(username=username)
             if user.is_active:

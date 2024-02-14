@@ -75,3 +75,10 @@ class LinkNotProvided(Exception):
 
 class RoomNotProvided(Exception):
     pass
+
+
+class UsernameNotProvided(Exception):
+    pass
+
+class PasswordNotProvided(Exception):
+    pass

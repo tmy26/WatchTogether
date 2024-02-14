@@ -33,7 +33,7 @@ class UserView(APIView):
             return CustomExceptionUtils.user_custom_exception_handler(error)
 
 
-class ResendActivationEmailView(APIView):
+class UserUtilsView(APIView):
     """ Currently only the resend activation email functionality """
     permission_classes = (AllowAny,)
 
@@ -76,16 +76,16 @@ class UserLogin(KnoxLoginView):
 class UserProfile(APIView):
     """User S.E.D(search, edit, delete)"""
 
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
-    # def put(self, request):
-    #     try:
-    #         message = User.edit_profile(request)
-    #         status_code = 200
-    #         return handle_response(status_code, message)
-    #     except Exception as e:
-    #         return user_custom_exception_handler(e)
+    def put(self, request):
+        try:
+            message = UserManager.edit_user_email(request)
+            status_code = 200
+            return HandleResponseUtils.handle_response(status_code, message)
+        except Exception as error:
+            return CustomExceptionUtils.user_custom_exception_handler(error)
 
         
     def delete(self, request):
