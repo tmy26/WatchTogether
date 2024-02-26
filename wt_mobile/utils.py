@@ -81,6 +81,7 @@ class CustomExceptionUtils(object):
     1. User
     2. Room
     3. Stream
+    4. Chat
     """
     @staticmethod
     def user_custom_exception_handler(exception_message) -> JsonResponse:
@@ -182,6 +183,25 @@ class CustomExceptionUtils(object):
                 response = JsonResponse({'Error': str(exception_message)}, status=406)
             case CommonException():
                 response = JsonResponse({'Error': str(exception_message)}, status=400)
+            case _:
+                response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
+        return response
+    
+    @staticmethod
+    def chat_custom_exception_handler(exception_message):
+        """
+        Handles custom exceptions raised from chat functions.
+        :param exception_message: the custom exception that is passed
+        :type exception_message: string
+        :rType: JsonResponse
+        :returns: the proper status code and error message
+        """
+
+        match exception_message:
+            case MultipleObjectsReturned():
+                response = JsonResponse({'Error': str(exception_message)}, status=500)
+            case ObjectDoesNotExist():
+                response = JsonResponse({'Error': str(exception_message)}, status=404)
             case _:
                 response = JsonResponse({'Error': 'Internal Server Error'}, status=500)
         return response
