@@ -13,21 +13,25 @@ SECRET_KEY = 'django-insecure-0wu5y4nf5_g3e$r#o%tl)7@=d#$%&=5@db!gx-nhi*jh_k&n4*
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', '192.168.0.44', '192.168.63.14']
+ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'wt_mobile.User'
 
 
 # Application definition
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework',
     'wt_mobile',
+    'chat_app',
     'knox',
+    'channels',
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',
@@ -64,7 +68,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'watch_together.wsgi.application'
+ASGI_APPLICATION = 'watch_together.asgi.application'
 
+# Configure channel layers
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+    },
+    'ROUTING': 'ws.routing.application',
+}
 
 # Database
 
