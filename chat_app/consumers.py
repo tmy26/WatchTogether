@@ -2,7 +2,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .models import Message
+from .models import Message, StreamHistory
 from channels.db import database_sync_to_async
 from watch_together.general_utils import get_loggers
 from .utils import get_room, get_user
@@ -78,21 +78,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        username = text_data_json['username']
+        receive_type = text_data_json['type'] # can be video or chat_message
 
-        # Save message to database
-        await self.save_messages(message)
+        # do action depending on what is the receive type
+        if receive_type == "chat_message":
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'username': username
-            }
-        )
+            message = text_data_json['message']
+            username = text_data_json['username']
+
+            # Save message to database
+            await self.save_messages(text_data_json["message"])
+
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': receive_type,
+                    'message': message,
+                    'username': username
+                }
+            )
+
+        elif receive_type == "video":
+            video_url = text_data_json['video_url']
+
+            # Save to stream history
+            await self.add_video_play_history(video_url)
+
+            # Broadcast video URL to all clients in room
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': receive_type,
+                    'video_url': video_url
+                }
+            )
 
     # Receive message from room group
     async def chat_message(self, event):
@@ -106,6 +126,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': username,
             'type': send_type
         }))
+    
+    async def video(self, event):
+        video_url = event['video_url']
+        send_type = event['type']
+
+        # Send video back to WebSocket
+        await self.send(text_data=json.dumps({
+            'video_url': video_url,
+            'type': send_type
+        }))
 
     @sync_to_async
     def save_messages(self, message):
@@ -115,4 +145,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             room=self.room_obj,
             sender=self.user_obj,
             content=message
+        )
+    
+    @sync_to_async
+    def add_video_play_history(self, video):
+        """ Saves to stream history db """
+
+        StreamHistory.objects.create(
+            room=self.room_obj,
+            link=video
         )

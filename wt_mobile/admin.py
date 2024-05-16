@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Room, Stream, User
+from .models import Room, User
 
 
 @admin.register(User)
@@ -13,8 +13,8 @@ class RoomAdmin(admin.ModelAdmin):
     list_display = ('unique_id', 'name', 'password')
 
 
-@admin.register(Stream)
-class StreamAdmin(admin.ModelAdmin):
-    search_fields = ('link', 'assigned_room')
-    list_display = ('link', 'assigned_room')
+# @admin.register(Stream)
+# class StreamAdmin(admin.ModelAdmin):
+#     search_fields = ('link', 'assigned_room')
+#     list_display = ('link', 'assigned_room')
     

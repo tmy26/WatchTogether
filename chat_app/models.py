@@ -14,3 +14,13 @@ class Message(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class StreamHistory(models.Model):
+    """Store all the links played within the room"""
+    class Meta:
+        verbose_name_plural = "StreamHistories"
+        db_table = "%s_%s" % (__package__, "stream_history")
+    
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True, blank=False)
+    link = models.URLField(blank=True, null=True)

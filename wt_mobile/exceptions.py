@@ -49,16 +49,16 @@ class UserIsNotInTheRoom(Exception):
     pass
 
 
-class StreamAssignedRoomRequired(Exception):
-    pass
+# class StreamAssignedRoomRequired(Exception):
+#     pass
 
 
-class StreamAlreadyAssigned(Exception):
-    pass
+# class StreamAlreadyAssigned(Exception):
+#     pass
 
 
-class StreamInvalidLink(Exception):
-    pass
+# class StreamInvalidLink(Exception):
+#     pass
 
 
 class UserAlreadyActivated(Exception):

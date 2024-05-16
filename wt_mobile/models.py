@@ -39,21 +39,21 @@ class UserRoom(models.Model):
     date_joined = models.DateField(blank=True, default=now)
 
 
-class Stream(models.Model):
-    class Meta:
-        verbose_name_plural = "Streams"
+# class Stream(models.Model):
+#     class Meta:
+#         verbose_name_plural = "Streams"
  
-    link = models.URLField(blank=True, null=True, default='https://www.youtube.com/watch?v=71Gt46aX9Z4')
-    assigned_room = models.OneToOneField(Room, on_delete=models.CASCADE)
+#     link = models.URLField(blank=True, null=True, default='https://www.youtube.com/watch?v=71Gt46aX9Z4')
+#     assigned_room = models.OneToOneField(Room, on_delete=models.CASCADE)
 
 
-class StreamHistory(models.Model):
-    """Store all the links played within the room"""
-    class Meta:
-        verbose_name_plural = "StreamHistories"
-        db_table = "%s_%s" % (__package__, "stream_history")
+# class StreamHistory(models.Model):
+#     """Store all the links played within the room"""
+#     class Meta:
+#         verbose_name_plural = "StreamHistories"
+#         db_table = "%s_%s" % (__package__, "stream_history")
     
-    stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=False)
-    time_when_played = models.CharField(max_length=30, blank=True)
-    link = models.URLField(blank=True, null=True)
+#     stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=False)
+#     time_when_played = models.CharField(max_length=30, blank=True)
+#     link = models.URLField(blank=True, null=True)
     

@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from .user_manager import UserManager
 from .room_manager import RoomManager
-from .stream_manager import StreamManager
+#from .stream_manager import StreamManager
 from .utils import HandleResponseUtils, CustomExceptionUtils
 
 
@@ -168,31 +168,31 @@ class RoomExtendedView(APIView):
 
 # ________ StreamVIEWS ________ #
 
-class StreamView(APIView):
-    """Stream Controller"""
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+# class StreamView(APIView):
+#     """Stream Controller"""
+#     permission_classes = [IsAuthenticated]
+#     authentication_classes = [TokenAuthentication]
 
-    def post(self, request):
-        try:
-            message = StreamManager.create_stream(request)
-            status_code = status.HTTP_201_CREATED
-            return HandleResponseUtils.handle_response(status_code, message)
-        except Exception as error:
-            CustomExceptionUtils.stream_custom_exception_handler(error)
+#     def post(self, request):
+#         try:
+#             message = StreamManager.create_stream(request)
+#             status_code = status.HTTP_201_CREATED
+#             return HandleResponseUtils.handle_response(status_code, message)
+#         except Exception as error:
+#             CustomExceptionUtils.stream_custom_exception_handler(error)
 
-    def put(self, request):
-        try:
-            message = StreamManager.edit_stream(request)
-            status_code = status.HTTP_200_OK
-            return HandleResponseUtils.handle_response(status_code, message)
-        except Exception as error:
-            CustomExceptionUtils.stream_custom_exception_handler(error)
+#     def put(self, request):
+#         try:
+#             message = StreamManager.edit_stream(request)
+#             status_code = status.HTTP_200_OK
+#             return HandleResponseUtils.handle_response(status_code, message)
+#         except Exception as error:
+#             CustomExceptionUtils.stream_custom_exception_handler(error)
     
-    def get(self, request):
-        try:
-            message = StreamManager.display_history(request)
-            status_code = status.HTTP_200_OK
-            return HandleResponseUtils.handle_response_data(status_code, message)
-        except Exception as error:
-            return CustomExceptionUtils.room_custom_exception_handler(error)
+#     def get(self, request):
+#         try:
+#             message = StreamManager.display_history(request)
+#             status_code = status.HTTP_200_OK
+#             return HandleResponseUtils.handle_response_data(status_code, message)
+#         except Exception as error:
+#             return CustomExceptionUtils.room_custom_exception_handler(error)
